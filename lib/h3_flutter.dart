@@ -1,13 +1,10 @@
+import 'dart:ffi';
+import 'dart:io';
 
-import 'dart:async';
+import 'generated/generated_bindings.dart';
 
-import 'package:flutter/services.dart';
+final DynamicLibrary _h3Lib = Platform.isAndroid
+    ? DynamicLibrary.open('libnative_add.so')
+    : DynamicLibrary.process();
 
-class H3Flutter {
-  static const MethodChannel _channel = MethodChannel('h3_flutter');
-
-  static Future<String?> get platformVersion async {
-    final String? version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
-}
+final h3 = H3(_h3Lib);
