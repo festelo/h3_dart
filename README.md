@@ -6,29 +6,13 @@ Library uses C-written H3 library almost without changes.
 Works via [FFI](https://pub.dev/packages/ffi) and bindings are automatically generated using [ffigen](https://pub.dev/packages/ffige)
 ## Setup
 
-### IOS
-
-Works as is.
-
-### Android
-
-Install CMake and NDK via SDK Manager in Android Studio.
-
-Specify NDK version you have installed in `android/app/build.gradle` file:
-```
-android {
-    compileSdkVersion flutter.compileSdkVersion
-    ...
-
-    ndkVersion "23.1.7779620"
-}
-```
+Just add the package to `pubspec.yaml` and that's all.
   
 -------------
   
 ## How to update the package to match latest H3 version
 
-~Good luck~
+\~Good luck\~
   
 
 You need cmake tool, if you're on macos use next command:
@@ -61,7 +45,7 @@ cp src/h3lib/include/* ../../ios/Classes/h3lib
 cp src/h3lib/lib/* ../../ios/Classes/h3lib
 ```
 
-You need to add .h and .c files to the project using XCode.  
+You need to add .h and .c files to the project using XCode if you want to launch example (iOS).  
 Then, probably you will face some build errors, in my case i just followed xcode instructions to solve them.  
 
 Code generation tool called [ffigen](https://pub.dev/packages/ffige) is used to create C-to-Dart bindings.  
