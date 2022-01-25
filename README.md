@@ -2,7 +2,9 @@
 
 H3 version: 3.7.2
 
-Library uses C-written H3 library almost without changes.  
+The library allows to use [H3 library](https://github.com/uber/h3) directly in your Flutter application!
+
+Library uses C-written version almost without changes.  
 Works via [FFI](https://pub.dev/packages/ffi) and bindings are automatically generated using [ffigen](https://pub.dev/packages/ffige)
 ## Setup
 
