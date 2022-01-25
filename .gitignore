@@ -27,5 +27,7 @@
 .dart_tool/
 .packages
 build/
+android/.cxx
 
 tmp/
+.fvm

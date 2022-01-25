@@ -1,12 +1,33 @@
-### H3 FLUTTER
+## H3 FLUTTER
 
 H3 version: 3.7.2
 
 Library uses C-written H3 library almost without changes.  
 Works via [FFI](https://pub.dev/packages/ffi) and bindings are automatically generated using [ffigen](https://pub.dev/packages/ffige)
-#  
+## Setup
 
-### How to update the library to get new changes of H3?
+### IOS
+
+Works as is.
+
+### Android
+
+Install CMake and NDK via SDK Manager in Android Studio.
+
+Specify NDK version you have installed in `android/app/build.gradle` file:
+```
+android {
+    compileSdkVersion flutter.compileSdkVersion
+    ...
+
+    ndkVersion "23.1.7779620"
+}
+```
+  
+-------------
+  
+## How to update the package to match latest H3 version
+
 ~Good luck~
   
 

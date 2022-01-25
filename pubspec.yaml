@@ -1,7 +1,7 @@
 name: h3_flutter
-description: A new flutter plugin project.
-version: 0.0.1
-homepage:
+description: Bindings to H3 library
+version: 1.0.0
+homepage: https://github.com/festelo/h3_flutter
 
 environment:
   sdk: ">=2.15.0 <3.0.0"
