@@ -63,13 +63,17 @@ cp src/h3lib/include/h3api.h ../../../c/h3lib
 Copy other source files (*.h and *.c) to the folder.
 ```
 cd ..
-tmp/h3_sources/src/h3lib/include
 cp src/h3lib/include/* ../../c/h3lib
 cp src/h3lib/lib/* ../../c/h3lib
 ```
 
-You need to add .h and .c files to the project using XCode if you want to launch example (iOS).  
-Then, probably you will face some build errors, in my case i just followed xcode instructions to solve them.  
+Copy c/h3lib folder to ios and macos folders with `sync_h3lib.sh` script:
+```
+sh sync_h3lib.sh
+```
+
+You need to add .h and .c files to the project using XCode if you want to launch example (for iOS and macOS).  
+You can face some build errors, in my case i just followed xcode instructions to solve them.  
 
 Code generation tool called [ffigen](https://pub.dev/packages/ffige) is used to create C-to-Dart bindings.  
 To run it, you need to install LLVM:
