@@ -2,10 +2,27 @@
 
 H3 version: 3.7.2
 
-The library allows to use [H3 library](https://github.com/uber/h3) directly in your Flutter application!
+The package allows to use [H3 library](https://github.com/uber/h3) directly in your Flutter application
 
-Library uses C-written version almost without changes.  
-Works via [FFI](https://pub.dev/packages/ffi) and bindings are automatically generated using [ffigen](https://pub.dev/packages/ffige)
+The package uses C version under the hood. 
+Works via [FFI](https://pub.dev/packages/ffi), bindings are automatically generated using [ffigen](https://pub.dev/packages/ffige)
+
+Few functions were adopted to allow work with them in a "safe" mode:
+```
+// Get hexagons in specified triangle.
+final hexagons = h3.polyfill(
+  resolution: 5,
+  coordinates: [
+    GeoCoord(20.4522, 54.7104),
+    GeoCoord(37.6173, 55.7558),
+    GeoCoord(39.7015, 47.2357),
+  ],
+);
+```  
+
+But most of them are not. You still can use them, but it's more complicated, because you'll need to work directly with FFI (`calloc`, `malloc` and everything). If you want to try, you can use `h3c` singletone.
+
+The package also contains few methods from JS library [Geojson2H3](https://github.com/uber/geojson2h3).
 ## Setup
 
 Just add the package to `pubspec.yaml` and that's all.

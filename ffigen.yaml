@@ -1,7 +1,7 @@
 
-name: H3
+name: H3C
 description: Bindings to H3
-output: 'lib/generated/generated_bindings.dart'
+output: 'lib/src/generated/generated_bindings.dart'
 headers:
   entry-points:
     - 'ios/Classes/h3lib/h3api.h'
