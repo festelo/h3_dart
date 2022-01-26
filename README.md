@@ -28,6 +28,10 @@ The package also contains few methods from JS library [Geojson2H3](https://githu
 Just add the package to `pubspec.yaml` and that's all.
   
 -------------
+## Tests
+
+To make tests work you need to execute `prepare_tests.sh` script. The script builds h3 library from C code.  
+The script is designed for macOS and therefore it probably work only under this system.  
   
 ## How to update the package to match latest H3 version
 
@@ -47,21 +51,21 @@ mkdir tmp/h3_sources/build
 cd tmp/h3_sources/build
 ```
 
-Generate `h3api.h` file and copy it to the ios folder (we use `ios` folder for both OS - Android and iOS):
+Generate `h3api.h` file and copy it to `c/h3lib` folder:
 ```
 cmake ..
-rm -rf ../../../ios/Classes/h3lib // recreate the folder to remove old h3 files
-mkdir ../../../ios/Classes/h3lib
+rm -rf ../../../c/h3lib // recreate the folder to remove old h3 files
+mkdir ../../../c/h3lib
 
-cp src/h3lib/include/h3api.h ../../../ios/Classes/h3lib
+cp src/h3lib/include/h3api.h ../../../c/h3lib
 ```
 
 Copy other source files (*.h and *.c) to the folder.
 ```
 cd ..
 tmp/h3_sources/src/h3lib/include
-cp src/h3lib/include/* ../../ios/Classes/h3lib
-cp src/h3lib/lib/* ../../ios/Classes/h3lib
+cp src/h3lib/include/* ../../c/h3lib
+cp src/h3lib/lib/* ../../c/h3lib
 ```
 
 You need to add .h and .c files to the project using XCode if you want to launch example (iOS).  

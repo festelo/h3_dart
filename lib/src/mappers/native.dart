@@ -1,18 +1,12 @@
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
+
 import 'package:h3_flutter/h3_flutter.dart';
+import 'package:h3_flutter/src/generated/generated_bindings.dart' as c;
 
-import 'generated/generated_bindings.dart' as c;
-
-class GeoCoord {
-  GeoCoord(this.lon, this.lat);
-
-  final double lat;
-  final double lon;
-}
-
-extension GeoCoordNativeMapperExt on GeoCoord {
+extension GeoCoordNativeMapperExtension on GeoCoord {
+  /// Returns native representation of GeoCoord class
   Pointer<c.GeoCoord> toNative([Pointer<c.GeoCoord>? pointer]) {
     pointer ??= calloc<c.GeoCoord>();
     pointer.ref.lat = h3.degsToRads(lat);
