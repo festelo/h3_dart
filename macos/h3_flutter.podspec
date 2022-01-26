@@ -14,10 +14,9 @@ H3 Flutter plugin
   s.author           = { 'Ilia Beregovskii' => 'festeloqq@gmail.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*.{m,c,swift}'
-  s.dependency 'Flutter'
-  s.platform = :ios, '9.0'
+  s.dependency 'FlutterMacOS'
 
-  # Flutter.framework does not contain a i386 slice.
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
+  s.platform = :osx, '10.11'
+  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   s.swift_version = '5.0'
 end

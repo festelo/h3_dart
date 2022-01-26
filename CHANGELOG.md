@@ -1,12 +1,18 @@
-## 0.1.0
+## 0.2.0
 
-* `h3.maxPolyfillSize` were added
-* `h3.polyfill` were added
-* `h3.h3ToGeoBoundary` were added
-* `h3.radsToDegs` were added
-* `h3.degsToRads` were added
-* `geojson2h3.h3ToFeature` were added
-* `geojson2h3.h3SetToFeatureCollection` were added
-## 0.1.0
+* macOS system support was added
+* Tests were added
+* Documentation was added
+## 0.2.0
+
+* `h3.maxPolyfillSize` was added
+* `h3.polyfill` was added
+* `h3.h3ToGeoBoundary` was added
+* `h3.radsToDegs` was added
+* `h3.degsToRads` was added
+* `geojson2h3.h3ToFeature` was added
+* `geojson2h3.h3SetToFeatureCollection` was added
+
+## 0.2.0
 
 * First version
