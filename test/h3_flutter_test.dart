@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:h3_flutter/h3_flutter.dart';
 import 'package:h3_flutter/internal.dart';
+import 'package:collection/collection.dart';
 
 import 'utils.dart';
 
@@ -13,6 +14,180 @@ void main() {
   final lib = DynamicLibrary.open('c/h3lib/build/libh3lib.dylib');
   setUpAll(() {
     initH3C(lib);
+  });
+  test('h3IsValid', () async {
+    expect(
+      h3.h3IsValid(0x85283473fffffff),
+      true,
+      reason: 'H3 index is considered an index',
+    );
+    expect(
+      h3.h3IsValid(0x821C37FFFFFFFFF),
+      true,
+      reason: 'H3 index in upper case is considered an index',
+    );
+    expect(
+      h3.h3IsValid(0x085283473fffffff),
+      true,
+      reason: 'H3 index with leading zero is considered an index',
+    );
+    expect(
+      !h3.h3IsValid(0xff283473fffffff),
+      true,
+      reason: 'Hexidecimal string with incorrect bits is not valid',
+    );
+    for (var res = 0; res < 16; res++) {
+      expect(
+        h3.h3IsValid(h3.geoToH3(const GeoCoord(lat: 37, lon: -122), res)),
+        true,
+        reason: 'H3 index is considered an index',
+      );
+    }
+  });
+  test('geoToH3', () async {
+    expect(
+      h3.geoToH3(const GeoCoord(lat: 37.3615593, lon: -122.0553238), 5),
+      0x85283473fffffff,
+      reason: 'Got the expected H3 index back',
+    );
+    expect(
+      h3.geoToH3(const GeoCoord(lat: 30.943387, lon: -164.991559), 5),
+      0x8547732ffffffff,
+      reason: 'Properly handle 8 Fs',
+    );
+    expect(
+      h3.geoToH3(
+          const GeoCoord(lat: 46.04189431883772, lon: 71.52790329909925), 15),
+      0x8f2000000000000,
+      reason: 'Properly handle leading zeros',
+    );
+    expect(
+      h3.geoToH3(const GeoCoord(lat: 37.3615593, lon: -122.0553238 + 360), 5),
+      0x85283473fffffff,
+      reason: 'world-wrapping lng accepted',
+    );
+  });
+  test('h3GetResolution', () async {
+    expect(
+      () => h3.h3GetResolution(-1),
+      throwsA(isA<H3Exception>()),
+      reason: 'Throws assertation error when an invalid index is passed',
+    );
+    for (var res = 0; res < 16; res++) {
+      final h3Index = h3.geoToH3(
+        const GeoCoord(lat: 37.3615593, lon: -122.0553238),
+        res,
+      );
+      expect(
+        h3.h3GetResolution(h3Index),
+        res,
+        reason: 'Got the expected resolution back',
+      );
+    }
+  });
+  test('h3ToGeo', () async {
+    expect(
+      ComparableGeoCoord.fromGeoCoord(h3.h3ToGeo(0x85283473fffffff)),
+      ComparableGeoCoord.fromLatLon(
+        lat: 37.34579337536848,
+        lon: -121.97637597255124,
+      ),
+      reason: 'lat/lng matches expected',
+    );
+  });
+
+  group('kRing', () {
+    test('k = 1', () async {
+      expect(
+        const DeepCollectionEquality.unordered().equals(
+          h3.kRing(0x8928308280fffff, 1),
+          [
+            0x8928308280fffff,
+            0x8928308280bffff,
+            0x89283082807ffff,
+            0x89283082877ffff,
+            0x89283082803ffff,
+            0x89283082873ffff,
+            0x8928308283bffff,
+          ],
+        ),
+        true,
+      );
+    });
+    test('k = 2', () async {
+      expect(
+        const DeepCollectionEquality.unordered().equals(
+          h3.kRing(0x8928308280fffff, 2),
+          [
+            0x89283082813ffff,
+            0x89283082817ffff,
+            0x8928308281bffff,
+            0x89283082863ffff,
+            0x89283082823ffff,
+            0x89283082873ffff,
+            0x89283082877ffff,
+            0x8928308287bffff,
+            0x89283082833ffff,
+            0x8928308282bffff,
+            0x8928308283bffff,
+            0x89283082857ffff,
+            0x892830828abffff,
+            0x89283082847ffff,
+            0x89283082867ffff,
+            0x89283082803ffff,
+            0x89283082807ffff,
+            0x8928308280bffff,
+            0x8928308280fffff
+          ],
+        ),
+        true,
+      );
+    });
+    test('Bad Radius', () async {
+      expect(
+        const DeepCollectionEquality.unordered().equals(
+          h3.kRing(0x8928308280fffff, -7),
+          [0x8928308280fffff],
+        ),
+        true,
+      );
+    });
+    test('Pentagon', () async {
+      expect(
+        const DeepCollectionEquality.unordered().equals(
+          h3.kRing(0x821c07fffffffff, 1),
+          [
+            0x821c2ffffffffff,
+            0x821c27fffffffff,
+            0x821c07fffffffff,
+            0x821c17fffffffff,
+            0x821c1ffffffffff,
+            0x821c37fffffffff,
+          ],
+        ),
+        true,
+      );
+    });
+    test('Edge case', () async {
+      // In H3-JS there was an issue reading particular 64-bit integers correctly,
+      // this kRing ran into it.
+      // Check it just in case
+      expect(
+        const DeepCollectionEquality.unordered().equals(
+          h3.kRing(0x8928308324bffff, 1),
+          [
+            0x8928308324bffff,
+            0x892830989b3ffff,
+            0x89283098987ffff,
+            0x89283098997ffff,
+            0x8928308325bffff,
+            0x89283083243ffff,
+            0x8928308324fffff,
+          ],
+        ),
+        true,
+      );
+    });
   });
   test('radsToDegs', () async {
     expect(h3.radsToDegs(pi / 2), 90);
@@ -114,18 +289,17 @@ void main() {
     });
 
     test('Negative resolution', () async {
-      final hexagons = h3.polyfill(
-        coordinates: const [
-          GeoCoord(lat: 0.5729577951308232, lon: -179.4270422048692),
-          GeoCoord(lat: 0.5729577951308232, lon: 179.4270422048692),
-          GeoCoord(lat: -0.5729577951308232, lon: 179.4270422048692),
-          GeoCoord(lat: -0.5729577951308232, lon: -179.4270422048692),
-        ],
-        resolution: -9,
-      );
       expect(
-        hexagons.length,
-        0,
+        () => h3.polyfill(
+          coordinates: const [
+            GeoCoord(lat: 0.5729577951308232, lon: -179.4270422048692),
+            GeoCoord(lat: 0.5729577951308232, lon: 179.4270422048692),
+            GeoCoord(lat: -0.5729577951308232, lon: 179.4270422048692),
+            GeoCoord(lat: -0.5729577951308232, lon: -179.4270422048692),
+          ],
+          resolution: -9,
+        ),
+        throwsAssertionError,
       );
     });
   });

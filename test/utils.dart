@@ -6,13 +6,19 @@ class ComparableGeoCoord {
   final String lat;
   final String lon;
 
-  ComparableGeoCoord({
+  const ComparableGeoCoord._({
     required this.lat,
     required this.lon,
   });
+
+  ComparableGeoCoord.fromLatLon({
+    required double lat,
+    required double lon,
+  })  : lat = lat.toStringAsPrecision(geoPrecision),
+        lon = lon.toStringAsPrecision(geoPrecision);
+
   ComparableGeoCoord.fromGeoCoord(GeoCoord geoCoord)
-      : lat = geoCoord.lat.toStringAsPrecision(geoPrecision),
-        lon = geoCoord.lon.toStringAsPrecision(geoPrecision);
+      : this.fromLatLon(lat: geoCoord.lat, lon: geoCoord.lon);
 
   @override
   bool operator ==(Object other) {
