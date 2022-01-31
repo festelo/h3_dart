@@ -14,7 +14,6 @@
 * `h3.h3ToGeo` was added
 * `h3.kRing` was added
 * `h3.hexRing` was added
-* `h3.kRingDistances` was added
 * `h3.compact` was added
 * `h3.uncompact` was added
 * `h3.h3IndexesAreNeighbors` was added

@@ -123,11 +123,6 @@ class H3 {
     });
   }
 
-  /// Hexagon neighbors in all directions, reporting distance from origin
-  List<int> kRingDistances(int h3Index, int ringSize) {
-    throw UnimplementedError();
-  }
-
   /// Takes a given [coordinates] and [resolution] and returns hexagons that
   /// are contained by them.
   ///
