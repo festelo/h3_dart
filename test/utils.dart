@@ -6,11 +6,6 @@ class ComparableGeoCoord {
   final String lat;
   final String lon;
 
-  const ComparableGeoCoord._({
-    required this.lat,
-    required this.lon,
-  });
-
   ComparableGeoCoord.fromLatLon({
     required double lat,
     required double lon,
