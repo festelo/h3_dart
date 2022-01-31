@@ -30,7 +30,7 @@ jobs:
       run: "flutter analyze"
 
     - name: Run tests
-      run: "flutter test"
+      run: "flutter test --coverage --coverage-path lcov.info"
 
     - name: Upload coverage to codecov
       run: curl -s https://codecov.io/bash | bash
