@@ -1,0 +1,25 @@
+name: C Checks
+
+on: 
+  push:
+  pull_request:
+
+concurrency:
+  group: c_checks-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+  
+jobs:
+  h3_sync_check:
+    name: Check C lib of H3 synced between different OS.
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Sync h3lib
+      run: sh sync_h3lib.sh
+
+    - name: Git status
+      run: git status
+
+    - name: Check C files are the same after executing sync script
+      run: sh -c 'if [[ $(git status --porcelain) ]]; then (exit 1); fi;'
