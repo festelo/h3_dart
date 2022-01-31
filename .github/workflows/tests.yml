@@ -1,0 +1,36 @@
+name: Tests
+
+on: 
+  push:
+  pull_request:
+  schedule:
+    # runs the CI everyday at 10AM
+    - cron: "0 10 * * *"
+
+concurrency:
+  group: build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+  
+jobs:
+  test:
+    name: Test (macOS)
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup subosito/flutter-action@v1
+      uses: subosito/flutter-action@v1
+      with:
+        channel: beta
+
+    - name: Prepare tests
+      run: sh prepare_tests.sh
+
+    - name: Analyze
+      run: "flutter analyze"
+
+    - name: Run tests
+      run: "flutter test"
+
+    - name: Upload coverage to codecov
+      run: curl -s https://codecov.io/bash | bash
