@@ -189,6 +189,73 @@ void main() {
       );
     });
   });
+
+  group('hexRing', () {
+    test('ringSize = 1', () async {
+      expect(
+        const DeepCollectionEquality.unordered().equals(
+          h3.hexRing(0x8928308280fffff, 1),
+          [
+            0x8928308280bffff,
+            0x89283082807ffff,
+            0x89283082877ffff,
+            0x89283082803ffff,
+            0x89283082873ffff,
+            0x8928308283bffff,
+          ],
+        ),
+        true,
+      );
+    });
+    test('ringSize = 2', () async {
+      expect(
+        const DeepCollectionEquality.unordered().equals(
+          h3.hexRing(0x928308280fffff, 2),
+          [
+            0x89283082813ffff,
+            0x89283082817ffff,
+            0x8928308281bffff,
+            0x89283082863ffff,
+            0x89283082823ffff,
+            0x8928308287bffff,
+            0x89283082833ffff,
+            0x8928308282bffff,
+            0x89283082857ffff,
+            0x892830828abffff,
+            0x89283082847ffff,
+            0x89283082867ffff,
+          ],
+        ),
+        true,
+      );
+    });
+    test('ringSize = 0', () async {
+      expect(
+        const DeepCollectionEquality.unordered().equals(
+          h3.hexRing(0x8928308280fffff, 0),
+          [0x8928308280fffff],
+        ),
+        true,
+      );
+    });
+    test('Pentagon', () async {
+      expect(
+        () => h3.hexRing(0x821c07fffffffff, 2),
+        throwsA(isA<H3Exception>()),
+        reason: 'Throws with a pentagon origin',
+      );
+      expect(
+        () => h3.hexRing(0x821c2ffffffffff, 1),
+        throwsA(isA<H3Exception>()),
+        reason: 'Throws with a pentagon in the ring itself',
+      );
+      expect(
+        () => h3.hexRing(0x821c2ffffffffff, 5),
+        throwsA(isA<H3Exception>()),
+        reason: 'Throws with a pentagon inside the ring',
+      );
+    });
+  });
   test('radsToDegs', () async {
     expect(h3.radsToDegs(pi / 2), 90);
     expect(h3.radsToDegs(pi), 180);
@@ -300,6 +367,70 @@ void main() {
           resolution: -9,
         ),
         throwsAssertionError,
+      );
+    });
+  });
+
+  group('compact and uncompact', () {
+    test('Basic', () async {
+      final hexagons = h3.polyfill(
+        coordinates: [
+          const GeoCoord(lat: 37.813318999983238, lon: -122.4089866999972145),
+          const GeoCoord(lat: 37.7866302000007224, lon: -122.3805436999997056),
+          const GeoCoord(lat: 37.7198061999978478, lon: -122.3544736999993603),
+          const GeoCoord(lat: 37.7076131999975672, lon: -122.5123436999983966),
+          const GeoCoord(lat: 37.7835871999971715, lon: -122.5247187000021967),
+          const GeoCoord(lat: 37.8151571999998453, lon: -122.4798767000009008),
+        ],
+        resolution: 9,
+      );
+      final compactedHexagons = h3.compact(hexagons);
+      expect(compactedHexagons.length, 209);
+      final uncompactedHexagons = h3.uncompact(
+        compactedHexagons,
+        resolution: 9,
+      );
+      expect(uncompactedHexagons.length, 1253);
+    });
+
+    test('Compact - Empty', () async {
+      expect(h3.compact([]).length, 0);
+    });
+
+    test('Uncompact - Empty', () async {
+      expect(h3.uncompact([], resolution: 9).length, 0);
+    });
+
+    test('Ignore duplicates', () async {
+      final hexagons = h3.polyfill(
+        coordinates: [
+          const GeoCoord(lat: 37.813318999983238, lon: -122.4089866999972145),
+          const GeoCoord(lat: 37.813318999983238, lon: -122.4089866999972145),
+          const GeoCoord(lat: 37.813318999983238, lon: -122.4089866999972145),
+          const GeoCoord(lat: 37.7866302000007224, lon: -122.3805436999997056),
+          const GeoCoord(lat: 37.7198061999978478, lon: -122.3544736999993603),
+          const GeoCoord(lat: 37.7076131999975672, lon: -122.5123436999983966),
+          const GeoCoord(lat: 37.7835871999971715, lon: -122.5247187000021967),
+          const GeoCoord(lat: 37.8151571999998453, lon: -122.4798767000009008),
+        ],
+        resolution: 9,
+      );
+      final compactedHexagons = h3.compact(hexagons);
+      expect(compactedHexagons.length, 209);
+      final uncompactedHexagons = h3.uncompact(
+        compactedHexagons,
+        resolution: 9,
+      );
+      expect(uncompactedHexagons.length, 1253);
+    });
+
+    test('Uncompact - Invalid', () async {
+      expect(
+        () => h3.uncompact(
+          [h3.geoToH3(const GeoCoord(lat: 37.3615593, lon: -122.0553238), 10)],
+          resolution: 5,
+        ),
+        throwsA(isA<H3Exception>()),
       );
     });
   });

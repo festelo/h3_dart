@@ -209,12 +209,13 @@ class H3 {
   }
 
   /// Uncompact a compacted set of hexagons to hexagons of the same resolution
-  List<int> uncompact({
-    required List<int> compactedHexagons,
+  List<int> uncompact(
+    List<int> compactedHexagons, {
     required int resolution,
   }) {
     assert(resolution >= 0 && resolution < 16,
         'Resolution must be in [0, 15] range');
+
     return using((arena) {
       final compactedHexagonsPointer = arena<Uint64>(compactedHexagons.length);
       for (var i = 0; i < compactedHexagons.length; i++) {
@@ -230,6 +231,10 @@ class H3 {
         resolution,
       );
 
+      if (maxUncompactSize < 0) {
+        throw H3Exception('Failed to uncompact');
+      }
+
       final out = arena<Uint64>(maxUncompactSize);
       final resultCode = _h3c.uncompact(
         compactedHexagonsPointer,
@@ -239,7 +244,7 @@ class H3 {
         resolution,
       );
       if (resultCode != 0) {
-        throw H3Exception('Failed to compact');
+        throw H3Exception('Failed to uncompact');
       }
 
       final list = out.asTypedList(maxUncompactSize).toList();
