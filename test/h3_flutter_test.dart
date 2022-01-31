@@ -210,7 +210,7 @@ void main() {
     test('ringSize = 2', () async {
       expect(
         const DeepCollectionEquality.unordered().equals(
-          h3.hexRing(0x928308280fffff, 2),
+          h3.hexRing(0x8928308280fffff, 2),
           [
             0x89283082813ffff,
             0x89283082817ffff,
