@@ -434,4 +434,158 @@ void main() {
       );
     });
   });
+  test('h3IsPentagon', () async {
+    expect(
+      h3.h3IsPentagon(0x8928308280fffff),
+      false,
+    );
+    expect(
+      h3.h3IsPentagon(0x821c07fffffffff),
+      true,
+    );
+    expect(
+      h3.h3IsPentagon(0x0),
+      false,
+    );
+  });
+  test('h3IsResClassIII', () async {
+    // Test all even indexes
+    for (var i = 0; i < 15; i += 2) {
+      final h3Index = h3.geoToH3(
+        const GeoCoord(lat: 37.3615593, lon: -122.0553238),
+        i,
+      );
+      expect(h3.h3IsResClassIII(h3Index), false);
+    }
+    // Test all odd indexes
+    for (var i = 1; i < 15; i += 2) {
+      final h3Index = h3.geoToH3(
+        const GeoCoord(lat: 37.3615593, lon: -122.0553238),
+        i,
+      );
+      expect(h3.h3IsResClassIII(h3Index), true);
+    }
+  });
+  test('h3GetFaces', () async {
+    void testFace(String name, int h3Index, int expected) {
+      final faces = h3.h3GetFaces(h3Index);
+
+      expect(
+        faces.length,
+        expected,
+        reason: 'Got expected face count for $name',
+      );
+      expect(
+        faces.toSet().length,
+        expected,
+        reason: 'Faces are unique for $name',
+      );
+      expect(
+        faces.every((e) => e >= 0 && e < 20),
+        true,
+        reason: ' face indexes in expected range for $name',
+      );
+    }
+
+    testFace('single face', 0x85283473fffffff, 1);
+    testFace('edge adjacent', 0x821c37fffffffff, 1);
+    testFace('edge crossing, distorted', 0x831c06fffffffff, 2);
+    testFace('edge crossing, aligned', 0x821ce7fffffffff, 2);
+    testFace('class II pentagon', 0x84a6001ffffffff, 5);
+    testFace('class III pentagon', 0x85a60003fffffff, 5);
+  });
+
+  test('h3GetBaseCell', () async {
+    expect(h3.h3GetBaseCell(0x8928308280fffff), 20);
+  });
+
+  group('h3ToParent', () {
+    test('Basic', () async {
+      // NB: This test will not work with every hexagon, it has to be a location
+      // that does not fall in the margin of error between the 7 children and
+      // the parent's true boundaries at every resolution
+      const lat = 37.81331899988944;
+      const lng = -122.409290778685;
+      for (var res = 1; res < 10; res++) {
+        for (var step = 0; step < res; step++) {
+          final child = h3.geoToH3(const GeoCoord(lat: lat, lon: lng), res);
+
+          final comparisonParent =
+              h3.geoToH3(const GeoCoord(lat: lat, lon: lng), res - step);
+
+          final parent = h3.h3ToParent(child, res - step);
+          expect(
+            parent,
+            comparisonParent,
+            reason: 'Got expected parent for $res:${res - step}',
+          );
+        }
+      }
+    });
+    test('Invalid', () async {
+      const h3Index = 0x8928308280fffff;
+
+      expect(
+        h3.h3ToParent(h3Index, 10),
+        0,
+        reason: 'Finer resolution returns zero',
+      );
+
+      expect(
+        h3.h3ToParent(h3Index, -1),
+        0,
+        reason: 'Invalid resolution returns zero',
+      );
+    });
+  });
+
+  test('h3ToChildren', () async {
+    const lat = 37.81331899988944;
+    const lng = -122.409290778685;
+    final h3Index = h3.geoToH3(const GeoCoord(lat: lat, lon: lng), 7);
+
+    expect(h3.h3ToChildren(h3Index, 8).length, 7,
+        reason: 'Immediate child count correct');
+
+    expect(h3.h3ToChildren(h3Index, 9).length, 49,
+        reason: 'Grandchild count correct');
+
+    expect(h3.h3ToChildren(h3Index, 7), [h3Index],
+        reason: 'Same resolution returns self');
+
+    expect(h3.h3ToChildren(h3Index, 6), [],
+        reason: 'Coarser resolution returns empty array');
+
+    expect(h3.h3ToChildren(h3Index, -1), [],
+        reason: 'Invalid resolution returns empty array');
+  });
+
+  group('h3ToCenterChild', () {
+    test('Basic', () async {
+      const baseIndex = 0x8029fffffffffff;
+      final geo = h3.h3ToGeo(baseIndex);
+      for (var res = 0; res < 14; res++) {
+        for (var childRes = res; childRes < 15; childRes++) {
+          final parent = h3.geoToH3(geo, res);
+          final comparisonChild = h3.geoToH3(geo, childRes);
+          final child = h3.h3ToCenterChild(parent, childRes);
+
+          expect(
+            child,
+            comparisonChild,
+            reason: 'Got expected center child for $res:$childRes',
+          );
+        }
+      }
+    });
+    test('Invalid', () async {
+      const h3Index = 0x8928308280fffff;
+
+      expect(h3.h3ToCenterChild(h3Index, 5), 0,
+          reason: 'Coarser resolution returns zero');
+
+      expect(h3.h3ToCenterChild(h3Index, -1), 0,
+          reason: 'Invalid resolution returns zero');
+    });
+  });
 }

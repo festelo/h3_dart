@@ -19,15 +19,15 @@ class H3 {
   }
 
   /// Determines if [h3Index] is a valid pentagon
-  int h3IsPentagon(int h3Index) {
-    return _h3c.h3IsPentagon(h3Index);
+  bool h3IsPentagon(int h3Index) {
+    return _h3c.h3IsPentagon(h3Index) == 1;
   }
 
   /// Determines if [h3Index] is Class III (rotated versus
   /// the icosahedron and subject to shape distortion adding extra points on
   /// icosahedron edges, making them not true hexagons).
-  int h3IsResClassIII(int h3Index) {
-    return _h3c.h3IsResClassIII(h3Index);
+  bool h3IsResClassIII(int h3Index) {
+    return _h3c.h3IsResClassIII(h3Index) == 1;
   }
 
   /// Returns the base cell "number" (0 to 121) of the provided H3 cell
@@ -44,7 +44,7 @@ class H3 {
       final size = _h3c.maxFaceCount(h3Index);
       final out = arena<Int32>(size);
       _h3c.h3GetFaces(h3Index, out);
-      return out.asTypedList(size).where((e) => e != 0).toList();
+      return out.asTypedList(size).where((e) => e != -1).toList();
     });
   }
 
@@ -96,6 +96,32 @@ class H3 {
       }
       return res;
     });
+  }
+
+  /// Get the parent of the given [h3Index] hexagon at a particular [resolution]
+  int h3ToParent(int h3Index, int resolution) {
+    return h3c.h3ToParent(h3Index, resolution);
+  }
+
+  /// Get the children/descendents of the given [h3Index] hexagon at a particular [resolution]
+  List<int> h3ToChildren(int h3Index, int resolution) {
+    // Bad input in this case can potentially result in high computation volume
+    // using the current C algorithm. Validate and return an empty array on failure.
+    if (!h3IsValid(h3Index)) {
+      return [];
+    }
+    final maxSize = h3c.maxH3ToChildrenSize(h3Index, resolution);
+    return using((arena) {
+      final out = arena<Uint64>(maxSize);
+      h3c.h3ToChildren(h3Index, resolution, out);
+      final list = out.asTypedList(maxSize).toList();
+      return list.where((e) => e != 0).toList();
+    });
+  }
+
+  /// Get the center child of the given [h3Index] hexagon at a particular [resolution]
+  int h3ToCenterChild(int h3Index, int resolution) {
+    return h3c.h3ToCenterChild(h3Index, resolution);
   }
 
   /// Maximum number of hexagons in k-ring
