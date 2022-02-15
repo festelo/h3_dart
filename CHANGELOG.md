@@ -1,3 +1,18 @@
+## 0.4.0
+* **[BREAKING]** Change return types for `h3.h3IsPentagon` and h3IsResClassIII methods from [int] to [bool]
+* Fix broken `h3.h3GetFaces` method
+* Add `h3.h3ToParent` and `h3.h3ToChildren` methods
+* Add tests for following methods:
+```
+h3.h3IsPentagon
+h3.h3IsResClassIII,
+h3.h3GetFaces
+h3.h3GetBaseCell
+h3.h3ToParent
+h3.h3ToChildren
+h3.h3ToCenterChild
+```
+
 ## 0.3.0
 * **[BREAKING]** resolution assert was added to `h3.polyfill` function.
 * `CoordIJ` class was added

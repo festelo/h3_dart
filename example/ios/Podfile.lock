@@ -1,6 +1,6 @@
 PODS:
   - Flutter (1.0.0)
-  - h3_flutter (0.3.0):
+  - h3_flutter (0.4.0):
     - Flutter
 
 DEPENDENCIES:
