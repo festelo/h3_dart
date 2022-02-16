@@ -1,9 +1,13 @@
 /// A pair of latitude and longitude coordinates
+///
+/// World-wrapping supported - if you pass coordinates outside of the bounds
+/// ([-180, 180] for longitude and [-90, 190] for latitude) they will be converted.
 class GeoCoord {
   const GeoCoord({
-    required this.lon,
-    required this.lat,
-  });
+    required double lon,
+    required double lat,
+  })  : lon = (lon + 180) % 360 - 180,
+        lat = (lat + 90) % 180 - 90;
 
   final double lon;
   final double lat;
@@ -16,8 +20,8 @@ class GeoCoord {
   }
 
   @override
-  int get hashCode => lat.hashCode ^ lon.hashCode;
+  int get hashCode => Object.hash(lat, lon);
 
   @override
-  String toString() => 'GeoCoord(lon: $lon, lon: $lat)';
+  String toString() => 'GeoCoord(lon: $lon, lat: $lat)';
 }

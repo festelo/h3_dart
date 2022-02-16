@@ -31,17 +31,17 @@ class Geojson2H3 {
         'type': _polygon,
         'coordinates': coordinates,
       },
-      if (properties != null) 'properties': properties,
+      'properties': properties ?? {},
     };
   }
 
   /// Convert a list of [hexagons] to a GeoJSON `FeatureCollection` with each hexagon
   /// in a separate `Polygon` feature with optional [properties].
   Map<String, dynamic> h3SetToFeatureCollection(List<int> hexagons,
-      {Map? properties}) {
+      {Map? Function(int h3Index)? properties}) {
     final features = hexagons
         .map(
-          (e) => h3ToFeature(e, properties: properties),
+          (e) => h3ToFeature(e, properties: properties?.call(e)),
         )
         .toList();
     return {

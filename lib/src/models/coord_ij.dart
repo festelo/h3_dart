@@ -16,8 +16,8 @@ class CoordIJ {
   }
 
   @override
-  int get hashCode => j.hashCode ^ i.hashCode;
+  int get hashCode => Object.hash(j, i);
 
   @override
-  String toString() => 'CoordIJ(i: $i, i: $j)';
+  String toString() => 'CoordIJ(i: $i, j: $j)';
 }

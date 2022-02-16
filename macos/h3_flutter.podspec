@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'h3_flutter'
-  s.version          = '0.4.1'
+  s.version          = '0.4.2'
   s.summary          = 'H3 Flutter plugin'
   s.description      = <<-DESC
 H3 Flutter plugin

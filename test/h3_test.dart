@@ -66,6 +66,27 @@ void main() {
       0x85283473fffffff,
       reason: 'world-wrapping lng accepted',
     );
+    expect(
+      h3.geoToH3(const GeoCoord(lat: 37.3615593, lon: -122.0553238 + 720), 5),
+      0x85283473fffffff,
+      reason: '2 times world-wrapping lng accepted',
+    );
+    expect(
+      h3.geoToH3(
+        const GeoCoord(lat: 37.3615593 + 180, lon: -122.0553238 + 360),
+        5,
+      ),
+      0x85283473fffffff,
+      reason: 'world-wrapping lat & lng accepted',
+    );
+    expect(
+      h3.geoToH3(
+        const GeoCoord(lat: 37.3615593 - 180, lon: -122.0553238 - 360),
+        5,
+      ),
+      0x85283473fffffff,
+      reason: 'world-wrapping lat & lng accepted 2',
+    );
   });
   test('h3GetResolution', () async {
     expect(
@@ -745,6 +766,26 @@ void main() {
     );
   });
 
+  test('getH3IndexesFromUnidirectionalEdge', () async {
+    const origin = 0x891ea6d6533ffff;
+    const destination = 0x891ea6d65afffff;
+    const edge = 0x1591ea6d6533ffff;
+
+    expect(
+      h3.getH3IndexesFromUnidirectionalEdge(edge),
+      [origin, destination],
+      reason: 'Got expected origin, destination from edge',
+    );
+
+    expect(
+      h3.getH3IndexesFromUnidirectionalEdge(
+          h3.getH3UnidirectionalEdge(origin, destination)),
+      [origin, destination],
+      reason:
+          'Got expected origin, destination from getH3UnidirectionalEdge output',
+    );
+  });
+
   group('getH3UnidirectionalEdgesFromHexagon', () {
     test('Basic', () async {
       const origin = 0x8928308280fffff;
@@ -1189,6 +1230,58 @@ void main() {
       true,
       reason: 'has some reasonable distance in m',
     );
+  });
+
+  test('exactEdgeLength', () async {
+    for (var res = 0; res < 16; res++) {
+      final h3Index = h3.geoToH3(const GeoCoord(lat: 0, lon: 0), res);
+      final edges = h3.getH3UnidirectionalEdgesFromHexagon(h3Index);
+      for (var i = 0; i < edges.length; i++) {
+        final edge = edges[i];
+        final lengthKm = h3.exactEdgeLength(edge, H3Units.km);
+        final lengthM = h3.exactEdgeLength(edge, H3Units.m);
+
+        expect(lengthKm > 0, true, reason: 'Has some length');
+        expect(lengthM > 0, true, reason: 'Has some length');
+        expect(lengthKm * 1000, lengthM, reason: 'km * 1000 = m');
+
+        if (res > 0) {
+          // res 0 has high distortion of average edge length due to high pentagon proportion
+          expect(
+            almostEqual(
+              lengthKm,
+              h3.edgeLength(res, H3EdgeLengthUnits.km),
+              0.2,
+            ),
+            true,
+            reason:
+                'Edge length is close to average edge length at res $res, km',
+          );
+          expect(
+            almostEqual(
+              lengthM,
+              h3.edgeLength(res, H3EdgeLengthUnits.m),
+              0.2,
+            ),
+            true,
+            reason:
+                'Edge length is close to average edge length at res $res, m',
+          );
+        }
+
+        expect(
+          lengthM > lengthKm,
+          true,
+          reason: 'm > Km',
+        );
+
+        expect(
+          lengthKm > h3.exactEdgeLength(edge, H3Units.rad),
+          true,
+          reason: 'Km > rads',
+        );
+      }
+    }
   });
 
   test('numHexagons', () async {

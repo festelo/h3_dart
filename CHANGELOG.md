@@ -1,3 +1,26 @@
+## 0.4.2
+* Fix `CoordIJ.toString()` output
+* Change `CoordIJ.hashCode`to generate more unique hashcode
+* Fix `GeoCoord.toString()` output
+* Change `GeoCoord.hashCode`to generate more unique hashcode
+* Add world-wrapping feature to `GeoCoord()` constructor
+* `geojson2h3.h3ToFeature` and `geojson2h3.h3SetToFeatureCollection` now adds `'properties': {}` to output when properties not set. To make the behaviour closer to JS version of the library
+* Change type for `properties` parameter in `geojson2h3.h3SetToFeatureCollection` function. Now it accepts Function() instead of Map
+* Rename `h3_flutter_test.dart` to `h3_test.dart`
+* Add tests for following methods:
+```
+geojson2h3.h3ToFeature
+geojson2h3.h3SetToFeatureCollection
+CoordIJ.==
+CoordIJ.hashCode
+CoordIJ.toString
+GeoCoord.==
+GeoCoord.hashCode
+GeoCoord.toString
+GeoCoord() (World-Wrapping)
+H3Exception.toString
+```
+
 ## 0.4.1
 * Fix `h3.getH3UnidirectionalEdgesFromHexagon` method - now it returns 5 elements for pentagon.
 * Fix `h3.h3Line` method - now it throws `H3Exception` instead of some internal when input is not valid.
