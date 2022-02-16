@@ -1,3 +1,30 @@
+## 0.4.1
+* Fix `h3.getH3UnidirectionalEdgesFromHexagon` method - now it returns 5 elements for pentagon.
+* Fix `h3.h3Line` method - now it throws `H3Exception` instead of some internal when input is not valid.
+* Update README.md.
+* Update documentation for methods `h3.h3ToParent`, `h3.h3ToCenterChild`, `h3.getH3UnidirectionalEdge`, `h3.getOriginH3IndexFromUnidirectionalEdge`, `h3.getDestinationH3IndexFromUnidirectionalEdge`, `h3.h3Distance`.
+* Add tests for following methods:
+```
+h3.h3IndexesAreNeighbors
+h3.getH3UnidirectionalEdge
+h3.getOriginH3IndexFromUnidirectionalEdge
+h3.getDestinationH3IndexFromUnidirectionalEdge
+h3.h3UnidirectionalEdgeIsValid
+h3.getH3UnidirectionalEdgesFromHexagon
+h3.getH3UnidirectionalEdgeBoundary
+h3.h3Distance
+h3.h3Line
+h3.experimentalH3ToLocalIj
+h3.experimentalLocalIjToH3
+h3.hexArea
+h3.edgeLength
+h3.cellArea
+h3.pointDist
+h3.numHexagons
+h3.getRes0Indexes
+h3.getPentagonIndexes
+```
+
 ## 0.4.0
 * **[BREAKING]** Change return types for `h3.h3IsPentagon` and h3IsResClassIII methods from [int] to [bool]
 * Fix broken `h3.h3GetFaces` method
@@ -5,7 +32,7 @@
 * Add tests for following methods:
 ```
 h3.h3IsPentagon
-h3.h3IsResClassIII,
+h3.h3IsResClassIII
 h3.h3GetFaces
 h3.h3GetBaseCell
 h3.h3ToParent

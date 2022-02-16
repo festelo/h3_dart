@@ -13,8 +13,7 @@ The package allows to use [H3 library](https://github.com/uber/h3) directly in y
 The package uses C version under the hood. 
 Works via [FFI](https://pub.dev/packages/ffi), bindings are automatically generated using [ffigen](https://pub.dev/packages/ffige)
 
-Few functions were adopted to allow work with them in a "safe" mode:
-```
+```dart
 // Get hexagons in specified triangle.
 final hexagons = h3.polyfill(
   resolution: 5,
@@ -26,9 +25,10 @@ final hexagons = h3.polyfill(
 );
 ```  
 
-But most of them are not. You still can use them, but it's more complicated, because you'll need to work directly with FFI (`calloc`, `malloc` and everything). If you want to try, you can use `h3c` singletone.
+Most of C's `H3` functions are available in `h3` singletone. But if you can't find method you need, you can call C function directly, althrough it's more complicated, because you'll need to work directly with FFI (you will need to worry about allocation and native types). If you want to try, you can use `h3c` singletone.
 
-The package also contains few methods from JS library [Geojson2H3](https://github.com/uber/geojson2h3).
+The package also contains few methods ported from JS library [Geojson2H3](https://github.com/uber/geojson2h3).
+
 ## Setup
 
 Just add the package to `pubspec.yaml` and that's all.
@@ -39,17 +39,17 @@ Just add the package to `pubspec.yaml` and that's all.
 To make tests work you need to execute `prepare_tests.sh` script. The script builds h3 library from C code.  
 The script is designed for macOS and therefore it probably work only under this system.  
   
-## How to update the package to match latest H3 version
+## How to update the package to use latest H3 version
 
 \~Good luck\~
   
 
-You need cmake tool, if you're on macos use next command:
+You need cmake tool, if you're on macos use next command to install it:
 ```
 brew install cmake # install cmake
 ```
 
-Clone h3 repository and prepare everything:
+Clone h3 repository and create work folders:
 ```
 git clone https://github.com/uber/h3 tmp/h3_sources 
 # git checkout ... - checkout on commit you need, currently stable versions are in stable-3.x branch

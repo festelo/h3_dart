@@ -99,6 +99,8 @@ class H3 {
   }
 
   /// Get the parent of the given [h3Index] hexagon at a particular [resolution]
+  ///
+  /// Returns 0 when result can't be calculated
   int h3ToParent(int h3Index, int resolution) {
     return h3c.h3ToParent(h3Index, resolution);
   }
@@ -120,6 +122,8 @@ class H3 {
   }
 
   /// Get the center child of the given [h3Index] hexagon at a particular [resolution]
+  ///
+  /// Returns 0 when result can't be calculated
   int h3ToCenterChild(int h3Index, int resolution) {
     return h3c.h3ToCenterChild(h3Index, resolution);
   }
@@ -280,16 +284,22 @@ class H3 {
 
   /// Get an H3 index representing a unidirectional edge for a given origin and
   /// destination
+  ///
+  /// Returns 0 when result can't be calculated
   int getH3UnidirectionalEdge(int origin, int destination) {
     return _h3c.getH3UnidirectionalEdge(origin, destination);
   }
 
   /// Get the origin hexagon from an H3 index representing a unidirectional edge
+  ///
+  /// Returns 0 when result can't be calculated
   int getOriginH3IndexFromUnidirectionalEdge(int edgeIndex) {
     return _h3c.getOriginH3IndexFromUnidirectionalEdge(edgeIndex);
   }
 
   /// Get the destination hexagon from an H3 index representing a unidirectional edge
+  ///
+  /// Returns 0 when result can't be calculated
   int getDestinationH3IndexFromUnidirectionalEdge(int edgeIndex) {
     return _h3c.getDestinationH3IndexFromUnidirectionalEdge(edgeIndex);
   }
@@ -314,7 +324,7 @@ class H3 {
     return using((arena) {
       final out = arena<Uint64>(6);
       _h3c.getH3UnidirectionalEdgesFromHexagon(edgeIndex, out);
-      return out.asTypedList(6).toList();
+      return out.asTypedList(6).toList().where((i) => i != 0).toList();
     });
   }
 
@@ -336,6 +346,8 @@ class H3 {
   /// Get the grid distance between two hex indexes. This function may fail
   /// to find the distance between two indexes if they are very far apart or
   /// on opposite sides of a pentagon.
+  ///
+  /// Returns -1 when result can't be calculated
   int h3Distance(int origin, int destination) {
     return _h3c.h3Distance(origin, destination);
   }
@@ -357,8 +369,8 @@ class H3 {
   List<int> h3Line(int origin, int destination) {
     return using((arena) {
       final size = _h3c.h3LineSize(origin, destination);
-      final out = arena<Uint64>(size);
       if (size < 0) throw H3Exception('Line cannot be calculated');
+      final out = arena<Uint64>(size);
       final resultCode = _h3c.h3Line(origin, destination, out);
       if (resultCode != 0) throw H3Exception('Line cannot be calculated');
       final list = out.asTypedList(size).toList();

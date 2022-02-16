@@ -28,3 +28,6 @@ class ComparableGeoCoord {
   @override
   String toString() => 'ComparableGeoCoord(lat: $lat, lon: $lon)';
 }
+
+bool almostEqual(num a, num b, [double factor = 1e-6]) =>
+    (a - b).abs() < a * factor;

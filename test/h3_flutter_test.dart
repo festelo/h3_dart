@@ -71,7 +71,7 @@ void main() {
     expect(
       () => h3.h3GetResolution(-1),
       throwsA(isA<H3Exception>()),
-      reason: 'Throws assertation error when an invalid index is passed',
+      reason: 'Throws error when an invalid index is passed',
     );
     for (var res = 0; res < 16; res++) {
       final h3Index = h3.geoToH3(
@@ -587,5 +587,669 @@ void main() {
       expect(h3.h3ToCenterChild(h3Index, -1), 0,
           reason: 'Invalid resolution returns zero');
     });
+  });
+
+  test('h3IndexesAreNeighbors', () async {
+    const origin = 0x891ea6d6533ffff;
+    const adjacent = 0x891ea6d65afffff;
+    const notAdjacent = 0x891ea6992dbffff;
+
+    expect(
+      h3.h3IndexesAreNeighbors(origin, adjacent),
+      true,
+      reason: 'Adjacent hexagons are neighbors',
+    );
+
+    expect(
+      h3.h3IndexesAreNeighbors(adjacent, origin),
+      true,
+      reason: 'Adjacent hexagons are neighbors',
+    );
+
+    expect(
+      h3.h3IndexesAreNeighbors(origin, notAdjacent),
+      false,
+      reason: 'Non-adjacent hexagons are not neighbors',
+    );
+
+    expect(
+      h3.h3IndexesAreNeighbors(origin, origin),
+      false,
+      reason: 'A hexagon is not a neighbor to itself',
+    );
+
+    expect(
+      h3.h3IndexesAreNeighbors(origin, -1),
+      false,
+      reason: 'A hexagon is not a neighbor to an invalid index',
+    );
+
+    expect(
+      h3.h3IndexesAreNeighbors(origin, 42),
+      false,
+      reason: 'A hexagon is not a neighbor to an invalid index',
+    );
+
+    expect(
+      h3.h3IndexesAreNeighbors(-1, -1),
+      false,
+      reason: 'Two invalid indexes are not neighbors',
+    );
+  });
+
+  test('getH3UnidirectionalEdge', () async {
+    const origin = 0x891ea6d6533ffff;
+    const destination = 0x891ea6d65afffff;
+    const edge = 0x1591ea6d6533ffff;
+    const notAdjacent = 0x891ea6992dbffff;
+
+    expect(
+      h3.getH3UnidirectionalEdge(origin, destination),
+      edge,
+      reason: 'Got expected edge for adjacent hexagons',
+    );
+
+    expect(
+      h3.getH3UnidirectionalEdge(origin, notAdjacent),
+      0,
+      reason: 'Got 0 for non-adjacent hexagons',
+    );
+
+    expect(
+      h3.getH3UnidirectionalEdge(origin, origin),
+      0,
+      reason: 'Got 0 for same hexagons',
+    );
+
+    expect(
+      h3.getH3UnidirectionalEdge(origin, -1),
+      0,
+      reason: 'Got 0 for invalid destination',
+    );
+
+    expect(
+      h3.getH3UnidirectionalEdge(-1, -1),
+      0,
+      reason: 'Got 0 for invalid hexagons',
+    );
+  });
+
+  test('getOriginH3IndexFromUnidirectionalEdge', () async {
+    const origin = 0x891ea6d6533ffff;
+    const edge = 0x1591ea6d6533ffff;
+
+    expect(
+      h3.getOriginH3IndexFromUnidirectionalEdge(edge),
+      origin,
+      reason: 'Got expected origin for edge',
+    );
+
+    expect(
+      h3.getOriginH3IndexFromUnidirectionalEdge(origin),
+      0,
+      reason: 'Got 0 for non-edge hexagon',
+    );
+
+    expect(
+      h3.getOriginH3IndexFromUnidirectionalEdge(-1),
+      0,
+      reason: 'Got 0 for non-valid hexagon',
+    );
+  });
+
+  test('getDestinationH3IndexFromUnidirectionalEdge', () async {
+    const destination = 0x891ea6d65afffff;
+    const edge = 0x1591ea6d6533ffff;
+
+    expect(
+      h3.getDestinationH3IndexFromUnidirectionalEdge(edge),
+      destination,
+      reason: 'Got expected origin for edge',
+    );
+
+    expect(
+      h3.getDestinationH3IndexFromUnidirectionalEdge(destination),
+      0,
+      reason: 'Got 0 for non-edge hexagon',
+    );
+
+    expect(
+      h3.getDestinationH3IndexFromUnidirectionalEdge(-1),
+      0,
+      reason: 'Got 0 for non-valid hexagon',
+    );
+  });
+
+  test('h3UnidirectionalEdgeIsValid', () async {
+    const origin = 0x891ea6d6533ffff;
+    const destination = 0x891ea6d65afffff;
+
+    expect(
+      h3.h3UnidirectionalEdgeIsValid(0x1591ea6d6533ffff),
+      true,
+      reason: 'Edge index is valid',
+    );
+
+    expect(
+      h3.h3UnidirectionalEdgeIsValid(
+        h3.getH3UnidirectionalEdge(origin, destination),
+      ),
+      true,
+      reason: 'Output of getH3UnidirectionalEdge is valid',
+    );
+
+    expect(
+      h3.h3UnidirectionalEdgeIsValid(-1),
+      false,
+      reason: '-1 is not valid',
+    );
+  });
+
+  group('getH3UnidirectionalEdgesFromHexagon', () {
+    test('Basic', () async {
+      const origin = 0x8928308280fffff;
+      final edges = h3.getH3UnidirectionalEdgesFromHexagon(origin);
+
+      expect(
+        edges.length,
+        6,
+        reason: 'got expected edge count',
+      );
+
+      final neighbours = h3.hexRing(origin, 1);
+      for (final neighbour in neighbours) {
+        final edge = h3.getH3UnidirectionalEdge(origin, neighbour);
+        expect(
+          edges.contains(edge),
+          true,
+          reason: 'found edge to neighbor',
+        );
+      }
+    });
+
+    test('Pentagon', () async {
+      const origin = 0x81623ffffffffff;
+      final edges = h3.getH3UnidirectionalEdgesFromHexagon(origin);
+
+      expect(
+        edges.length,
+        5,
+        reason: 'got expected edge count',
+      );
+
+      final neighbours = h3.kRing(origin, 1).where((e) => e != origin).toList();
+
+      for (final neighbour in neighbours) {
+        final edge = h3.getH3UnidirectionalEdge(origin, neighbour);
+        expect(
+          edges.contains(edge),
+          true,
+          reason: 'found edge to neighbor',
+        );
+      }
+    });
+  });
+
+  group('getH3UnidirectionalEdgeBoundary', () {
+    test('Basic', () async {
+      const origin = 0x85283473fffffff;
+      final edges = h3.getH3UnidirectionalEdgesFromHexagon(origin);
+
+      // GeoBoundary of the origin
+      final originBoundary = h3.h3ToGeoBoundary(origin);
+
+      final expectedEdges = [
+        [originBoundary[3], originBoundary[4]],
+        [originBoundary[1], originBoundary[2]],
+        [originBoundary[2], originBoundary[3]],
+        [originBoundary[5], originBoundary[0]],
+        [originBoundary[4], originBoundary[5]],
+        [originBoundary[0], originBoundary[1]]
+      ];
+
+      for (var i = 0; i < edges.length; i++) {
+        final latlngs = h3.getH3UnidirectionalEdgeBoundary(edges[i]);
+        expect(
+          latlngs,
+          expectedEdges[i],
+          reason: 'Coordinates match expected for edge $i',
+        );
+      }
+    });
+
+    test('10-vertex pentagon', () async {
+      const origin = 0x81623ffffffffff;
+      final edges = h3.getH3UnidirectionalEdgesFromHexagon(origin);
+
+      // GeoBoundary of the origin
+      final originBoundary = h3.h3ToGeoBoundary(origin);
+
+      final expectedEdges = [
+        [originBoundary[2], originBoundary[3], originBoundary[4]],
+        [originBoundary[4], originBoundary[5], originBoundary[6]],
+        [originBoundary[8], originBoundary[9], originBoundary[0]],
+        [originBoundary[6], originBoundary[7], originBoundary[8]],
+        [originBoundary[0], originBoundary[1], originBoundary[2]]
+      ];
+
+      for (var i = 0; i < edges.length; i++) {
+        final latlngs = h3.getH3UnidirectionalEdgeBoundary(edges[i]);
+        expect(
+          latlngs,
+          expectedEdges[i],
+          reason: 'Coordinates match expected for edge $i',
+        );
+      }
+    });
+  });
+
+  group('h3Distance', () {
+    test('Basic', () async {
+      final origin = h3.geoToH3(const GeoCoord(lat: 37.5, lon: -122), 9);
+      for (var radius = 0; radius < 4; radius++) {
+        final others = h3.hexRing(origin, radius);
+        for (var i = 0; i < others.length; i++) {
+          expect(h3.h3Distance(origin, others[i]), radius,
+              reason: 'Got distance $radius for ($origin, ${others[i]})');
+        }
+      }
+    });
+
+    test('Failure', () async {
+      final origin = h3.geoToH3(const GeoCoord(lat: 37.5, lon: -122), 9);
+      final origin10 = h3.geoToH3(const GeoCoord(lat: 37.5, lon: -122), 10);
+      const edge = 0x1591ea6d6533ffff;
+      final distantHex = h3.geoToH3(const GeoCoord(lat: -37.5, lon: 122), 9);
+
+      expect(
+        h3.h3Distance(origin, origin10),
+        -1,
+        reason: 'Returned -1 for distance between different resolutions',
+      );
+      expect(
+        h3.h3Distance(origin, edge),
+        -1,
+        reason: 'Returned -1 for distance between hexagon and edge',
+      );
+      expect(
+        h3.h3Distance(origin, distantHex),
+        -1,
+        reason: 'Returned -1 for distance between distant hexagons',
+      );
+    });
+  });
+
+  group('h3Line', () {
+    test('Basic', () async {
+      for (var res = 0; res < 12; res++) {
+        final origin = h3.geoToH3(const GeoCoord(lat: 37.5, lon: -122), res);
+        final destination = h3.geoToH3(const GeoCoord(lat: 25, lon: -120), res);
+        final line = h3.h3Line(origin, destination);
+        final distance = h3.h3Distance(origin, destination);
+        expect(
+          line.length,
+          distance + 1,
+          reason: 'distance matches expected: ${distance + 1}',
+        );
+
+        // property-based test for the line
+        expect(
+          line.asMap().entries.every(
+                (e) =>
+                    e.key == 0 ||
+                    h3.h3IndexesAreNeighbors(
+                      e.value,
+                      line[e.key - 1],
+                    ),
+              ),
+          true,
+          reason: 'every index in the line is a neighbor of the previous',
+        );
+      }
+    });
+
+    test('Failure', () async {
+      final origin = h3.geoToH3(const GeoCoord(lat: 37.5, lon: -122), 9);
+      final origin10 = h3.geoToH3(const GeoCoord(lat: 37.5, lon: -122), 10);
+
+      expect(
+        () => h3.h3Line(origin, origin10),
+        throwsA(isA<H3Exception>()),
+        reason: 'got expected error for different resolutions',
+      );
+    });
+  });
+
+  group('experimentalH3ToLocalIj / experimentalLocalIjToH3', () {
+    test('Basic', () async {
+      const origin = 0x8828308281fffff;
+      final testValues = {
+        origin: const CoordIJ(i: 392, j: 336),
+        0x882830828dfffff: const CoordIJ(i: 393, j: 337),
+        0x8828308285fffff: const CoordIJ(i: 392, j: 337),
+        0x8828308287fffff: const CoordIJ(i: 391, j: 336),
+        0x8828308283fffff: const CoordIJ(i: 391, j: 335),
+        0x882830828bfffff: const CoordIJ(i: 392, j: 335),
+        0x8828308289fffff: const CoordIJ(i: 393, j: 336),
+      };
+      for (final testValue in testValues.entries) {
+        final h3Index = testValue.key;
+        final coord = testValue.value;
+        expect(
+          h3.experimentalH3ToLocalIj(origin, h3Index),
+          coord,
+          reason: 'Got expected coordinates for $h3Index',
+        );
+        expect(
+          h3.experimentalLocalIjToH3(origin, coord),
+          h3Index,
+          reason: 'Got expected H3 index for $coord',
+        );
+      }
+    });
+    test('Pentagon', () async {
+      const origin = 0x811c3ffffffffff;
+      final testValues = {
+        origin: const CoordIJ(i: 0, j: 0),
+        0x811d3ffffffffff: const CoordIJ(i: 1, j: 0),
+        0x811cfffffffffff: const CoordIJ(i: -1, j: 0),
+      };
+
+      for (final testValue in testValues.entries) {
+        final h3Index = testValue.key;
+        final coord = testValue.value;
+        expect(
+          h3.experimentalH3ToLocalIj(origin, h3Index),
+          coord,
+          reason: 'Got expected coordinates for $h3Index',
+        );
+        expect(
+          h3.experimentalLocalIjToH3(origin, coord),
+          h3Index,
+          reason: 'Got expected H3 index for $coord',
+        );
+      }
+    });
+
+    test('Failure', () async {
+      // experimentalH3ToLocalIj
+
+      expect(
+        () => h3.experimentalH3ToLocalIj(0x832830fffffffff, 0x822837fffffffff),
+        throwsA(isA<H3Exception>()),
+        reason: 'Got expected error',
+      );
+      expect(
+        () => h3.experimentalH3ToLocalIj(0x822a17fffffffff, 0x822837fffffffff),
+        throwsA(isA<H3Exception>()),
+        reason: 'Got expected error',
+      );
+      expect(
+        () => h3.experimentalH3ToLocalIj(0x8828308281fffff, 0x8841492553fffff),
+        throwsA(isA<H3Exception>()),
+        reason: 'Got expected error for opposite sides of the world',
+      );
+      expect(
+        () => h3.experimentalH3ToLocalIj(0x81283ffffffffff, 0x811cbffffffffff),
+        throwsA(isA<H3Exception>()),
+        reason: 'Got expected error',
+      );
+      expect(
+        () => h3.experimentalH3ToLocalIj(0x811d3ffffffffff, 0x8122bffffffffff),
+        throwsA(isA<H3Exception>()),
+        reason: 'Got expected error',
+      );
+
+      // experimentalLocalIjToH3
+
+      expect(
+        () => h3.experimentalLocalIjToH3(
+          0x8049fffffffffff,
+          const CoordIJ(i: 2, j: 0),
+        ),
+        throwsA(isA<H3Exception>()),
+        reason: 'Got expected error when index is not defined',
+      );
+    });
+  });
+
+  group('hexArea', () {
+    test('Basic', () async {
+      var last = 1e14;
+      for (var res = 0; res < 16; res++) {
+        final result = h3.hexArea(res, H3AreaUnits.m2);
+        expect(
+          result < last,
+          true,
+          reason: 'result < last result: $result, $last',
+        );
+        last = result;
+      }
+
+      last = 1e7;
+      for (var res = 0; res < 16; res++) {
+        final result = h3.hexArea(res, H3AreaUnits.km2);
+        expect(
+          result < last,
+          true,
+          reason: 'result < last result: $result, $last',
+        );
+        last = result;
+      }
+    });
+    test('Bad resolution', () async {
+      expect(
+        () => h3.hexArea(42, H3AreaUnits.km2),
+        throwsAssertionError,
+        reason: 'throws on invalid resolution',
+      );
+    });
+  });
+
+  group('edgeLength', () {
+    test('Basic', () async {
+      var last = 1e7;
+      for (var res = 0; res < 16; res++) {
+        final result = h3.edgeLength(res, H3EdgeLengthUnits.m);
+        expect(
+          result < last,
+          true,
+          reason: 'result < last result: $result, $last',
+        );
+        last = result;
+      }
+
+      last = 1e4;
+      for (var res = 0; res < 16; res++) {
+        final result = h3.edgeLength(res, H3EdgeLengthUnits.km);
+        expect(
+          result < last,
+          true,
+          reason: 'result < last result: $result, $last',
+        );
+        last = result;
+      }
+    });
+    test('Bad resolution', () async {
+      expect(
+        () => h3.edgeLength(42, H3EdgeLengthUnits.km),
+        throwsAssertionError,
+        reason: 'throws on invalid resolution',
+      );
+    });
+  });
+  test('cellArea', () async {
+    const expectedAreas = [
+      2.562182162955496e+06,
+      4.476842018179411e+05,
+      6.596162242711056e+04,
+      9.228872919002590e+03,
+      1.318694490797110e+03,
+      1.879593512281298e+02,
+      2.687164354763186e+01,
+      3.840848847060638e+00,
+      5.486939641329893e-01,
+      7.838600808637444e-02,
+      1.119834221989390e-02,
+      1.599777169186614e-03,
+      2.285390931423380e-04,
+      3.264850232091780e-05,
+      4.664070326136774e-06,
+      6.662957615868888e-07
+    ];
+
+    for (var res = 0; res < 16; res++) {
+      final h3Index = h3.geoToH3(const GeoCoord(lat: 0, lon: 0), res);
+      final cellAreaKm2 = h3.cellArea(h3Index, H3Units.km);
+      expect(
+        cellAreaKm2.toStringAsFixed(9),
+        expectedAreas[res].toStringAsFixed(9),
+        reason: 'Area matches expected value at res $res',
+      );
+      final cellAreaM2 = h3.cellArea(h3Index, H3Units.m);
+      if (res != 0) {
+        // Property tests
+        // res 0 has high distortion of average area due to high pentagon proportion
+        expect(
+          // This seems to be the lowest factor that works for other resolutions
+          almostEqual(cellAreaKm2, h3.hexArea(res, H3AreaUnits.km2), 0.4),
+          true,
+          reason: 'Area is close to average area at res $res, km2',
+        );
+        expect(
+          // This seems to be the lowest factor that works for other resolutions
+          almostEqual(cellAreaM2, h3.hexArea(res, H3AreaUnits.m2), 0.4),
+          true,
+          reason: 'Area is close to average area at res $res, m2',
+        );
+      }
+
+      expect(
+        cellAreaM2 > cellAreaKm2,
+        true,
+        reason: 'm2 > Km2',
+      );
+
+      expect(
+        cellAreaKm2 > h3.cellArea(h3Index, H3Units.rad),
+        true,
+        reason: 'Km2 > rads2',
+      );
+    }
+  });
+
+  test('pointDist', () async {
+    expect(
+      h3.pointDist(
+        const GeoCoord(lat: -10, lon: 0),
+        const GeoCoord(lat: 10, lon: 0),
+        H3Units.rad,
+      ),
+      h3.degsToRads(20),
+      reason: 'Got expected angular distance for latitude along the equator',
+    );
+
+    expect(
+      h3.pointDist(
+        const GeoCoord(lat: 0, lon: -10),
+        const GeoCoord(lat: 0, lon: 10),
+        H3Units.rad,
+      ),
+      h3.degsToRads(20),
+      reason: 'Got expected angular distance for latitude along a meridian',
+    );
+    expect(
+      h3.pointDist(
+        const GeoCoord(lat: 23, lon: 23),
+        const GeoCoord(lat: 23, lon: 23),
+        H3Units.rad,
+      ),
+      0,
+      reason: 'Got expected angular distance for same point',
+    );
+
+    // Just rough tests for the other units
+    final distKm = h3.pointDist(const GeoCoord(lat: 0, lon: 0),
+        const GeoCoord(lat: 39, lon: -122), H3Units.km);
+
+    expect(
+      distKm > 12e3 && distKm < 13e3,
+      true,
+      reason: 'has some reasonable distance in Km',
+    );
+
+    final distM = h3.pointDist(
+      const GeoCoord(lat: 0, lon: 0),
+      const GeoCoord(lat: 39, lon: -122),
+      H3Units.m,
+    );
+
+    expect(
+      distM > 12e6 && distM < 13e6,
+      true,
+      reason: 'has some reasonable distance in m',
+    );
+  });
+
+  test('numHexagons', () async {
+    var last = 0;
+    for (var res = 0; res < 16; res++) {
+      final result = h3.numHexagons(res);
+      expect(
+        result > last,
+        true,
+        reason: 'result > last result: $result, $last',
+      );
+      last = result;
+    }
+
+    expect(
+      () => h3.numHexagons(42),
+      throwsAssertionError,
+      reason: 'throws on invalid resolution',
+    );
+  });
+
+  test('getRes0Indexes', () async {
+    final indexes = h3.getRes0Indexes();
+    expect(indexes.length, 122, reason: 'Got expected count');
+    expect(indexes.every(h3.h3IsValid), true, reason: 'All indexes are valid');
+  });
+
+  test('getPentagonIndexes', () async {
+    for (var res = 0; res < 16; res++) {
+      final indexes = h3.getPentagonIndexes(res);
+      expect(
+        indexes.length,
+        12,
+        reason: 'Got expected count',
+      );
+      expect(
+        indexes.every(h3.h3IsValid),
+        true,
+        reason: 'All indexes are valid',
+      );
+      expect(
+        indexes.every(h3.h3IsPentagon),
+        true,
+        reason: 'All indexes are pentagons',
+      );
+      expect(
+        indexes.every((idx) => h3.h3GetResolution(idx) == res),
+        true,
+        reason: 'All indexes have the right resolution',
+      );
+      expect(
+        indexes.toSet().length,
+        indexes.length,
+        reason: 'All indexes are unique',
+      );
+    }
+
+    expect(
+      () => h3.getPentagonIndexes(42),
+      throwsAssertionError,
+      reason: 'throws on invalid resolution',
+    );
   });
 }
