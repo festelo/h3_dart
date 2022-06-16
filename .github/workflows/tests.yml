@@ -19,9 +19,10 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Setup subosito/flutter-action@v1
-      uses: subosito/flutter-action@v1
+      uses: subosito/flutter-action@v2
       with:
         channel: beta
+        architecture: x64
 
     - name: Prepare tests
       run: sh prepare_tests.sh
