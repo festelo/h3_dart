@@ -37,7 +37,7 @@ jobs:
         working-directory: ./h3_dart
 
       - name: Run tests
-        run: dart test --coverage --coverage-path lcov.info
+        run: flutter test --coverage --coverage-path ../lcov.info
         working-directory: ./h3_dart
 
       - name: Upload coverage to codecov
