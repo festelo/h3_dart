@@ -22,8 +22,14 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Text('Running on: ${h3.degsToRads(12)}\n'),
+        body: Column(
+          children: [
+            Text('180 degrees in radians is ${h3.degsToRads(180)}'),
+            Text(
+              '${h3.degsToRads(180)}',
+              key: const ValueKey('degsToRadsText'),
+            ),
+          ],
         ),
       ),
     );
