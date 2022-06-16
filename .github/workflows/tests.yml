@@ -27,11 +27,17 @@ jobs:
     - name: Prepare tests
       run: sh prepare_tests.sh
 
-    - name: Analyze
+    - name: Pub get (h3_dart)
+      run: "dart pub get"
+      working-directory: ./h3_dart
+
+    - name: Analyze (h3_dart)
       run: "flutter analyze"
+      working-directory: ./h3_dart
 
     - name: Run tests (h3_dart)
-      run: "cd h3_dart && flutter test --coverage --coverage-path lcov.info"
+      run: "flutter test --coverage --coverage-path lcov.info"
+      working-directory: ./h3_dart
 
     - name: Upload coverage to codecov
       run: curl -s https://codecov.io/bash | bash
