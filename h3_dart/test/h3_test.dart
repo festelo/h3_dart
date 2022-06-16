@@ -1137,8 +1137,8 @@ void main() {
       final h3Index = h3.geoToH3(const GeoCoord(lat: 0, lon: 0), res);
       final cellAreaKm2 = h3.cellArea(h3Index, H3Units.km);
       expect(
-        cellAreaKm2.toStringAsFixed(9),
-        expectedAreas[res].toStringAsFixed(9),
+        almostEqual(cellAreaKm2, expectedAreas[res]),
+        true,
         reason: 'Area matches expected value at res $res',
       );
       final cellAreaM2 = h3.cellArea(h3Index, H3Units.m);
@@ -1175,26 +1175,28 @@ void main() {
 
   test('pointDist', () async {
     expect(
-      h3
-          .pointDist(
-            const GeoCoord(lat: -10, lon: 0),
-            const GeoCoord(lat: 10, lon: 0),
-            H3Units.rad,
-          )
-          .toStringAsFixed(geoPrecision),
-      h3.degsToRads(20).toStringAsFixed(geoPrecision),
+      almostEqual(
+        h3.pointDist(
+          const GeoCoord(lat: -10, lon: 0),
+          const GeoCoord(lat: 10, lon: 0),
+          H3Units.rad,
+        ),
+        h3.degsToRads(20),
+      ),
+      true,
       reason: 'Got expected angular distance for latitude along the equator',
     );
 
     expect(
-      h3
-          .pointDist(
-            const GeoCoord(lat: 0, lon: -10),
-            const GeoCoord(lat: 0, lon: 10),
-            H3Units.rad,
-          )
-          .toStringAsFixed(geoPrecision),
-      h3.degsToRads(20).toStringAsFixed(geoPrecision),
+      almostEqual(
+        h3.pointDist(
+          const GeoCoord(lat: 0, lon: -10),
+          const GeoCoord(lat: 0, lon: 10),
+          H3Units.rad,
+        ),
+        h3.degsToRads(20),
+      ),
+      true,
       reason: 'Got expected angular distance for latitude along a meridian',
     );
     expect(
