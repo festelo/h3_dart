@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:math';
 
 import 'package:test/test.dart';
@@ -8,8 +7,7 @@ import 'package:collection/collection.dart';
 import 'common.dart';
 
 void main() {
-  final lib = DynamicLibrary.open('../c/h3lib/build/libh3lib.dylib');
-  final h3 = H3Factory().byDynamicLibary(lib);
+  final h3 = H3Factory().byPath('../c/h3lib/build/libh3lib.dylib');
 
   test('h3IsValid', () async {
     expect(

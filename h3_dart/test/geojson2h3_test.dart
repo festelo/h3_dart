@@ -1,11 +1,8 @@
-import 'dart:ffi';
-
 import 'package:test/test.dart';
 import 'package:h3_dart/h3_dart.dart';
 
 void main() {
-  final lib = DynamicLibrary.open('../c/h3lib/build/libh3lib.dylib');
-  final h3 = H3Factory().byDynamicLibary(lib);
+  final h3 = H3Factory().byPath('../c/h3lib/build/libh3lib.dylib');
   final geojson2H3 = Geojson2H3(h3);
 
   test('h3ToFeature', () async {
