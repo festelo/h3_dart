@@ -1,16 +1,13 @@
 import 'dart:ffi';
 
-import 'package:flutter_test/flutter_test.dart';
-
-import 'package:h3_flutter/h3_flutter.dart';
-import 'package:h3_flutter/internal.dart';
+import 'package:test/test.dart';
+import 'package:h3_dart/h3_dart.dart';
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-  final lib = DynamicLibrary.open('c/h3lib/build/libh3lib.dylib');
-  setUpAll(() {
-    initH3C(lib);
-  });
+  final lib = DynamicLibrary.open('../c/h3lib/build/libh3lib.dylib');
+  final h3 = H3Factory().byDynamicLibary(lib);
+  final geojson2H3 = Geojson2H3(h3);
+
   test('h3ToFeature', () async {
     const hexagon = 0x89283082837ffff;
     final coordinates = h3.h3ToGeoBoundary(hexagon);

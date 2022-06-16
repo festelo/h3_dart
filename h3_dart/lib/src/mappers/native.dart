@@ -1,28 +1,28 @@
 import 'dart:ffi';
 
-import 'package:h3_flutter/h3_flutter.dart';
-import 'package:h3_flutter/src/generated/generated_bindings.dart' as c;
+import 'package:h3_dart/h3_dart.dart';
+import 'package:h3_dart/src/generated/generated_bindings.dart' as c;
 
-extension GeoCoordToNativeMapperExtension on GeoCoord {
+extension GeoCoordToNativeMapperExtension on GeoCoordRadians {
   /// Returns native representation of GeoCoord class
   Pointer<c.GeoCoord> toNative(Allocator allocator) {
     final pointer = allocator<c.GeoCoord>();
-    fillNative(pointer.ref);
+    assignToNative(pointer.ref);
     return pointer;
   }
 
-  void fillNative(c.GeoCoord ref) {
-    ref.lat = h3.degsToRads(lat);
-    ref.lon = h3.degsToRads(lon);
+  void assignToNative(c.GeoCoord ref) {
+    ref.lat = lat;
+    ref.lon = lon;
   }
 }
 
 extension GeoCoordFromNativeMapperExtension on c.GeoCoord {
   /// Returns [GeoCoord] representation of native GeoCoord class
-  GeoCoord toPure() {
-    return GeoCoord(
-      lat: h3.radsToDegs(lat),
-      lon: h3.radsToDegs(lon),
+  GeoCoordRadians toPure() {
+    return GeoCoordRadians(
+      lat: lat,
+      lon: lon,
     );
   }
 }

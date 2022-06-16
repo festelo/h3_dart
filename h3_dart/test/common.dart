@@ -1,4 +1,4 @@
-import 'package:h3_flutter/h3_flutter.dart';
+import 'package:h3_dart/h3_dart.dart';
 
 const geoPrecision = 12;
 

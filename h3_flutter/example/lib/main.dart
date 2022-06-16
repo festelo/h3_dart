@@ -13,6 +13,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final h3 = const H3Factory().load();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

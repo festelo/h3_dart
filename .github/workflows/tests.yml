@@ -29,8 +29,8 @@ jobs:
     - name: Analyze
       run: "flutter analyze"
 
-    - name: Run tests
-      run: "flutter test --coverage --coverage-path lcov.info"
+    - name: Run tests (h3_dart)
+      run: "cd h3_dart && flutter test --coverage --coverage-path lcov.info"
 
     - name: Upload coverage to codecov
       run: curl -s https://codecov.io/bash | bash

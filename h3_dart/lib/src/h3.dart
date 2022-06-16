@@ -1,6 +1,6 @@
 import 'dart:ffi';
 import 'package:ffi/ffi.dart';
-import 'package:h3_flutter/h3_flutter.dart';
+import 'package:h3_dart/h3_dart.dart';
 
 import 'generated/generated_bindings.dart' as c;
 import 'mappers/native.dart';
@@ -12,6 +12,9 @@ class H3 {
   H3(this._h3c);
 
   final c.H3C _h3c;
+
+  late final GeoCoordConverter _geoCoordConverter =
+      GeoCoordConverter(H3AngleConverter(this));
 
   /// Determines if [h3Index] is a valid cell (hexagon or pentagon)
   bool h3IsValid(int h3Index) {
@@ -63,7 +66,7 @@ class H3 {
     assert(res >= 0 && res < 16, 'Resolution must be in [0, 15] range');
     return using((arena) {
       return _h3c.geoToH3(
-        geoCoord.toNative(arena),
+        geoCoord.toRadians(_geoCoordConverter).toNative(arena),
         res,
       );
     });
@@ -75,7 +78,7 @@ class H3 {
       final geoCoordNative = arena<c.GeoCoord>();
 
       _h3c.h3ToGeo(h3Index, geoCoordNative);
-      return geoCoordNative.ref.toPure();
+      return geoCoordNative.ref.toPure().toDegrees(_geoCoordConverter);
     });
   }
 
@@ -102,7 +105,7 @@ class H3 {
   ///
   /// Returns 0 when result can't be calculated
   int h3ToParent(int h3Index, int resolution) {
-    return h3c.h3ToParent(h3Index, resolution);
+    return _h3c.h3ToParent(h3Index, resolution);
   }
 
   /// Get the children/descendents of the given [h3Index] hexagon at a particular [resolution]
@@ -112,10 +115,10 @@ class H3 {
     if (!h3IsValid(h3Index)) {
       return [];
     }
-    final maxSize = h3c.maxH3ToChildrenSize(h3Index, resolution);
+    final maxSize = _h3c.maxH3ToChildrenSize(h3Index, resolution);
     return using((arena) {
       final out = arena<Uint64>(maxSize);
-      h3c.h3ToChildren(h3Index, resolution, out);
+      _h3c.h3ToChildren(h3Index, resolution, out);
       final list = out.asTypedList(maxSize).toList();
       return list.where((e) => e != 0).toList();
     });
@@ -125,7 +128,7 @@ class H3 {
   ///
   /// Returns 0 when result can't be calculated
   int h3ToCenterChild(int h3Index, int resolution) {
-    return h3c.h3ToCenterChild(h3Index, resolution);
+    return _h3c.h3ToCenterChild(h3Index, resolution);
   }
 
   /// Maximum number of hexagons in k-ring
@@ -188,7 +191,9 @@ class H3 {
         final pointer = Pointer<c.GeoCoord>.fromAddress(
           nativeCoordinatesPointer.address + sizeOf<c.GeoCoord>() * i,
         );
-        coordinates[i].fillNative(pointer.ref);
+        coordinates[i]
+            .toRadians(_geoCoordConverter)
+            .assignToNative(pointer.ref);
       }
 
       final polygon = arena<c.GeoPolygon>();
@@ -337,7 +342,8 @@ class H3 {
       _h3c.getH3UnidirectionalEdgeBoundary(edgeIndex, out);
       final coordinates = <GeoCoord>[];
       for (var i = 0; i < out.ref.numVerts; i++) {
-        coordinates.add(out.ref.verts[i].toPure());
+        coordinates
+            .add(out.ref.verts[i].toPure().toDegrees(_geoCoordConverter));
       }
       return coordinates;
     });
@@ -449,11 +455,20 @@ class H3 {
     return using((arena) {
       switch (unit) {
         case H3Units.m:
-          return _h3c.pointDistM(a.toNative(arena), b.toNative(arena));
+          return _h3c.pointDistM(
+            a.toRadians(_geoCoordConverter).toNative(arena),
+            b.toRadians(_geoCoordConverter).toNative(arena),
+          );
         case H3Units.km:
-          return _h3c.pointDistKm(a.toNative(arena), b.toNative(arena));
+          return _h3c.pointDistKm(
+            a.toRadians(_geoCoordConverter).toNative(arena),
+            b.toRadians(_geoCoordConverter).toNative(arena),
+          );
         case H3Units.rad:
-          return _h3c.pointDistRads(a.toNative(arena), b.toNative(arena));
+          return _h3c.pointDistRads(
+            a.toRadians(_geoCoordConverter).toNative(arena),
+            b.toRadians(_geoCoordConverter).toNative(arena),
+          );
       }
     });
   }

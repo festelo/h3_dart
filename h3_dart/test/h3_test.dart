@@ -1,20 +1,16 @@
 import 'dart:ffi';
 import 'dart:math';
 
-import 'package:flutter_test/flutter_test.dart';
-
-import 'package:h3_flutter/h3_flutter.dart';
-import 'package:h3_flutter/internal.dart';
+import 'package:test/test.dart';
+import 'package:h3_dart/h3_dart.dart';
 import 'package:collection/collection.dart';
 
-import 'utils.dart';
+import 'common.dart';
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-  final lib = DynamicLibrary.open('c/h3lib/build/libh3lib.dylib');
-  setUpAll(() {
-    initH3C(lib);
-  });
+  final lib = DynamicLibrary.open('../c/h3lib/build/libh3lib.dylib');
+  final h3 = H3Factory().byDynamicLibary(lib);
+
   test('h3IsValid', () async {
     expect(
       h3.h3IsValid(0x85283473fffffff),
@@ -387,7 +383,7 @@ void main() {
           ],
           resolution: -9,
         ),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
       );
     });
   });
@@ -851,8 +847,8 @@ void main() {
       for (var i = 0; i < edges.length; i++) {
         final latlngs = h3.getH3UnidirectionalEdgeBoundary(edges[i]);
         expect(
-          latlngs,
-          expectedEdges[i],
+          latlngs.map((g) => ComparableGeoCoord.fromGeoCoord(g)),
+          expectedEdges[i].map((g) => ComparableGeoCoord.fromGeoCoord(g)),
           reason: 'Coordinates match expected for edge $i',
         );
       }
@@ -876,8 +872,8 @@ void main() {
       for (var i = 0; i < edges.length; i++) {
         final latlngs = h3.getH3UnidirectionalEdgeBoundary(edges[i]);
         expect(
-          latlngs,
-          expectedEdges[i],
+          latlngs.map((g) => ComparableGeoCoord.fromGeoCoord(g)),
+          expectedEdges[i].map((g) => ComparableGeoCoord.fromGeoCoord(g)),
           reason: 'Coordinates match expected for edge $i',
         );
       }
@@ -1081,7 +1077,7 @@ void main() {
     test('Bad resolution', () async {
       expect(
         () => h3.hexArea(42, H3AreaUnits.km2),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
         reason: 'throws on invalid resolution',
       );
     });
@@ -1114,7 +1110,7 @@ void main() {
     test('Bad resolution', () async {
       expect(
         () => h3.edgeLength(42, H3EdgeLengthUnits.km),
-        throwsAssertionError,
+        throwsA(isA<AssertionError>()),
         reason: 'throws on invalid resolution',
       );
     });
@@ -1181,22 +1177,26 @@ void main() {
 
   test('pointDist', () async {
     expect(
-      h3.pointDist(
-        const GeoCoord(lat: -10, lon: 0),
-        const GeoCoord(lat: 10, lon: 0),
-        H3Units.rad,
-      ),
-      h3.degsToRads(20),
+      h3
+          .pointDist(
+            const GeoCoord(lat: -10, lon: 0),
+            const GeoCoord(lat: 10, lon: 0),
+            H3Units.rad,
+          )
+          .toStringAsFixed(geoPrecision),
+      h3.degsToRads(20).toStringAsFixed(geoPrecision),
       reason: 'Got expected angular distance for latitude along the equator',
     );
 
     expect(
-      h3.pointDist(
-        const GeoCoord(lat: 0, lon: -10),
-        const GeoCoord(lat: 0, lon: 10),
-        H3Units.rad,
-      ),
-      h3.degsToRads(20),
+      h3
+          .pointDist(
+            const GeoCoord(lat: 0, lon: -10),
+            const GeoCoord(lat: 0, lon: 10),
+            H3Units.rad,
+          )
+          .toStringAsFixed(geoPrecision),
+      h3.degsToRads(20).toStringAsFixed(geoPrecision),
       reason: 'Got expected angular distance for latitude along a meridian',
     );
     expect(
@@ -1298,7 +1298,7 @@ void main() {
 
     expect(
       () => h3.numHexagons(42),
-      throwsAssertionError,
+      throwsA(isA<AssertionError>()),
       reason: 'throws on invalid resolution',
     );
   });
@@ -1341,7 +1341,7 @@ void main() {
 
     expect(
       () => h3.getPentagonIndexes(42),
-      throwsAssertionError,
+      throwsA(isA<AssertionError>()),
       reason: 'throws on invalid resolution',
     );
   });

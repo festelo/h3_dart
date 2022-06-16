@@ -1,7 +1,7 @@
-/// A pair of latitude and longitude coordinates
+/// A pair of latitude and longitude coordinates in degrees
 ///
 /// World-wrapping supported - if you pass coordinates outside of the bounds
-/// ([-180, 180] for longitude and [-90, 190] for latitude) they will be converted.
+/// ([-180, 180] for longitude and [-90, 90] for latitude) they will be converted.
 class GeoCoord {
   const GeoCoord({
     required double lon,

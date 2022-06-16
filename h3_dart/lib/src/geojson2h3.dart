@@ -8,7 +8,7 @@ const _polygon = 'Polygon';
 ///
 /// You should not construct the class directly, use [geojson2H3] singletone instead.
 class Geojson2H3 {
-  Geojson2H3(this._h3);
+  const Geojson2H3(H3 h3) : _h3 = h3;
 
   final H3 _h3;
 
