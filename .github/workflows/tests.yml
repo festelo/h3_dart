@@ -24,6 +24,9 @@ jobs:
         with:
           sdk: ${{ matrix.sdk }}
           architecture: x64
+
+      - name: Install coverage tool
+        run: dart pub global activate coverage
   
       - name: Prepare tests
         run: sh prepare_tests.sh
@@ -37,11 +40,13 @@ jobs:
         working-directory: ./h3_dart
 
       - name: Run tests
-        run: flutter test --coverage --coverage-path ../lcov.info
+        run: dart pub global run coverage:test_with_coverage
         working-directory: ./h3_dart
 
       - name: Upload coverage to codecov
-        run: curl -s https://codecov.io/bash | bash
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./h3_dart/coverage/lcov.info
 
 
   h3_flutter_test_desktop:
