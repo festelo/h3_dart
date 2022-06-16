@@ -7,7 +7,7 @@ import 'package:collection/collection.dart';
 import 'common.dart';
 
 void main() {
-  final h3 = H3Factory().byPath('../c/h3lib/build/libh3lib.dylib');
+  final h3 = H3Factory().byPath('../c/h3lib/build/libh3lib.lib');
 
   test('h3IsValid', () async {
     expect(
