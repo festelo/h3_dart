@@ -1,3 +1,5 @@
+## 0.5.2
+* Update README.md and tests
 ## 0.5.1
 * Update README.md
 

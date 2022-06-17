@@ -32,11 +32,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           tag: h3_dart_${{ env.VERSION }}
-          doNotFailIfNotFound: 'true'
-
-      - name: Check git release not found
-        if: steps.get_existing_release.outputs.id != '' && steps.get_existing_release.outputs.id != null
-        run: exit 1
+        continue-on-error: true
 
       - name: Publish to pub
         uses: festelo/actions-flutter-pub-publisher@master
@@ -46,6 +42,7 @@ jobs:
           skip_test: true
           dry_run: ${{ github.ref != 'refs/heads/master' }}
           package_directory: ./h3_dart
+        if: steps.get_existing_release.outputs.id == null
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
@@ -53,7 +50,7 @@ jobs:
           prerelease: false
           title: "H3 Dart v${{ env.VERSION }}"
           automatic_release_tag: "h3_dart_${{ env.VERSION }}"
-        if: github.ref == 'refs/heads/master'
+        if: steps.get_existing_release.outputs.id == null && github.ref == 'refs/heads/master'
 
   publish_h3_flutter:
     runs-on: ubuntu-latest
@@ -78,12 +75,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           tag: h3_flutter_${{ env.VERSION }}
-          doNotFailIfNotFound: 'true'
+        continue-on-error: true
 
-      - name: Check git release not found
-        if: steps.get_existing_release.outputs.id != '' && steps.get_existing_release.outputs.id != null
-        run: exit 1
-        
       - name: Publish to pub
         uses: festelo/actions-flutter-pub-publisher@master
         with:
@@ -92,6 +85,7 @@ jobs:
           skip_test: true
           dry_run: ${{ github.ref != 'refs/heads/master' }}
           package_directory: ./h3_flutter
+        if: steps.get_existing_release.outputs.id == null
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
@@ -99,5 +93,5 @@ jobs:
           prerelease: false
           title: "H3 Flutter v${{ env.VERSION }}"
           automatic_release_tag: "h3_flutter_${{ env.VERSION }}"
-        if: github.ref == 'refs/heads/master'
+        if: steps.get_existing_release.outputs.id == null && github.ref == 'refs/heads/master'
   
