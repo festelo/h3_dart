@@ -7,6 +7,9 @@
 * Add option to convert `GeoCoord` to `GeoCoordRadians` via `.toRadians(converter)` method
 * Add AngleConverter and GeoCoordConverter classes to convert between radians and degrees.  
   AngleConverter is abstract, but has two implementations - H3AngleConverter and NativeAngleConverter
+* Add tests on windows, linux, flutter stable and dev.
+* Add integration tests for `h3_flutter` built for macos
+* CI/CD improvements - more checks, automatic publishing
 
 ## 0.4.2
 * Fix `CoordIJ.toString()` output

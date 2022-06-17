@@ -1,4 +1,4 @@
-name: Publish to pub.dev
+name: Publish to pub.dev, create tag and release
 
 on:
   push:
@@ -15,7 +15,30 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Publish
+
+      - uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: stable
+          architecture: x64
+
+      - name: Get version
+        run: echo "VERSION=$(dart scripts/get_package_version.dart)" >> $GITHUB_ENV
+        env:
+          target: h3_dart
+
+      - id: get_existing_release
+        uses: cardinalby/git-get-release-action@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag: h3_dart_${{ env.VERSION }}
+          doNotFailIfNotFound: 'true'
+
+      - name: Check git release not found
+        if: steps.get_existing_release.outputs.id != '' && steps.get_existing_release.outputs.id != null
+        run: exit 1
+
+      - name: Publish to pub
         uses: festelo/actions-flutter-pub-publisher@master
         with:
           credential: ${{ secrets.PUB_CREDENTIAL_JSON }}
@@ -24,12 +47,44 @@ jobs:
           dry_run: ${{ github.ref != 'refs/heads/master' }}
           package_directory: ./h3_dart
 
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          title: "H3 Dart v${{ env.VERSION }}"
+          automatic_release_tag: "h3_dart_${{ env.VERSION }}"
+        if: github.ref == 'refs/heads/master'
+
   publish_h3_flutter:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Publish
+
+      - name: Get version
+        uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: stable
+          architecture: x64
+
+      - name: Get version
+        run: echo "VERSION=$(dart scripts/get_package_version.dart)" >> $GITHUB_ENV
+        env:
+          target: h3_flutter
+
+      - id: get_existing_release
+        uses: cardinalby/git-get-release-action@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag: h3_flutter_${{ env.VERSION }}
+          doNotFailIfNotFound: 'true'
+
+      - name: Check git release not found
+        if: steps.get_existing_release.outputs.id != '' && steps.get_existing_release.outputs.id != null
+        run: exit 1
+        
+      - name: Publish to pub
         uses: festelo/actions-flutter-pub-publisher@master
         with:
           credential: ${{ secrets.PUB_CREDENTIAL_JSON }}
@@ -37,3 +92,12 @@ jobs:
           skip_test: true
           dry_run: ${{ github.ref != 'refs/heads/master' }}
           package_directory: ./h3_flutter
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          title: "H3 Flutter v${{ env.VERSION }}"
+          automatic_release_tag: "h3_flutter_${{ env.VERSION }}"
+        if: github.ref == 'refs/heads/master'
+  

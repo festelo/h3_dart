@@ -20,6 +20,6 @@ jobs:
         architecture: x64
 
     - name: Check h3_dart version is synchronized
-      run: dart sync_h3_dart_version.dart
+      run: dart scripts/sync_h3_dart_version.dart
       env:
         test: true

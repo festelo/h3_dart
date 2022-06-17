@@ -1,20 +1,17 @@
 import 'dart:io';
 
-final h3DartLibraryVersionRegex = RegExp(r'version: (.+)$', multiLine: true);
+import 'common.dart';
+
 final h3DartDependencyVersionRegex = RegExp(r'h3_dart: (.+)$', multiLine: true);
 final versionMatchRegex = RegExp(r'\^?{VERSION}\s*$', multiLine: true);
 
 final testMode = Platform.environment['test'] == 'true';
 
 void main() async {
-  final h3dartPubspecFile = File('h3_dart/pubspec.yaml');
-  final h3flutterPubspecFile = File('h3_flutter/pubspec.yaml');
-
   final h3dartPubspec = await h3dartPubspecFile.readAsString();
   var h3flutterPubspec = await h3flutterPubspecFile.readAsString();
 
-  final h3dartVersion =
-      h3DartLibraryVersionRegex.firstMatch(h3dartPubspec)?.group(1);
+  final h3dartVersion = libraryVersionRegex.firstMatch(h3dartPubspec)?.group(1);
   if (h3dartVersion == null) {
     exitCode = 1;
     print('h3_dart version not found');

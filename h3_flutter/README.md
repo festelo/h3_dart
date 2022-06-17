@@ -57,7 +57,7 @@ Place your library somewhere and load it using `H3Factory().byPath('path/to/libr
 -------------
 ## Tests
 
-To make tests work you need to execute `prepare_tests.sh` script. The script builds h3 library from C code.  
+To make tests work you need to execute `scripts/prepare_tests.sh` script. The script builds h3 library from C code.  
 The script is designed for macOS and therefore it probably work only under this system.  
   
 ## How to update the package to use latest H3 version
@@ -94,9 +94,9 @@ cp src/h3lib/include/* ../../c/h3lib
 cp src/h3lib/lib/* ../../c/h3lib
 ```
 
-Copy c/h3lib folder to ios and macos folders with `sync_h3lib.sh` script:
+Copy c/h3lib folder to ios and macos folders with `scripts/sync_h3lib.sh` script:
 ```
-sh sync_h3lib.sh
+sh scripts/sync_h3lib.sh
 ```
 
 You need to add .h and .c files to the project using XCode if you want to launch example (for iOS and macOS).  

@@ -113,19 +113,19 @@ packages:
     source: sdk
     version: "0.0.0"
   h3_dart:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: h3_dart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.0-dev.1"
+    version: "0.5.0"
   h3_flutter:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.5.0-dev"
+    version: "0.5.0"
   integration_test:
     dependency: "direct dev"
     description: flutter
