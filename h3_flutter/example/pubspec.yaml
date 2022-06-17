@@ -1,0 +1,25 @@
+name: h3_flutter_example
+description: Demonstrates how to use the h3_flutter plugin.
+
+publish_to: 'none'
+
+environment:
+  sdk: ">=2.16.0-80.1.beta <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  h3_flutter:
+    path: ../
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^1.0.0
+
+flutter:
+  uses-material-design: true

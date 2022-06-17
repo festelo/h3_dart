@@ -10,27 +10,93 @@ on:
 concurrency:
   group: build-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
-  
+
 jobs:
-  test:
-    name: Test (macOS)
-    runs-on: macos-latest
+  h3_dart_test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        sdk: [stable, beta, dev]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: ${{ matrix.sdk }}
+          architecture: x64
+
+      - name: Install coverage tool
+        run: dart pub global activate coverage
+  
+      - name: Prepare tests
+        run: sh scripts/prepare_tests.sh
+
+      - name: Install dependencies
+        run: dart pub get
+        working-directory: ./h3_dart
+
+      - name: Analyze
+        run: dart analyze
+        working-directory: ./h3_dart
+
+      - name: Run tests
+        run: dart pub global run coverage:test_with_coverage
+        working-directory: ./h3_dart
+
+      - name: Upload coverage to codecov
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./h3_dart/coverage/lcov.info
+
+
+  h3_flutter_test_desktop:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
     steps:
     - uses: actions/checkout@v2
 
-    - name: Setup subosito/flutter-action@v1
-      uses: subosito/flutter-action@v1
+    - name: Install linux dependencies
+      run: sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+      if: matrix.os == 'ubuntu-latest'
+
+    - name: Setup subosito/flutter-action@v2
+      uses: subosito/flutter-action@v2
       with:
         channel: beta
+        architecture: x64
 
-    - name: Prepare tests
-      run: sh prepare_tests.sh
+    - name: Enable linux
+      run: flutter config --enable-linux-desktop
+
+    - name: Enable macos
+      run: flutter config --enable-macos-desktop
+
+    - name: Enable windows
+      run: flutter config --enable-windows-desktop
+    
+    - name: Override dependencies
+      run: |
+        echo -e "\ndependency_overrides:\n  h3_dart:\n    path: ../h3_dart" >> './h3_flutter/pubspec.yaml'
+        echo -e "\ndependency_overrides:\n  h3_dart:\n    path: ../../h3_dart" >> './h3_flutter/example/pubspec.yaml'
+
+    - name: Pub get
+      run: "flutter pub get"
+      working-directory: ./h3_flutter
 
     - name: Analyze
       run: "flutter analyze"
+      working-directory: ./h3_flutter
+
+    - name: Run tests (linux)
+      run: | 
+          export DISPLAY=:99
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+          flutter test integration_test/app_test.dart
+      working-directory: ./h3_flutter/example
+      if: matrix.os == 'ubuntu-latest'
 
     - name: Run tests
-      run: "flutter test --coverage --coverage-path lcov.info"
-
-    - name: Upload coverage to codecov
-      run: curl -s https://codecov.io/bash | bash
+      run: flutter test integration_test/app_test.dart
+      working-directory: ./h3_flutter/example

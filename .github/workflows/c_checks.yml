@@ -16,7 +16,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Sync h3lib
-      run: sh sync_h3lib.sh
+      run: sh scripts/sync_h3lib.sh
 
     - name: Git status
       run: git status
