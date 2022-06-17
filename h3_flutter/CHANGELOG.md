@@ -1,3 +1,6 @@
+## 0.5.1
+* Update README.md
+
 ## 0.5.0
 * Split `h3_flutter` library into 2 libraries - `h3_flutter` and `h3_dart` for pure-dart projects.
 * **[BREAKING]** remove `h3` and `geojson2H3` singletones.  

@@ -35,7 +35,7 @@ To access them you should instantiate Geojson2H3 class using `const Geojson2H3(h
 
 Add `h3_flutter` package to `pubspec.yaml`, import it and load:
 ```dart
-import 'package:h3'
+import 'package:h3_flutter/h3_flutter.dart';
 
 final h3 = const H3Factory().load();
 final geojson2h3 = Geojson2H3(h3);
