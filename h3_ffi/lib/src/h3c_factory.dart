@@ -1,6 +1,6 @@
 import 'dart:ffi';
 
-import 'package:h3_dart/src/generated/generated_bindings.dart';
+import 'package:h3_ffi/src/generated/generated_bindings.dart';
 
 class H3CFactory {
   const H3CFactory();

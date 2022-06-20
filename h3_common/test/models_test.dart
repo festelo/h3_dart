@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:test/test.dart';
-import 'package:h3_dart/h3_dart.dart';
+import 'package:h3_common/h3_common.dart';
 
 void main() {
   test('CoordIJ', () async {

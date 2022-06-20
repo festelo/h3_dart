@@ -1,13 +1,13 @@
 import 'dart:math';
 
 import 'package:test/test.dart';
-import 'package:h3_dart/h3_dart.dart';
+import 'package:h3_ffi/h3_ffi.dart';
 import 'package:collection/collection.dart';
 
 import 'common.dart';
 
 void main() {
-  final h3 = H3Factory().byPath('../c/h3lib/build/libh3lib.lib');
+  final h3 = H3FfiFactory().byPath('../c/h3lib/build/libh3lib.lib');
 
   test('h3IsValid', () async {
     expect(

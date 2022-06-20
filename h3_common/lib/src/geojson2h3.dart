@@ -15,7 +15,7 @@ class Geojson2H3 {
   /// Converts a single H3 hexagon with index [h3Index] to a `Polygon` feature
   ///
   /// It's possible to add optional feature [properties]
-  Map h3ToFeature(int h3Index, {Map? properties}) {
+  Map h3ToFeature(BigInt h3Index, {Map? properties}) {
     final boundary = _h3.h3ToGeoBoundary(h3Index);
     // Wrap in an array for a single-loop polygon
     final coordinates = [
@@ -37,8 +37,8 @@ class Geojson2H3 {
 
   /// Convert a list of [hexagons] to a GeoJSON `FeatureCollection` with each hexagon
   /// in a separate `Polygon` feature with optional [properties].
-  Map<String, dynamic> h3SetToFeatureCollection(List<int> hexagons,
-      {Map? Function(int h3Index)? properties}) {
+  Map<String, dynamic> h3SetToFeatureCollection(List<BigInt> hexagons,
+      {Map? Function(BigInt h3Index)? properties}) {
     final features = hexagons
         .map(
           (e) => h3ToFeature(e, properties: properties?.call(e)),

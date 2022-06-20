@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
-import 'package:h3_dart/h3_dart.dart';
-import 'package:h3_dart/src/generated/generated_bindings.dart' as c;
+import 'package:h3_common/h3_common.dart';
+import 'package:h3_ffi/src/generated/generated_bindings.dart' as c;
 
 extension GeoCoordToNativeMapperExtension on GeoCoordRadians {
   /// Returns native representation of GeoCoord class
