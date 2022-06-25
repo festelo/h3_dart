@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "generate": "npm i && dart_js_facade_gen --destination=lib/src/generated --base-path=node_modules/h3-js/dist node_modules/h3-js/dist/types.d.ts"
+  },
+  "dependencies": {
+    "h3-js": "^3.7.2"
+  },
+  "devDependencies": {
+    "dart_js_facade_gen": "^0.0.7"
+  }
+}

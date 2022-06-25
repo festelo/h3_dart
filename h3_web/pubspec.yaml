@@ -8,6 +8,8 @@ environment:
 
 dependencies:
   js: ^0.6.4
+  h3_common: 
+    path: ../h3_common
 
 dev_dependencies:
   test: ^1.21.2

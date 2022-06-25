@@ -92,6 +92,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  h3_common:
+    dependency: "direct main"
+    description:
+      path: "../h3_common"
+      relative: true
+    source: path
+    version: "0.6.0"
   http_multi_server:
     dependency: transitive
     description:

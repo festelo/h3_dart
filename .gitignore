@@ -31,3 +31,5 @@ android/.cxx
 
 tmp/
 .fvm
+
+node_modules
