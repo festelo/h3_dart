@@ -9,27 +9,27 @@ class H3Web implements H3 {
 
   @override
   bool h3IsValid(BigInt h3Index) {
-    return h3_js.h3IsValid(bigIntToH3JS(h3Index));
+    return h3_js.h3IsValid(h3Index.toH3JS());
   }
 
   @override
   bool h3IsPentagon(BigInt h3Index) {
-    return h3_js.h3IsPentagon(bigIntToH3JS(h3Index));
+    return h3_js.h3IsPentagon(h3Index.toH3JS());
   }
 
   @override
   bool h3IsResClassIII(BigInt h3Index) {
-    return h3_js.h3IsResClassIII(bigIntToH3JS(h3Index));
+    return h3_js.h3IsResClassIII(h3Index.toH3JS());
   }
 
   @override
   int h3GetBaseCell(BigInt h3Index) {
-    return h3_js.h3GetBaseCell(bigIntToH3JS(h3Index)).toInt();
+    return h3_js.h3GetBaseCell(h3Index.toH3JS()).toInt();
   }
 
   @override
   List<int> h3GetFaces(BigInt h3Index) {
-    return h3_js.h3GetFaces(bigIntToH3JS(h3Index)).cast<int>();
+    return h3_js.h3GetFaces(h3Index.toH3JS()).cast<int>();
   }
 
   @override
@@ -37,7 +37,7 @@ class H3Web implements H3 {
     if (!h3IsValid(h3Index)) {
       throw H3Exception('H3Index is not valid.');
     }
-    return h3_js.h3GetResolution(bigIntToH3JS(h3Index)).toInt();
+    return h3_js.h3GetResolution(h3Index.toH3JS()).toInt();
   }
 
   @override
@@ -48,13 +48,13 @@ class H3Web implements H3 {
 
   @override
   GeoCoord h3ToGeo(BigInt h3Index) {
-    final res = h3_js.h3ToGeo(bigIntToH3JS(h3Index));
+    final res = h3_js.h3ToGeo(h3Index.toH3JS());
     return GeoCoord(lat: res[0].toDouble(), lon: res[1].toDouble());
   }
 
   @override
   List<GeoCoord> h3ToGeoBoundary(BigInt h3Index) {
-    final res = h3_js.h3ToGeoBoundary(bigIntToH3JS(h3Index));
+    final res = h3_js.h3ToGeoBoundary(h3Index.toH3JS());
     return res
         .map((e) => GeoCoord(lat: e[0].toDouble(), lon: e[1].toDouble()))
         .toList();
@@ -63,7 +63,7 @@ class H3Web implements H3 {
   @override
   BigInt h3ToParent(BigInt h3Index, int resolution) {
     // ignore: unnecessary_nullable_for_final_variable_declarations
-    final String? res = h3_js.h3ToParent(bigIntToH3JS(h3Index), resolution);
+    final String? res = h3_js.h3ToParent(h3Index.toH3JS(), resolution);
     if (res == null) {
       return BigInt.zero;
     }
@@ -76,7 +76,7 @@ class H3Web implements H3 {
       return [];
     }
     return h3_js
-        .h3ToChildren(bigIntToH3JS(h3Index), resolution)
+        .h3ToChildren(h3Index.toH3JS(), resolution)
         .map((e) => e.toBigInt())
         .toList();
   }
@@ -85,7 +85,7 @@ class H3Web implements H3 {
   BigInt h3ToCenterChild(BigInt h3Index, int resolution) {
     // ignore: unnecessary_nullable_for_final_variable_declarations
     final String? res = h3_js.h3ToCenterChild(
-      bigIntToH3JS(h3Index),
+      h3Index.toH3JS(),
       resolution,
     );
     if (res == null) {
@@ -97,7 +97,7 @@ class H3Web implements H3 {
   @override
   List<BigInt> kRing(BigInt h3Index, int ringSize) {
     return h3_js
-        .kRing(bigIntToH3JS(h3Index), ringSize)
+        .kRing(h3Index.toH3JS(), ringSize)
         .map((e) => e.toBigInt())
         .toList();
   }
@@ -106,7 +106,7 @@ class H3Web implements H3 {
   List<BigInt> hexRing(BigInt h3Index, int ringSize) {
     try {
       return h3_js
-          .hexRing(bigIntToH3JS(h3Index), ringSize)
+          .hexRing(h3Index.toH3JS(), ringSize)
           .map((e) => e.toBigInt())
           .toList();
     } catch (e) {
@@ -328,7 +328,7 @@ class H3Web implements H3 {
   double cellArea(BigInt h3Index, H3Units unit) {
     return h3_js
         .cellArea(
-          bigIntToH3JS(h3Index),
+          h3Index.toH3JS(),
           unit.toH3JSSquare(),
         )
         .toDouble();
