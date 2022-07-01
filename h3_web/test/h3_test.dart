@@ -1,3 +1,6 @@
+@TestOn('browser')
+library h3_web.test.web.h3_test;
+
 import 'dart:math';
 
 import 'package:test/test.dart';

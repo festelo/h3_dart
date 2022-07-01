@@ -54,16 +54,18 @@ class H3Web implements H3 {
 
   @override
   List<GeoCoord> h3ToGeoBoundary(BigInt h3Index) {
-    final res = h3_js.h3ToGeoBoundary(h3Index.toH3JS());
-    return res
+    return h3_js
+        .h3ToGeoBoundary(h3Index.toH3JS())
+        .cast<dynamic>()
+        .map((e) => List<num>.from(e))
         .map((e) => GeoCoord(lat: e[0].toDouble(), lon: e[1].toDouble()))
         .toList();
   }
 
   @override
   BigInt h3ToParent(BigInt h3Index, int resolution) {
-    // ignore: unnecessary_nullable_for_final_variable_declarations
-    final String? res = h3_js.h3ToParent(h3Index.toH3JS(), resolution);
+    // ignore: unnecessary_cast
+    final res = h3_js.h3ToParent(h3Index.toH3JS(), resolution) as String?;
     if (res == null) {
       return BigInt.zero;
     }
@@ -77,17 +79,18 @@ class H3Web implements H3 {
     }
     return h3_js
         .h3ToChildren(h3Index.toH3JS(), resolution)
+        .cast<String>()
         .map((e) => e.toBigInt())
         .toList();
   }
 
   @override
   BigInt h3ToCenterChild(BigInt h3Index, int resolution) {
-    // ignore: unnecessary_nullable_for_final_variable_declarations
-    final String? res = h3_js.h3ToCenterChild(
+    // ignore: unnecessary_cast
+    final res = h3_js.h3ToCenterChild(
       h3Index.toH3JS(),
       resolution,
-    );
+    ) as String?;
     if (res == null) {
       return BigInt.zero;
     }
@@ -98,6 +101,7 @@ class H3Web implements H3 {
   List<BigInt> kRing(BigInt h3Index, int ringSize) {
     return h3_js
         .kRing(h3Index.toH3JS(), ringSize)
+        .cast<String>()
         .map((e) => e.toBigInt())
         .toList();
   }
@@ -107,6 +111,7 @@ class H3Web implements H3 {
     try {
       return h3_js
           .hexRing(h3Index.toH3JS(), ringSize)
+          .cast<String>()
           .map((e) => e.toBigInt())
           .toList();
     } catch (e) {
@@ -127,6 +132,7 @@ class H3Web implements H3 {
         'Resolution must be in [0, 15] range');
     return h3_js
         .polyfill(coordinates.map((e) => [e.lat, e.lon]).toList(), resolution)
+        .cast<String>()
         .map((e) => e.toBigInt())
         .toList();
   }
@@ -135,6 +141,7 @@ class H3Web implements H3 {
   List<BigInt> compact(List<BigInt> hexagons) {
     return h3_js
         .compact(hexagons.map((e) => e.toRadixString(16)).toList())
+        .cast<String>()
         .map((e) => e.toBigInt())
         .toList();
   }
@@ -153,6 +160,7 @@ class H3Web implements H3 {
             compactedHexagons.map((e) => e.toRadixString(16)).toList(),
             resolution,
           )
+          .cast<String>()
           .map((e) => e.toBigInt())
           .toList();
     } catch (e) {
@@ -174,11 +182,11 @@ class H3Web implements H3 {
 
   @override
   BigInt getH3UnidirectionalEdge(BigInt origin, BigInt destination) {
-    // ignore: unnecessary_nullable_for_final_variable_declarations
-    final String? res = h3_js.getH3UnidirectionalEdge(
+    // ignore: unnecessary_cast
+    final res = h3_js.getH3UnidirectionalEdge(
       origin.toRadixString(16),
       destination.toRadixString(16),
-    );
+    ) as String?;
     if (res == null) {
       return BigInt.zero;
     }
@@ -187,9 +195,9 @@ class H3Web implements H3 {
 
   @override
   BigInt getOriginH3IndexFromUnidirectionalEdge(BigInt edgeIndex) {
-    // ignore: unnecessary_nullable_for_final_variable_declarations
-    final String? res = h3_js
-        .getOriginH3IndexFromUnidirectionalEdge(edgeIndex.toRadixString(16));
+    // ignore: unnecessary_cast
+    final res = h3_js.getOriginH3IndexFromUnidirectionalEdge(
+        edgeIndex.toRadixString(16)) as String?;
     if (res == null) {
       return BigInt.zero;
     }
@@ -198,9 +206,9 @@ class H3Web implements H3 {
 
   @override
   BigInt getDestinationH3IndexFromUnidirectionalEdge(BigInt edgeIndex) {
-    // ignore: unnecessary_nullable_for_final_variable_declarations
-    final String? res = h3_js.getDestinationH3IndexFromUnidirectionalEdge(
-        edgeIndex.toRadixString(16));
+    // ignore: unnecessary_cast
+    final res = h3_js.getDestinationH3IndexFromUnidirectionalEdge(
+        edgeIndex.toRadixString(16)) as String?;
     if (res == null) {
       return BigInt.zero;
     }
@@ -216,6 +224,7 @@ class H3Web implements H3 {
   List<BigInt> getH3IndexesFromUnidirectionalEdge(BigInt edgeIndex) {
     return h3_js
         .getH3IndexesFromUnidirectionalEdge(edgeIndex.toRadixString(16))
+        .cast<String>()
         .map((e) => e.toBigInt())
         .toList();
   }
@@ -224,6 +233,7 @@ class H3Web implements H3 {
   List<BigInt> getH3UnidirectionalEdgesFromHexagon(BigInt edgeIndex) {
     return h3_js
         .getH3UnidirectionalEdgesFromHexagon(edgeIndex.toRadixString(16))
+        .cast<String>()
         .map((e) => e.toBigInt())
         .toList();
   }
@@ -232,6 +242,8 @@ class H3Web implements H3 {
   List<GeoCoord> getH3UnidirectionalEdgeBoundary(BigInt edgeIndex) {
     return h3_js
         .getH3UnidirectionalEdgeBoundary(edgeIndex.toRadixString(16))
+        .cast<dynamic>()
+        .map((e) => List<num>.from(e))
         .map((e) => GeoCoord(lat: e[0].toDouble(), lon: e[1].toDouble()))
         .toList();
   }
@@ -248,6 +260,7 @@ class H3Web implements H3 {
     try {
       return h3_js
           .h3Line(origin.toRadixString(16), destination.toRadixString(16))
+          .cast<String>()
           .map((e) => e.toBigInt())
           .toList();
     } catch (e) {
@@ -374,13 +387,21 @@ class H3Web implements H3 {
 
   @override
   List<BigInt> getRes0Indexes() {
-    return h3_js.getRes0Indexes().map((e) => e.toBigInt()).toList();
+    return h3_js
+        .getRes0Indexes()
+        .cast<String>()
+        .map((e) => e.toBigInt())
+        .toList();
   }
 
   @override
   List<BigInt> getPentagonIndexes(int res) {
     assert(res >= 0 && res < 16, 'Resolution must be in [0, 15] range');
-    return h3_js.getPentagonIndexes(res).map((e) => e.toBigInt()).toList();
+    return h3_js
+        .getPentagonIndexes(res)
+        .cast<String>()
+        .map((e) => e.toBigInt())
+        .toList();
   }
 
   @override
