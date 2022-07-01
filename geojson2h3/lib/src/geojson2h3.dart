@@ -1,4 +1,4 @@
-import 'h3.dart';
+import 'package:h3_common/h3_common.dart';
 
 const _featureCollection = 'FeatureCollection';
 const _feature = 'Feature';
@@ -26,7 +26,7 @@ class Geojson2H3 {
     ];
     return {
       'type': _feature,
-      'id': h3Index,
+      'id': h3Index.toString(),
       'geometry': {
         'type': _polygon,
         'coordinates': coordinates,

@@ -1,5 +1,4 @@
 export 'src/h3.dart';
-export 'src/geojson2h3.dart';
 
 export 'src/models/geo_coord.dart';
 export 'src/models/coord_ij.dart';
