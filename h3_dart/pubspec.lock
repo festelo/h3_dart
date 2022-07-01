@@ -22,6 +22,20 @@ packages:
       relative: true
     source: path
     version: "0.6.0"
+  h3_web:
+    dependency: "direct main"
+    description:
+      path: "../h3_web"
+      relative: true
+    source: path
+    version: "0.6.0"
+  js:
+    dependency: transitive
+    description:
+      name: js
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.4"
   path:
     dependency: transitive
     description:
@@ -30,4 +44,4 @@ packages:
     source: hosted
     version: "1.8.2"
 sdks:
-  dart: ">=2.14.0 <3.0.0"
+  dart: ">=2.16.0-100.0.dev <3.0.0"
