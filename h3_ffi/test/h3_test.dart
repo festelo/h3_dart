@@ -7,26 +7,26 @@ import 'package:collection/collection.dart';
 import 'common.dart';
 
 void main() {
-  final h3 = H3FfiFactory().byPath('../c/h3lib/build/libh3lib.lib');
+  final h3 = H3FfiFactory().byPath('c/h3lib/build/libh3lib.lib');
 
   test('h3IsValid', () async {
     expect(
-      h3.h3IsValid(0x85283473fffffff),
+      h3.h3IsValid(BigInt.parse('0x85283473fffffff')),
       true,
       reason: 'H3 index is considered an index',
     );
     expect(
-      h3.h3IsValid(0x821C37FFFFFFFFF),
+      h3.h3IsValid(BigInt.parse('0x821C37FFFFFFFFF')),
       true,
       reason: 'H3 index in upper case is considered an index',
     );
     expect(
-      h3.h3IsValid(0x085283473fffffff),
+      h3.h3IsValid(BigInt.parse('0x085283473fffffff')),
       true,
       reason: 'H3 index with leading zero is considered an index',
     );
     expect(
-      !h3.h3IsValid(0xff283473fffffff),
+      !h3.h3IsValid(BigInt.parse('0xff283473fffffff')),
       true,
       reason: 'Hexidecimal string with incorrect bits is not valid',
     );
@@ -41,28 +41,28 @@ void main() {
   test('geoToH3', () async {
     expect(
       h3.geoToH3(const GeoCoord(lat: 37.3615593, lon: -122.0553238), 5),
-      0x85283473fffffff,
+      BigInt.parse('0x85283473fffffff'),
       reason: 'Got the expected H3 index back',
     );
     expect(
       h3.geoToH3(const GeoCoord(lat: 30.943387, lon: -164.991559), 5),
-      0x8547732ffffffff,
+      BigInt.parse('0x8547732ffffffff'),
       reason: 'Properly handle 8 Fs',
     );
     expect(
       h3.geoToH3(
           const GeoCoord(lat: 46.04189431883772, lon: 71.52790329909925), 15),
-      0x8f2000000000000,
+      BigInt.parse('0x8f2000000000000'),
       reason: 'Properly handle leading zeros',
     );
     expect(
       h3.geoToH3(const GeoCoord(lat: 37.3615593, lon: -122.0553238 + 360), 5),
-      0x85283473fffffff,
+      BigInt.parse('0x85283473fffffff'),
       reason: 'world-wrapping lng accepted',
     );
     expect(
       h3.geoToH3(const GeoCoord(lat: 37.3615593, lon: -122.0553238 + 720), 5),
-      0x85283473fffffff,
+      BigInt.parse('0x85283473fffffff'),
       reason: '2 times world-wrapping lng accepted',
     );
     expect(
@@ -70,7 +70,7 @@ void main() {
         const GeoCoord(lat: 37.3615593 + 180, lon: -122.0553238 + 360),
         5,
       ),
-      0x85283473fffffff,
+      BigInt.parse('0x85283473fffffff'),
       reason: 'world-wrapping lat & lng accepted',
     );
     expect(
@@ -78,13 +78,13 @@ void main() {
         const GeoCoord(lat: 37.3615593 - 180, lon: -122.0553238 - 360),
         5,
       ),
-      0x85283473fffffff,
+      BigInt.parse('0x85283473fffffff'),
       reason: 'world-wrapping lat & lng accepted 2',
     );
   });
   test('h3GetResolution', () async {
     expect(
-      () => h3.h3GetResolution(-1),
+      () => h3.h3GetResolution(BigInt.parse('-1')),
       throwsA(isA<H3Exception>()),
       reason: 'Throws error when an invalid index is passed',
     );
@@ -102,7 +102,8 @@ void main() {
   });
   test('h3ToGeo', () async {
     expect(
-      ComparableGeoCoord.fromGeoCoord(h3.h3ToGeo(0x85283473fffffff)),
+      ComparableGeoCoord.fromGeoCoord(
+          h3.h3ToGeo(BigInt.parse('0x85283473fffffff'))),
       ComparableGeoCoord.fromLatLon(
         lat: 37.34579337536848,
         lon: -121.97637597255124,
@@ -115,15 +116,15 @@ void main() {
     test('k = 1', () async {
       expect(
         const DeepCollectionEquality.unordered().equals(
-          h3.kRing(0x8928308280fffff, 1),
+          h3.kRing(BigInt.parse('0x8928308280fffff'), 1),
           [
-            0x8928308280fffff,
-            0x8928308280bffff,
-            0x89283082807ffff,
-            0x89283082877ffff,
-            0x89283082803ffff,
-            0x89283082873ffff,
-            0x8928308283bffff,
+            BigInt.parse('0x8928308280fffff'),
+            BigInt.parse('0x8928308280bffff'),
+            BigInt.parse('0x89283082807ffff'),
+            BigInt.parse('0x89283082877ffff'),
+            BigInt.parse('0x89283082803ffff'),
+            BigInt.parse('0x89283082873ffff'),
+            BigInt.parse('0x8928308283bffff'),
           ],
         ),
         true,
@@ -132,27 +133,27 @@ void main() {
     test('k = 2', () async {
       expect(
         const DeepCollectionEquality.unordered().equals(
-          h3.kRing(0x8928308280fffff, 2),
+          h3.kRing(BigInt.parse('0x8928308280fffff'), 2),
           [
-            0x89283082813ffff,
-            0x89283082817ffff,
-            0x8928308281bffff,
-            0x89283082863ffff,
-            0x89283082823ffff,
-            0x89283082873ffff,
-            0x89283082877ffff,
-            0x8928308287bffff,
-            0x89283082833ffff,
-            0x8928308282bffff,
-            0x8928308283bffff,
-            0x89283082857ffff,
-            0x892830828abffff,
-            0x89283082847ffff,
-            0x89283082867ffff,
-            0x89283082803ffff,
-            0x89283082807ffff,
-            0x8928308280bffff,
-            0x8928308280fffff
+            BigInt.parse('0x89283082813ffff'),
+            BigInt.parse('0x89283082817ffff'),
+            BigInt.parse('0x8928308281bffff'),
+            BigInt.parse('0x89283082863ffff'),
+            BigInt.parse('0x89283082823ffff'),
+            BigInt.parse('0x89283082873ffff'),
+            BigInt.parse('0x89283082877ffff'),
+            BigInt.parse('0x8928308287bffff'),
+            BigInt.parse('0x89283082833ffff'),
+            BigInt.parse('0x8928308282bffff'),
+            BigInt.parse('0x8928308283bffff'),
+            BigInt.parse('0x89283082857ffff'),
+            BigInt.parse('0x892830828abffff'),
+            BigInt.parse('0x89283082847ffff'),
+            BigInt.parse('0x89283082867ffff'),
+            BigInt.parse('0x89283082803ffff'),
+            BigInt.parse('0x89283082807ffff'),
+            BigInt.parse('0x8928308280bffff'),
+            BigInt.parse('0x8928308280fffff')
           ],
         ),
         true,
@@ -161,8 +162,8 @@ void main() {
     test('Bad Radius', () async {
       expect(
         const DeepCollectionEquality.unordered().equals(
-          h3.kRing(0x8928308280fffff, -7),
-          [0x8928308280fffff],
+          h3.kRing(BigInt.parse('0x8928308280fffff'), -7),
+          [BigInt.parse('0x8928308280fffff')],
         ),
         true,
       );
@@ -170,14 +171,14 @@ void main() {
     test('Pentagon', () async {
       expect(
         const DeepCollectionEquality.unordered().equals(
-          h3.kRing(0x821c07fffffffff, 1),
+          h3.kRing(BigInt.parse('0x821c07fffffffff'), 1),
           [
-            0x821c2ffffffffff,
-            0x821c27fffffffff,
-            0x821c07fffffffff,
-            0x821c17fffffffff,
-            0x821c1ffffffffff,
-            0x821c37fffffffff,
+            BigInt.parse('0x821c2ffffffffff'),
+            BigInt.parse('0x821c27fffffffff'),
+            BigInt.parse('0x821c07fffffffff'),
+            BigInt.parse('0x821c17fffffffff'),
+            BigInt.parse('0x821c1ffffffffff'),
+            BigInt.parse('0x821c37fffffffff'),
           ],
         ),
         true,
@@ -189,15 +190,15 @@ void main() {
       // Check it just in case
       expect(
         const DeepCollectionEquality.unordered().equals(
-          h3.kRing(0x8928308324bffff, 1),
+          h3.kRing(BigInt.parse('0x8928308324bffff'), 1),
           [
-            0x8928308324bffff,
-            0x892830989b3ffff,
-            0x89283098987ffff,
-            0x89283098997ffff,
-            0x8928308325bffff,
-            0x89283083243ffff,
-            0x8928308324fffff,
+            BigInt.parse('0x8928308324bffff'),
+            BigInt.parse('0x892830989b3ffff'),
+            BigInt.parse('0x89283098987ffff'),
+            BigInt.parse('0x89283098997ffff'),
+            BigInt.parse('0x8928308325bffff'),
+            BigInt.parse('0x89283083243ffff'),
+            BigInt.parse('0x8928308324fffff'),
           ],
         ),
         true,
@@ -209,14 +210,14 @@ void main() {
     test('ringSize = 1', () async {
       expect(
         const DeepCollectionEquality.unordered().equals(
-          h3.hexRing(0x8928308280fffff, 1),
+          h3.hexRing(BigInt.parse('0x8928308280fffff'), 1),
           [
-            0x8928308280bffff,
-            0x89283082807ffff,
-            0x89283082877ffff,
-            0x89283082803ffff,
-            0x89283082873ffff,
-            0x8928308283bffff,
+            BigInt.parse('0x8928308280bffff'),
+            BigInt.parse('0x89283082807ffff'),
+            BigInt.parse('0x89283082877ffff'),
+            BigInt.parse('0x89283082803ffff'),
+            BigInt.parse('0x89283082873ffff'),
+            BigInt.parse('0x8928308283bffff'),
           ],
         ),
         true,
@@ -225,20 +226,20 @@ void main() {
     test('ringSize = 2', () async {
       expect(
         const DeepCollectionEquality.unordered().equals(
-          h3.hexRing(0x8928308280fffff, 2),
+          h3.hexRing(BigInt.parse('0x8928308280fffff'), 2),
           [
-            0x89283082813ffff,
-            0x89283082817ffff,
-            0x8928308281bffff,
-            0x89283082863ffff,
-            0x89283082823ffff,
-            0x8928308287bffff,
-            0x89283082833ffff,
-            0x8928308282bffff,
-            0x89283082857ffff,
-            0x892830828abffff,
-            0x89283082847ffff,
-            0x89283082867ffff,
+            BigInt.parse('0x89283082813ffff'),
+            BigInt.parse('0x89283082817ffff'),
+            BigInt.parse('0x8928308281bffff'),
+            BigInt.parse('0x89283082863ffff'),
+            BigInt.parse('0x89283082823ffff'),
+            BigInt.parse('0x8928308287bffff'),
+            BigInt.parse('0x89283082833ffff'),
+            BigInt.parse('0x8928308282bffff'),
+            BigInt.parse('0x89283082857ffff'),
+            BigInt.parse('0x892830828abffff'),
+            BigInt.parse('0x89283082847ffff'),
+            BigInt.parse('0x89283082867ffff'),
           ],
         ),
         true,
@@ -247,25 +248,25 @@ void main() {
     test('ringSize = 0', () async {
       expect(
         const DeepCollectionEquality.unordered().equals(
-          h3.hexRing(0x8928308280fffff, 0),
-          [0x8928308280fffff],
+          h3.hexRing(BigInt.parse('0x8928308280fffff'), 0),
+          [BigInt.parse('0x8928308280fffff')],
         ),
         true,
       );
     });
     test('Pentagon', () async {
       expect(
-        () => h3.hexRing(0x821c07fffffffff, 2),
+        () => h3.hexRing(BigInt.parse('0x821c07fffffffff'), 2),
         throwsA(isA<H3Exception>()),
         reason: 'Throws with a pentagon origin',
       );
       expect(
-        () => h3.hexRing(0x821c2ffffffffff, 1),
+        () => h3.hexRing(BigInt.parse('0x821c2ffffffffff'), 1),
         throwsA(isA<H3Exception>()),
         reason: 'Throws with a pentagon in the ring itself',
       );
       expect(
-        () => h3.hexRing(0x821c2ffffffffff, 5),
+        () => h3.hexRing(BigInt.parse('0x821c2ffffffffff'), 5),
         throwsA(isA<H3Exception>()),
         reason: 'Throws with a pentagon inside the ring',
       );
@@ -285,7 +286,7 @@ void main() {
   });
   group('h3ToGeoBoundary', () {
     test('Hexagon', () async {
-      final coordinates = h3.h3ToGeoBoundary(0x85283473fffffff);
+      final coordinates = h3.h3ToGeoBoundary(BigInt.parse('0x85283473fffffff'));
       const expectedCoordinates = [
         GeoCoord(lat: 37.271355866731895, lon: -121.91508032705622),
         GeoCoord(lat: 37.353926450852256, lon: -121.86222328902491),
@@ -303,7 +304,7 @@ void main() {
     });
 
     test('10-Vertex Pentagon', () async {
-      final coordinates = h3.h3ToGeoBoundary(0x81623ffffffffff);
+      final coordinates = h3.h3ToGeoBoundary(BigInt.parse('0x81623ffffffffff'));
       const expectedCoordinates = [
         GeoCoord(lat: 12.754829243237463, lon: 55.94007484027043),
         GeoCoord(lat: 10.2969712272183, lon: 55.17817579309866),
@@ -451,15 +452,15 @@ void main() {
   });
   test('h3IsPentagon', () async {
     expect(
-      h3.h3IsPentagon(0x8928308280fffff),
+      h3.h3IsPentagon(BigInt.parse('0x8928308280fffff')),
       false,
     );
     expect(
-      h3.h3IsPentagon(0x821c07fffffffff),
+      h3.h3IsPentagon(BigInt.parse('0x821c07fffffffff')),
       true,
     );
     expect(
-      h3.h3IsPentagon(0x0),
+      h3.h3IsPentagon(BigInt.parse('0x0')),
       false,
     );
   });
@@ -482,7 +483,7 @@ void main() {
     }
   });
   test('h3GetFaces', () async {
-    void testFace(String name, int h3Index, int expected) {
+    void testFace(String name, BigInt h3Index, int expected) {
       final faces = h3.h3GetFaces(h3Index);
 
       expect(
@@ -502,16 +503,16 @@ void main() {
       );
     }
 
-    testFace('single face', 0x85283473fffffff, 1);
-    testFace('edge adjacent', 0x821c37fffffffff, 1);
-    testFace('edge crossing, distorted', 0x831c06fffffffff, 2);
-    testFace('edge crossing, aligned', 0x821ce7fffffffff, 2);
-    testFace('class II pentagon', 0x84a6001ffffffff, 5);
-    testFace('class III pentagon', 0x85a60003fffffff, 5);
+    testFace('single face', BigInt.parse('0x85283473fffffff'), 1);
+    testFace('edge adjacent', BigInt.parse('0x821c37fffffffff'), 1);
+    testFace('edge crossing, distorted', BigInt.parse('0x831c06fffffffff'), 2);
+    testFace('edge crossing, aligned', BigInt.parse('0x821ce7fffffffff'), 2);
+    testFace('class II pentagon', BigInt.parse('0x84a6001ffffffff'), 5);
+    testFace('class III pentagon', BigInt.parse('0x85a60003fffffff'), 5);
   });
 
   test('h3GetBaseCell', () async {
-    expect(h3.h3GetBaseCell(0x8928308280fffff), 20);
+    expect(h3.h3GetBaseCell(BigInt.parse('0x8928308280fffff')), 20);
   });
 
   group('h3ToParent', () {
@@ -538,17 +539,17 @@ void main() {
       }
     });
     test('Invalid', () async {
-      const h3Index = 0x8928308280fffff;
+      final h3Index = BigInt.parse('0x8928308280fffff');
 
       expect(
         h3.h3ToParent(h3Index, 10),
-        0,
+        BigInt.zero,
         reason: 'Finer resolution returns zero',
       );
 
       expect(
         h3.h3ToParent(h3Index, -1),
-        0,
+        BigInt.zero,
         reason: 'Invalid resolution returns zero',
       );
     });
@@ -577,7 +578,7 @@ void main() {
 
   group('h3ToCenterChild', () {
     test('Basic', () async {
-      const baseIndex = 0x8029fffffffffff;
+      final baseIndex = BigInt.parse('0x8029fffffffffff');
       final geo = h3.h3ToGeo(baseIndex);
       for (var res = 0; res < 14; res++) {
         for (var childRes = res; childRes < 15; childRes++) {
@@ -594,20 +595,20 @@ void main() {
       }
     });
     test('Invalid', () async {
-      const h3Index = 0x8928308280fffff;
+      final h3Index = BigInt.parse('0x8928308280fffff');
 
-      expect(h3.h3ToCenterChild(h3Index, 5), 0,
+      expect(h3.h3ToCenterChild(h3Index, 5), BigInt.zero,
           reason: 'Coarser resolution returns zero');
 
-      expect(h3.h3ToCenterChild(h3Index, -1), 0,
+      expect(h3.h3ToCenterChild(h3Index, -1), BigInt.zero,
           reason: 'Invalid resolution returns zero');
     });
   });
 
   test('h3IndexesAreNeighbors', () async {
-    const origin = 0x891ea6d6533ffff;
-    const adjacent = 0x891ea6d65afffff;
-    const notAdjacent = 0x891ea6992dbffff;
+    final origin = BigInt.parse('0x891ea6d6533ffff');
+    final adjacent = BigInt.parse('0x891ea6d65afffff');
+    final notAdjacent = BigInt.parse('0x891ea6992dbffff');
 
     expect(
       h3.h3IndexesAreNeighbors(origin, adjacent),
@@ -634,29 +635,29 @@ void main() {
     );
 
     expect(
-      h3.h3IndexesAreNeighbors(origin, -1),
+      h3.h3IndexesAreNeighbors(origin, BigInt.parse('-1')),
       false,
       reason: 'A hexagon is not a neighbor to an invalid index',
     );
 
     expect(
-      h3.h3IndexesAreNeighbors(origin, 42),
+      h3.h3IndexesAreNeighbors(origin, BigInt.parse('42')),
       false,
       reason: 'A hexagon is not a neighbor to an invalid index',
     );
 
     expect(
-      h3.h3IndexesAreNeighbors(-1, -1),
+      h3.h3IndexesAreNeighbors(BigInt.parse('-1'), BigInt.parse('-1')),
       false,
       reason: 'Two invalid indexes are not neighbors',
     );
   });
 
   test('getH3UnidirectionalEdge', () async {
-    const origin = 0x891ea6d6533ffff;
-    const destination = 0x891ea6d65afffff;
-    const edge = 0x1591ea6d6533ffff;
-    const notAdjacent = 0x891ea6992dbffff;
+    final origin = BigInt.parse('0x891ea6d6533ffff');
+    final destination = BigInt.parse('0x891ea6d65afffff');
+    final edge = BigInt.parse('0x1591ea6d6533ffff');
+    final notAdjacent = BigInt.parse('0x891ea6992dbffff');
 
     expect(
       h3.getH3UnidirectionalEdge(origin, destination),
@@ -666,32 +667,32 @@ void main() {
 
     expect(
       h3.getH3UnidirectionalEdge(origin, notAdjacent),
-      0,
+      BigInt.zero,
       reason: 'Got 0 for non-adjacent hexagons',
     );
 
     expect(
       h3.getH3UnidirectionalEdge(origin, origin),
-      0,
+      BigInt.zero,
       reason: 'Got 0 for same hexagons',
     );
 
     expect(
-      h3.getH3UnidirectionalEdge(origin, -1),
-      0,
+      h3.getH3UnidirectionalEdge(origin, BigInt.parse('-1')),
+      BigInt.zero,
       reason: 'Got 0 for invalid destination',
     );
 
     expect(
-      h3.getH3UnidirectionalEdge(-1, -1),
-      0,
+      h3.getH3UnidirectionalEdge(BigInt.parse('-1'), BigInt.parse('-1')),
+      BigInt.zero,
       reason: 'Got 0 for invalid hexagons',
     );
   });
 
   test('getOriginH3IndexFromUnidirectionalEdge', () async {
-    const origin = 0x891ea6d6533ffff;
-    const edge = 0x1591ea6d6533ffff;
+    final origin = BigInt.parse('0x891ea6d6533ffff');
+    final edge = BigInt.parse('0x1591ea6d6533ffff');
 
     expect(
       h3.getOriginH3IndexFromUnidirectionalEdge(edge),
@@ -701,20 +702,20 @@ void main() {
 
     expect(
       h3.getOriginH3IndexFromUnidirectionalEdge(origin),
-      0,
+      BigInt.zero,
       reason: 'Got 0 for non-edge hexagon',
     );
 
     expect(
-      h3.getOriginH3IndexFromUnidirectionalEdge(-1),
-      0,
+      h3.getOriginH3IndexFromUnidirectionalEdge(BigInt.parse('-1')),
+      BigInt.zero,
       reason: 'Got 0 for non-valid hexagon',
     );
   });
 
   test('getDestinationH3IndexFromUnidirectionalEdge', () async {
-    const destination = 0x891ea6d65afffff;
-    const edge = 0x1591ea6d6533ffff;
+    final destination = BigInt.parse('0x891ea6d65afffff');
+    final edge = BigInt.parse('0x1591ea6d6533ffff');
 
     expect(
       h3.getDestinationH3IndexFromUnidirectionalEdge(edge),
@@ -724,23 +725,23 @@ void main() {
 
     expect(
       h3.getDestinationH3IndexFromUnidirectionalEdge(destination),
-      0,
+      BigInt.zero,
       reason: 'Got 0 for non-edge hexagon',
     );
 
     expect(
-      h3.getDestinationH3IndexFromUnidirectionalEdge(-1),
-      0,
+      h3.getDestinationH3IndexFromUnidirectionalEdge(BigInt.parse('-1')),
+      BigInt.zero,
       reason: 'Got 0 for non-valid hexagon',
     );
   });
 
   test('h3UnidirectionalEdgeIsValid', () async {
-    const origin = 0x891ea6d6533ffff;
-    const destination = 0x891ea6d65afffff;
+    final origin = BigInt.parse('0x891ea6d6533ffff');
+    final destination = BigInt.parse('0x891ea6d65afffff');
 
     expect(
-      h3.h3UnidirectionalEdgeIsValid(0x1591ea6d6533ffff),
+      h3.h3UnidirectionalEdgeIsValid(BigInt.parse('0x1591ea6d6533ffff')),
       true,
       reason: 'Edge index is valid',
     );
@@ -754,16 +755,16 @@ void main() {
     );
 
     expect(
-      h3.h3UnidirectionalEdgeIsValid(-1),
+      h3.h3UnidirectionalEdgeIsValid(BigInt.parse('-1')),
       false,
       reason: '-1 is not valid',
     );
   });
 
   test('getH3IndexesFromUnidirectionalEdge', () async {
-    const origin = 0x891ea6d6533ffff;
-    const destination = 0x891ea6d65afffff;
-    const edge = 0x1591ea6d6533ffff;
+    final origin = BigInt.parse('0x891ea6d6533ffff');
+    final destination = BigInt.parse('0x891ea6d65afffff');
+    final edge = BigInt.parse('0x1591ea6d6533ffff');
 
     expect(
       h3.getH3IndexesFromUnidirectionalEdge(edge),
@@ -782,7 +783,7 @@ void main() {
 
   group('getH3UnidirectionalEdgesFromHexagon', () {
     test('Basic', () async {
-      const origin = 0x8928308280fffff;
+      final origin = BigInt.parse('0x8928308280fffff');
       final edges = h3.getH3UnidirectionalEdgesFromHexagon(origin);
 
       expect(
@@ -803,7 +804,7 @@ void main() {
     });
 
     test('Pentagon', () async {
-      const origin = 0x81623ffffffffff;
+      final origin = BigInt.parse('0x81623ffffffffff');
       final edges = h3.getH3UnidirectionalEdgesFromHexagon(origin);
 
       expect(
@@ -827,7 +828,7 @@ void main() {
 
   group('getH3UnidirectionalEdgeBoundary', () {
     test('Basic', () async {
-      const origin = 0x85283473fffffff;
+      final origin = BigInt.parse('0x85283473fffffff');
       final edges = h3.getH3UnidirectionalEdgesFromHexagon(origin);
 
       // GeoBoundary of the origin
@@ -853,7 +854,7 @@ void main() {
     });
 
     test('10-vertex pentagon', () async {
-      const origin = 0x81623ffffffffff;
+      final origin = BigInt.parse('0x81623ffffffffff');
       final edges = h3.getH3UnidirectionalEdgesFromHexagon(origin);
 
       // GeoBoundary of the origin
@@ -893,7 +894,7 @@ void main() {
     test('Failure', () async {
       final origin = h3.geoToH3(const GeoCoord(lat: 37.5, lon: -122), 9);
       final origin10 = h3.geoToH3(const GeoCoord(lat: 37.5, lon: -122), 10);
-      const edge = 0x1591ea6d6533ffff;
+      final edge = BigInt.parse('0x1591ea6d6533ffff');
       final distantHex = h3.geoToH3(const GeoCoord(lat: -37.5, lon: 122), 9);
 
       expect(
@@ -957,15 +958,15 @@ void main() {
 
   group('experimentalH3ToLocalIj / experimentalLocalIjToH3', () {
     test('Basic', () async {
-      const origin = 0x8828308281fffff;
+      final origin = BigInt.parse('0x8828308281fffff');
       final testValues = {
         origin: const CoordIJ(i: 392, j: 336),
-        0x882830828dfffff: const CoordIJ(i: 393, j: 337),
-        0x8828308285fffff: const CoordIJ(i: 392, j: 337),
-        0x8828308287fffff: const CoordIJ(i: 391, j: 336),
-        0x8828308283fffff: const CoordIJ(i: 391, j: 335),
-        0x882830828bfffff: const CoordIJ(i: 392, j: 335),
-        0x8828308289fffff: const CoordIJ(i: 393, j: 336),
+        BigInt.parse('0x882830828dfffff'): const CoordIJ(i: 393, j: 337),
+        BigInt.parse('0x8828308285fffff'): const CoordIJ(i: 392, j: 337),
+        BigInt.parse('0x8828308287fffff'): const CoordIJ(i: 391, j: 336),
+        BigInt.parse('0x8828308283fffff'): const CoordIJ(i: 391, j: 335),
+        BigInt.parse('0x882830828bfffff'): const CoordIJ(i: 392, j: 335),
+        BigInt.parse('0x8828308289fffff'): const CoordIJ(i: 393, j: 336),
       };
       for (final testValue in testValues.entries) {
         final h3Index = testValue.key;
@@ -983,11 +984,11 @@ void main() {
       }
     });
     test('Pentagon', () async {
-      const origin = 0x811c3ffffffffff;
+      final origin = BigInt.parse('0x811c3ffffffffff');
       final testValues = {
         origin: const CoordIJ(i: 0, j: 0),
-        0x811d3ffffffffff: const CoordIJ(i: 1, j: 0),
-        0x811cfffffffffff: const CoordIJ(i: -1, j: 0),
+        BigInt.parse('0x811d3ffffffffff'): const CoordIJ(i: 1, j: 0),
+        BigInt.parse('0x811cfffffffffff'): const CoordIJ(i: -1, j: 0),
       };
 
       for (final testValue in testValues.entries) {
@@ -1010,27 +1011,32 @@ void main() {
       // experimentalH3ToLocalIj
 
       expect(
-        () => h3.experimentalH3ToLocalIj(0x832830fffffffff, 0x822837fffffffff),
+        () => h3.experimentalH3ToLocalIj(BigInt.parse('0x832830fffffffff'),
+            BigInt.parse('0x822837fffffffff')),
         throwsA(isA<H3Exception>()),
         reason: 'Got expected error',
       );
       expect(
-        () => h3.experimentalH3ToLocalIj(0x822a17fffffffff, 0x822837fffffffff),
+        () => h3.experimentalH3ToLocalIj(BigInt.parse('0x822a17fffffffff'),
+            BigInt.parse('0x822837fffffffff')),
         throwsA(isA<H3Exception>()),
         reason: 'Got expected error',
       );
       expect(
-        () => h3.experimentalH3ToLocalIj(0x8828308281fffff, 0x8841492553fffff),
+        () => h3.experimentalH3ToLocalIj(BigInt.parse('0x8828308281fffff'),
+            BigInt.parse('0x8841492553fffff')),
         throwsA(isA<H3Exception>()),
         reason: 'Got expected error for opposite sides of the world',
       );
       expect(
-        () => h3.experimentalH3ToLocalIj(0x81283ffffffffff, 0x811cbffffffffff),
+        () => h3.experimentalH3ToLocalIj(BigInt.parse('0x81283ffffffffff'),
+            BigInt.parse('0x811cbffffffffff')),
         throwsA(isA<H3Exception>()),
         reason: 'Got expected error',
       );
       expect(
-        () => h3.experimentalH3ToLocalIj(0x811d3ffffffffff, 0x8122bffffffffff),
+        () => h3.experimentalH3ToLocalIj(BigInt.parse('0x811d3ffffffffff'),
+            BigInt.parse('0x8122bffffffffff')),
         throwsA(isA<H3Exception>()),
         reason: 'Got expected error',
       );
@@ -1039,7 +1045,7 @@ void main() {
 
       expect(
         () => h3.experimentalLocalIjToH3(
-          0x8049fffffffffff,
+          BigInt.parse('0x8049fffffffffff'),
           const CoordIJ(i: 2, j: 0),
         ),
         throwsA(isA<H3Exception>()),
