@@ -91,6 +91,10 @@ jobs:
       run: "flutter analyze"
       working-directory: ./h3_flutter
 
+    - name: Disable web
+      run: flutter config --no-enable-web
+      working-directory: ./h3_flutter
+
     - name: Run tests (linux)
       run: | 
           export DISPLAY=:99
