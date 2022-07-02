@@ -1,10 +1,6 @@
 import 'dart:io';
 
-import 'common.dart';
-
-final packageDependencyVersionRegex =
-    RegExp(r'{PACKAGE}: (.+)', multiLine: true);
-final versionMatchRegex = RegExp(r'\^?{VERSION}\s*$', multiLine: true);
+import 'common/common.dart';
 
 final testMode = Platform.environment['test'] == 'true';
 
@@ -70,44 +66,4 @@ Map<Package, String> getPackageVersions() {
     throw Exception(exceptionMessages.join('\n'));
   }
   return res;
-}
-
-String? getLibraryVersion({required String fileContent}) {
-  return libraryVersionRegex.firstMatch(fileContent)?.group(1);
-}
-
-String? getDependencyVersionFor(Package package,
-    {required String fileContent}) {
-  final escapedName = RegExp.escape(package.name);
-  final regex = RegExp(
-    packageDependencyVersionRegex.pattern.replaceAll('{PACKAGE}', escapedName),
-  );
-
-  return regex.firstMatch(fileContent)?.group(1);
-}
-
-String replaceVersionFor(
-  Package package, {
-  required String newVersion,
-  required String fileContent,
-}) {
-  final escapedName = RegExp.escape(package.name);
-  final regex = RegExp(
-    packageDependencyVersionRegex.pattern.replaceAll('{PACKAGE}', escapedName),
-  );
-
-  fileContent = fileContent.replaceFirst(
-    regex,
-    '${package.name}: ^$newVersion',
-  );
-
-  return fileContent;
-}
-
-bool versionMatch(String original, String dependency) {
-  final escapedOriginal = RegExp.escape(original);
-  final regex = RegExp(
-    versionMatchRegex.pattern.replaceAll('{VERSION}', escapedOriginal),
-  );
-  return regex.hasMatch(dependency);
 }

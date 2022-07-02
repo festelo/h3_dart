@@ -1,9 +1,3 @@
-import 'dart:io';
-
-final libraryVersionRegex = RegExp(r'version: (.+)$', multiLine: true);
-
-File pubspecFileFor(Package package) => File('${package.name}/pubspec.yaml');
-
 enum Package {
   h3Common(name: 'h3_common'),
   h3Ffi(name: 'h3_ffi'),

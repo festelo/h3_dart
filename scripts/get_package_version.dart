@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'common.dart';
+import 'common/common.dart';
 
 final target = Platform.environment['target'];
 
@@ -17,7 +17,7 @@ void main() async {
 
 Future<void> resolveVersionFor(Package package) async {
   final pubspec = await pubspecFileFor(package).readAsString();
-  final version = libraryVersionRegex.firstMatch(pubspec)?.group(1);
+  final version = getLibraryVersion(fileContent: pubspec);
   if (version == null) {
     exitCode = 1;
     print('h3_dart: version unknown');
