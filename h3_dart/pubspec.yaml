@@ -8,7 +8,5 @@ environment:
 
 dependencies:
   ffi: ^1.1.2
-  h3_ffi:
-    path: ../h3_ffi
-  h3_web:
-    path: ../h3_web
+  h3_ffi: ^0.6.0-dev
+  h3_web: ^0.6.0-dev
