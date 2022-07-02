@@ -11,14 +11,11 @@ void main(List<String> args) {
       pubspec = removeDependencyOverrides(fileContent: pubspec);
       pubspecFileFor(package).writeAsStringSync(pubspec);
 
-      final exampleDir =
-          Directory(pubspecFileFor(package).parent.path + '/example');
-      final examplePubspecFile = File(exampleDir.path + '/pubspec.yaml');
-
-      if (exampleDir.existsSync()) {
-        var examplePubspec = examplePubspecFile.readAsStringSync();
+      final examples = getExamples(package);
+      for (final example in examples) {
+        var examplePubspec = example.pubspecFile.readAsStringSync();
         examplePubspec = removeDependencyOverrides(fileContent: examplePubspec);
-        examplePubspecFile.writeAsStringSync(examplePubspec);
+        example.pubspecFile.writeAsStringSync(examplePubspec);
       }
     }
   } else {
@@ -43,23 +40,51 @@ void main(List<String> args) {
         );
         pubspecFileFor(package).writeAsStringSync(pubspec);
 
-        final exampleDir =
-            Directory(pubspecFileFor(package).parent.path + '/example');
-        final examplePubspecFile = File(exampleDir.path + '/pubspec.yaml');
-
-        if (exampleDir.existsSync()) {
+        final examples = getExamples(package);
+        for (final example in examples) {
           final exampleDependencyOverridesString = 'dependency_overrides:\n' +
               packagesToOverride
-                  .map((e) => '  ${e.name}:\n    path: ../../${e.name}')
+                  .map((e) =>
+                      '  ${e.name}:\n    path: ${pathOffsetForLevel(example.level)}${e.name}')
                   .join('\n');
-          var examplePubspec = examplePubspecFile.readAsStringSync();
+
+          var examplePubspec = example.pubspecFile.readAsStringSync();
           examplePubspec = appendOrReplaceDependencyOverrides(
             fileContent: examplePubspec,
             newDependencyOverrides: exampleDependencyOverridesString,
           );
-          examplePubspecFile.writeAsStringSync(examplePubspec);
+          example.pubspecFile.writeAsStringSync(examplePubspec);
         }
       }
     }
   }
+}
+
+String pathOffsetForLevel(int level) =>
+    [for (var i = 0; i < level + 1; i++) '..'].join('/') + '/';
+
+class Example {
+  final File pubspecFile;
+  final int level;
+
+  const Example(this.pubspecFile, this.level);
+}
+
+List<Example> getExamples(Package package) {
+  final exampleDir =
+      Directory(pubspecFileFor(package).parent.path + '/example');
+  if (!exampleDir.existsSync()) return [];
+  final examplePubspecFile = File(exampleDir.path + '/pubspec.yaml');
+  if (examplePubspecFile.existsSync()) {
+    return [Example(examplePubspecFile, 1)];
+  }
+
+  final resList = <Example>[];
+  for (final d in exampleDir.listSync()) {
+    final examplePubspecFile = File(d.path + '/pubspec.yaml');
+    if (examplePubspecFile.existsSync()) {
+      resList.add(Example(examplePubspecFile, 2));
+    }
+  }
+  return resList;
 }
