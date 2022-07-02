@@ -10,6 +10,16 @@ void main(List<String> args) {
       var pubspec = pubspecFileFor(package).readAsStringSync();
       pubspec = removeDependencyOverrides(fileContent: pubspec);
       pubspecFileFor(package).writeAsStringSync(pubspec);
+
+      final exampleDir =
+          Directory(pubspecFileFor(package).parent.path + '/example');
+      final examplePubspecFile = File(exampleDir.path + '/pubspec.yaml');
+
+      if (exampleDir.existsSync()) {
+        var examplePubspec = examplePubspecFile.readAsStringSync();
+        examplePubspec = removeDependencyOverrides(fileContent: examplePubspec);
+        examplePubspecFile.writeAsStringSync(examplePubspec);
+      }
     }
   } else {
     for (final package in Package.values) {
@@ -32,6 +42,23 @@ void main(List<String> args) {
           newDependencyOverrides: dependencyOverridesString,
         );
         pubspecFileFor(package).writeAsStringSync(pubspec);
+
+        final exampleDir =
+            Directory(pubspecFileFor(package).parent.path + '/example');
+        final examplePubspecFile = File(exampleDir.path + '/pubspec.yaml');
+
+        if (exampleDir.existsSync()) {
+          final exampleDependencyOverridesString = 'dependency_overrides:\n' +
+              packagesToOverride
+                  .map((e) => '  ${e.name}:\n    path: ../../${e.name}')
+                  .join('\n');
+          var examplePubspec = examplePubspecFile.readAsStringSync();
+          examplePubspec = appendOrReplaceDependencyOverrides(
+            fileContent: examplePubspec,
+            newDependencyOverrides: exampleDependencyOverridesString,
+          );
+          examplePubspecFile.writeAsStringSync(examplePubspec);
+        }
       }
     }
   }
