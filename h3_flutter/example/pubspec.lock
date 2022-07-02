@@ -105,25 +105,46 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  h3_dart:
-    dependency: transitive
+  h3_common:
+    dependency: "direct overridden"
     description:
-      name: h3_dart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.2"
+      path: "../../h3_common"
+      relative: true
+    source: path
+    version: "0.6.0-dev"
+  h3_ffi:
+    dependency: "direct overridden"
+    description:
+      path: "../../h3_ffi"
+      relative: true
+    source: path
+    version: "0.6.0-dev"
   h3_flutter:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.5.2"
+    version: "0.6.0-dev"
+  h3_web:
+    dependency: "direct overridden"
+    description:
+      path: "../../h3_web"
+      relative: true
+    source: path
+    version: "0.6.0-dev"
   integration_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
+  js:
+    dependency: transitive
+    description:
+      name: js
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.4"
   lints:
     dependency: transitive
     description:
