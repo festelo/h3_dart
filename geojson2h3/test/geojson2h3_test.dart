@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:geojson2h3/geojson2h3.dart';
 import 'package:h3_common/h3_common.dart';
 import 'package:mockito/annotations.dart';
