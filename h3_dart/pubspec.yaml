@@ -10,3 +10,4 @@ dependencies:
   ffi: ^1.1.2
   h3_ffi: ^0.6.0-dev
   h3_web: ^0.6.0-dev
+  h3_common: ^0.6.0-dev
