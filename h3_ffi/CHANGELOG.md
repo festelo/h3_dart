@@ -1,4 +1,4 @@
-## 0.6.0.pre
+## 0.6.0-dev
 * Split `h3_dart` library into 5 libraries - `h3_dart`, `h3_ffi`, `h3_web`, `h3_common`, `geojson2h3`
 * Use `BigInt` instead of `int` for h3 indexes due to `web` specific.
 * Web support added to `h3_dart` and `h3_flutter`
