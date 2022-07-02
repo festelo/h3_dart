@@ -1,66 +1,69 @@
 import 'dart:io';
 
-import 'common.dart';
-
-final h3DartDependencyVersionRegex = RegExp(r'h3_dart: (.+)$', multiLine: true);
-final versionMatchRegex = RegExp(r'\^?{VERSION}\s*$', multiLine: true);
+import 'common/common.dart';
 
 final testMode = Platform.environment['test'] == 'true';
 
-void main() async {
-  final h3dartPubspec = await h3dartPubspecFile.readAsString();
-  var h3flutterPubspec = await h3flutterPubspecFile.readAsString();
+void main() {
+  final versions = getPackageVersions();
+  final notUpToDateMessages = <String>[];
+  bool anyVersionUpdated = false;
+  for (final package in Package.values) {
+    var fileContent = pubspecFileFor(package).readAsStringSync();
+    for (final versionEntry in versions.entries) {
+      if (versionEntry.key == package) continue;
 
-  final h3dartVersion = libraryVersionRegex.firstMatch(h3dartPubspec)?.group(1);
-  if (h3dartVersion == null) {
-    exitCode = 1;
-    print('h3_dart version not found');
-    return;
-  }
-  print('h3_dart version: $h3dartVersion');
+      final usedVersion =
+          getDependencyVersionFor(versionEntry.key, fileContent: fileContent);
+      if (usedVersion == null) continue;
 
-  final h3dartVersionInH3Flutter =
-      h3DartDependencyVersionRegex.firstMatch(h3flutterPubspec)?.group(1);
-  if (h3dartVersionInH3Flutter == null) {
-    exitCode = 1;
-    print('h3_dart dependency not found for h3_flutter');
-    return;
-  }
-  print('h3_dart version used for h3_flutter: $h3dartVersionInH3Flutter');
+      if (versionMatch(versionEntry.value, usedVersion)) {
+        continue;
+      }
 
-  if (testMode) {
-    if (!versionMatch(h3dartVersion, h3dartVersionInH3Flutter)) {
-      exitCode = 1;
-      print(
-        'h3_dart version used for h3_flutter does not match current h3_dart version',
+      if (testMode) {
+        notUpToDateMessages.add(
+          'package:${package.name}: version for ${versionEntry.key.name} is not up-to-date. Current: $usedVersion, latest: ${versionEntry.value}',
+        );
+        continue;
+      }
+
+      fileContent = replaceVersionFor(
+        versionEntry.key,
+        newVersion: versionEntry.value,
+        fileContent: fileContent,
       );
-      return;
+
+      anyVersionUpdated = true;
+      print(
+        'package:${package.name}: version for ${versionEntry.key.name} has been updated from $usedVersion to ${versionEntry.value}',
+      );
+      pubspecFileFor(package).writeAsStringSync(fileContent);
     }
-
-    print(
-      'h3_dart version used for h3_flutter does match current h3_dart version',
-    );
-    return;
   }
 
-  if (!versionMatch(h3dartVersion, h3dartVersionInH3Flutter)) {
-    h3flutterPubspec = h3flutterPubspec.replaceFirst(
-      h3DartDependencyVersionRegex,
-      'h3_dart: ^$h3dartVersion',
-    );
-    await h3flutterPubspecFile.writeAsString(h3flutterPubspec);
-    print('version updated in h3_flutter');
-    return;
+  if (notUpToDateMessages.isNotEmpty) {
+    throw Exception(notUpToDateMessages.join('\n'));
   }
-
-  print('no changes needed');
-  return;
+  if (!anyVersionUpdated) {
+    print('no changes needed');
+  }
 }
 
-bool versionMatch(String original, String dependency) {
-  final escapedOriginal = RegExp.escape(original);
-  final regex = RegExp(
-    versionMatchRegex.pattern.replaceAll('{VERSION}', escapedOriginal),
-  );
-  return regex.hasMatch(dependency);
+Map<Package, String> getPackageVersions() {
+  Map<Package, String> res = {};
+  final exceptionMessages = <String>[];
+  for (final package in Package.values) {
+    final fileContent = pubspecFileFor(package).readAsStringSync();
+    final version = getLibraryVersion(fileContent: fileContent);
+    if (version == null) {
+      exceptionMessages.add('${package.name} library version not found');
+      continue;
+    }
+    res[package] = version;
+  }
+  if (exceptionMessages.isNotEmpty) {
+    throw Exception(exceptionMessages.join('\n'));
+  }
+  return res;
 }

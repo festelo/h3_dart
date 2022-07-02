@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  h3_dart_test:
+  h3_ffi_test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -31,22 +31,26 @@ jobs:
       - name: Prepare tests
         run: sh scripts/prepare_tests.sh
 
+      - name: Override dependencies
+        run: dart scripts/dependency_override.dart
+
       - name: Install dependencies
         run: dart pub get
-        working-directory: ./h3_dart
+        working-directory: ./h3_ffi
 
       - name: Analyze
         run: dart analyze
-        working-directory: ./h3_dart
+        working-directory: ./h3_ffi
 
       - name: Run tests
         run: dart pub global run coverage:test_with_coverage
-        working-directory: ./h3_dart
+        working-directory: ./h3_ffi
 
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v2
         with:
-          files: ./h3_dart/coverage/lcov.info
+          files: ./h3_ffi/coverage/lcov.info
+          flags: h3_ffi
 
 
   h3_flutter_test_desktop:
@@ -77,9 +81,7 @@ jobs:
       run: flutter config --enable-windows-desktop
     
     - name: Override dependencies
-      run: |
-        echo -e "\ndependency_overrides:\n  h3_dart:\n    path: ../h3_dart" >> './h3_flutter/pubspec.yaml'
-        echo -e "\ndependency_overrides:\n  h3_dart:\n    path: ../../h3_dart" >> './h3_flutter/example/pubspec.yaml'
+      run: dart scripts/dependency_override.dart
 
     - name: Pub get
       run: "flutter pub get"
@@ -87,6 +89,10 @@ jobs:
 
     - name: Analyze
       run: "flutter analyze"
+      working-directory: ./h3_flutter
+
+    - name: Disable web
+      run: flutter config --no-enable-web
       working-directory: ./h3_flutter
 
     - name: Run tests (linux)

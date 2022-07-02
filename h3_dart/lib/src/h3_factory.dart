@@ -1,22 +1,22 @@
-import 'dart:ffi';
+import 'package:h3_common/h3_common.dart';
 
-import 'package:h3_dart/h3_dart.dart';
-import 'package:h3_dart/internal.dart';
-import 'package:path/path.dart' as p;
+import 'h3_factory.base.dart';
 
-class H3Factory {
-  const H3Factory({
-    H3CFactory h3cFactory = const H3CFactory(),
-  }) : _h3cFactory = h3cFactory;
+class H3Factory implements BaseH3Factory {
+  const H3Factory();
 
-  final H3CFactory _h3cFactory;
-
-  H3 byDynamicLibary(DynamicLibrary dynamicLibrary) {
-    return H3(_h3cFactory.byDynamicLibary(dynamicLibrary));
+  @override
+  H3 process() {
+    throw UnimplementedError();
   }
 
-  H3 byPath(String libraryPath) {
-    libraryPath = p.canonicalize(libraryPath);
-    return H3(_h3cFactory.byPath(libraryPath));
+  @override
+  H3 byPath(String? libraryPath) {
+    throw UnimplementedError();
+  }
+
+  @override
+  H3 web() {
+    throw UnimplementedError();
   }
 }
