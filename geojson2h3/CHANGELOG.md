@@ -1,4 +1,4 @@
-## 0.6.0-dev.1
+## 0.6.0
 * Split `h3_dart` library into 5 libraries - `h3_dart`, `h3_ffi`, `h3_web`, `h3_common`, `geojson2h3`
 * **[BREAKING]** Use `BigInt` instead of `int` for h3 indexes due to `web` specific.  
   Use `BigInt.parse(0x00000000000)` instead of `0x00000000000` in h3 functions.
