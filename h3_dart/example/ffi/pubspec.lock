@@ -9,11 +9,11 @@ packages:
     source: hosted
     version: "1.2.1"
   h3_common:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../../../h3_common"
-      relative: true
-    source: path
+      name: h3_common
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.6.0-dev"
   h3_dart:
     dependency: "direct main"
@@ -23,18 +23,18 @@ packages:
     source: path
     version: "0.6.0-dev"
   h3_ffi:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../../../h3_ffi"
-      relative: true
-    source: path
+      name: h3_ffi
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.6.0-dev"
   h3_web:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../../../h3_web"
-      relative: true
-    source: path
+      name: h3_web
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.6.0-dev"
   js:
     dependency: transitive

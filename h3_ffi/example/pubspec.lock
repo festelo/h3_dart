@@ -9,40 +9,19 @@ packages:
     source: hosted
     version: "1.2.1"
   h3_common:
-    dependency: "direct overridden"
-    description:
-      path: "../../../h3_common"
-      relative: true
-    source: path
-    version: "0.6.0-dev"
-  h3_dart:
-    dependency: "direct main"
-    description:
-      path: "../.."
-      relative: true
-    source: path
-    version: "0.6.0-dev"
-  h3_ffi:
-    dependency: "direct overridden"
-    description:
-      path: "../../../h3_ffi"
-      relative: true
-    source: path
-    version: "0.6.0-dev"
-  h3_web:
-    dependency: "direct overridden"
-    description:
-      path: "../../../h3_web"
-      relative: true
-    source: path
-    version: "0.6.0-dev"
-  js:
     dependency: transitive
     description:
-      name: js
+      name: h3_common
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.4"
+    version: "0.6.0-dev"
+  h3_ffi:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "0.6.0-dev"
   lints:
     dependency: "direct dev"
     description:
@@ -58,4 +37,4 @@ packages:
     source: hosted
     version: "1.8.2"
 sdks:
-  dart: ">=2.16.0-100.0.dev <3.0.0"
+  dart: ">=2.15.1 <3.0.0"

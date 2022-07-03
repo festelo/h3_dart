@@ -17,6 +17,6 @@ class H3Factory implements BaseH3Factory {
 
   @override
   H3 web() {
-    throw UnimplementedError();
+    throw UnsupportedError('H3Factory.web() is not supported under Dart VM');
   }
 }

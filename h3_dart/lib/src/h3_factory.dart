@@ -11,7 +11,7 @@ class H3Factory implements BaseH3Factory {
   }
 
   @override
-  H3 byPath(String? libraryPath) {
+  H3 byPath(String libraryPath) {
     throw UnimplementedError();
   }
 

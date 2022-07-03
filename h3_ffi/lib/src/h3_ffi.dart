@@ -6,9 +6,9 @@ import 'package:h3_ffi/src/mappers/big_int.dart';
 import 'generated/generated_bindings.dart' as c;
 import 'mappers/native.dart';
 
-/// Provides access to H3 functions.
+/// Provides access to H3 functions through FFI.
 ///
-/// You should not construct the class directly, use [h3] singletone instead.
+/// You should not construct the class directly, use [H3Factory] instead.
 class H3Ffi implements H3 {
   H3Ffi(this._h3c);
 

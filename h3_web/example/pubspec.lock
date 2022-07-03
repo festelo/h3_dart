@@ -226,11 +226,11 @@ packages:
     source: hosted
     version: "2.1.0"
   h3_common:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../../h3_common"
-      relative: true
-    source: path
+      name: h3_common
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.6.0-dev"
   h3_web:
     dependency: "direct main"

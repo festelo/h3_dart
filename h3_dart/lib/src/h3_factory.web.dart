@@ -7,12 +7,16 @@ class H3Factory implements BaseH3Factory {
 
   @override
   H3 process() {
-    throw UnimplementedError();
+    throw UnsupportedError(
+      'H3Factory.process() is not supported when compiled to Web',
+    );
   }
 
   @override
   H3 byPath(String libraryPath) {
-    throw UnimplementedError();
+    throw UnsupportedError(
+      'H3Factory.byPath(...) is not supported when compiled to Web',
+    );
   }
 
   @override
