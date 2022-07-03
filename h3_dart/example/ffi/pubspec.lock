@@ -14,35 +14,35 @@ packages:
       path: "../../../geojson2h3"
       relative: true
     source: path
-    version: "0.6.0-dev"
+    version: "0.6.0-dev.1"
   h3_common:
     dependency: "direct overridden"
     description:
       path: "../../../h3_common"
       relative: true
     source: path
-    version: "0.6.0-dev"
+    version: "0.6.0-dev.1"
   h3_dart:
     dependency: "direct main"
     description:
       path: "../.."
       relative: true
     source: path
-    version: "0.6.0-dev"
+    version: "0.6.0-dev.1"
   h3_ffi:
     dependency: "direct overridden"
     description:
       path: "../../../h3_ffi"
       relative: true
     source: path
-    version: "0.6.0-dev"
+    version: "0.6.0-dev.1"
   h3_web:
     dependency: "direct overridden"
     description:
       path: "../../../h3_web"
       relative: true
     source: path
-    version: "0.6.0-dev"
+    version: "0.6.0-dev.1"
   js:
     dependency: transitive
     description:

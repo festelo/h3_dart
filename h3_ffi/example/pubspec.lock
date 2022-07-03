@@ -14,14 +14,14 @@ packages:
       path: "../../h3_common"
       relative: true
     source: path
-    version: "0.6.0-dev"
+    version: "0.6.0-dev.1"
   h3_ffi:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.6.0-dev"
+    version: "0.6.0-dev.1"
   lints:
     dependency: "direct dev"
     description:

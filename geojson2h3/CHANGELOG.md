@@ -1,6 +1,9 @@
-## 0.6.0-dev
+## 0.6.0-dev.1
 * Split `h3_dart` library into 5 libraries - `h3_dart`, `h3_ffi`, `h3_web`, `h3_common`, `geojson2h3`
-* Use `BigInt` instead of `int` for h3 indexes due to `web` specific.
+* **[BREAKING]** Use `BigInt` instead of `int` for h3 indexes due to `web` specific.  
+  Use `BigInt.parse(0x00000000000)` instead of `0x00000000000` in h3 functions.
+* **[BREAKING]** H3Factory() updated for each library.  
+  There's no `.byPath()` or `.byDynamicLibrary` in `h3_flutter`'s `H3Factory`, use `h3_dart` instead, you can use both if you need, they are compatible.
 * Web support added to `h3_dart` and `h3_flutter`
 ## 0.5.2
 * Update README.md and tests
@@ -11,9 +14,9 @@
 ## 0.5.0
 * Split `h3_flutter` library into 2 libraries - `h3_flutter` and `h3_dart` for pure-dart projects.
 * **[BREAKING]** remove `h3` and `geojson2H3` singletones.  
-  To access h3 you should use `H3Factory().load()` if you use `h3_flutter` and `H3Factory().byPath(...)` or `H3Factory().byDynamicLibary(...)` if you use `h3_dart`
+  To access h3 you should use `H3Factory().load()` if you use `h3_flutter` and `H3Factory().byPath(...)` or `H3Factory().byDynamicLibary(...)` if you use `h3_dart`  
 * Add `GeoCoordRadians` to allow to specify coordinates in radians.  
-  `GeoCoordRadians` must be converted to `GeoCoord` using `.toDegrees(converter)` method before you can use it in h3 or geojson2h3 methods.
+  `GeoCoordRadians` must be converted to `GeoCoord` using `.toDegrees(converter)` method before you can use it in h3 or geojson2h3 methods.  
 * Add option to convert `GeoCoord` to `GeoCoordRadians` via `.toRadians(converter)` method
 * Add AngleConverter and GeoCoordConverter classes to convert between radians and degrees.  
   AngleConverter is abstract, but has two implementations - H3AngleConverter and NativeAngleConverter
