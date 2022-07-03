@@ -2,6 +2,7 @@ name: Publish to pub.dev, create tag and release
 
 on:
   push:
+  workflow_dispatch:
 
 concurrency:
   group: publish-${{ github.event.pull_request.number || github.ref }}
@@ -10,8 +11,26 @@ concurrency:
 # secrets.PUB_CREDENTIAL_JSON taken from "~/Library/Application Support/dart/pub-credentials.json"
 
 jobs:
-  publish_h3_dart:
+  publish:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        package: [h3_common, geojson2h3, h3_ffi, h3_web, h3_dart, h3_flutter]
+        include:
+          - package: h3_common
+            release_name: "H3 Common"
+          - package: geojson2h3
+            release_name: "Geojson2H3"
+          - package: h3_ffi
+            release_name: "H3 Ffi"
+          - package: h3_web
+            release_name: "H3 Web"
+          - package: h3_dart
+            release_name: "H3 Dart"
+          - package: h3_flutter
+            release_name: "H3 Flutter"
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -24,57 +43,14 @@ jobs:
       - name: Get version
         run: echo "VERSION=$(dart scripts/get_package_version.dart)" >> $GITHUB_ENV
         env:
-          target: h3_dart
+          target:  ${{ matrix.package }}
 
       - id: get_existing_release
         uses: cardinalby/git-get-release-action@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          tag: h3_dart_${{ env.VERSION }}
-        continue-on-error: true
-
-      - name: Publish to pub
-        uses: festelo/actions-flutter-pub-publisher@master
-        with:
-          credential: ${{ secrets.PUB_CREDENTIAL_JSON }}
-          flutter_package: false
-          skip_test: true
-          dry_run: ${{ github.ref != 'refs/heads/master' }}
-          package_directory: ./h3_dart
-        if: steps.get_existing_release.outputs.id == null
-
-      - uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
-          title: "H3 Dart v${{ env.VERSION }}"
-          automatic_release_tag: "h3_dart_${{ env.VERSION }}"
-        if: steps.get_existing_release.outputs.id == null && github.ref == 'refs/heads/master'
-
-  publish_h3_flutter:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-
-      - name: Get version
-        uses: dart-lang/setup-dart@v1.3
-        with:
-          sdk: stable
-          architecture: x64
-
-      - name: Get version
-        run: echo "VERSION=$(dart scripts/get_package_version.dart)" >> $GITHUB_ENV
-        env:
-          target: h3_flutter
-
-      - id: get_existing_release
-        uses: cardinalby/git-get-release-action@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          tag: h3_flutter_${{ env.VERSION }}
+          tag: ${{ matrix.package }}_${{ env.VERSION }}
         continue-on-error: true
 
       - name: Publish to pub
@@ -84,14 +60,14 @@ jobs:
           flutter_package: true
           skip_test: true
           dry_run: ${{ github.ref != 'refs/heads/master' }}
-          package_directory: ./h3_flutter
-        if: steps.get_existing_release.outputs.id == null
+          package_directory: ./${{ matrix.package }}
+        if: steps.get_existing_release.outputs.id == null && (github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch')
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-          title: "H3 Flutter v${{ env.VERSION }}"
-          automatic_release_tag: "h3_flutter_${{ env.VERSION }}"
-        if: steps.get_existing_release.outputs.id == null && github.ref == 'refs/heads/master'
+          title: "${{ matrix.release_name }} v${{ env.VERSION }}"
+          automatic_release_tag: "${{ matrix.package }}_${{ env.VERSION }}"
+        if: steps.get_existing_release.outputs.id == null && (github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch')
   

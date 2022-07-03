@@ -12,7 +12,81 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  h3_dart_test:
+  geojson2h3_tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        sdk: [stable, beta, dev]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: ${{ matrix.sdk }}
+          architecture: x64
+
+      - name: Install coverage tool
+        run: dart pub global activate coverage
+
+      - name: Override dependencies
+        run: dart scripts/dependency_override.dart
+
+      - name: Install dependencies
+        run: dart pub get
+        working-directory: ./geojson2h3
+
+      - name: Analyze
+        run: dart analyze
+        working-directory: ./geojson2h3
+
+      - name: Run tests
+        run: dart pub global run coverage:test_with_coverage
+        working-directory: ./geojson2h3
+
+      - name: Upload coverage to codecov
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./geojson2h3/coverage/lcov.info
+          flags: geojson2h3
+
+  h3_common_tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        sdk: [stable, beta, dev]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: ${{ matrix.sdk }}
+          architecture: x64
+
+      - name: Install coverage tool
+        run: dart pub global activate coverage
+
+      - name: Override dependencies
+        run: dart scripts/dependency_override.dart
+
+      - name: Install dependencies
+        run: dart pub get
+        working-directory: ./h3_common
+
+      - name: Analyze
+        run: dart analyze
+        working-directory: ./h3_common
+
+      - name: Run tests
+        run: dart pub global run coverage:test_with_coverage
+        working-directory: ./h3_common
+
+      - name: Upload coverage to codecov
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./h3_common/coverage/lcov.info
+          flags: h3_common
+
+  h3_dart_tests:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -31,6 +105,9 @@ jobs:
       - name: Prepare tests
         run: sh scripts/prepare_tests.sh
 
+      - name: Override dependencies
+        run: dart scripts/dependency_override.dart
+
       - name: Install dependencies
         run: dart pub get
         working-directory: ./h3_dart
@@ -39,15 +116,62 @@ jobs:
         run: dart analyze
         working-directory: ./h3_dart
 
-      - name: Run tests
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@latest
+
+      - name: Run tests (VM)
         run: dart pub global run coverage:test_with_coverage
+        working-directory: ./h3_dart
+
+      - name: Run tests (Web)
+        run: dart test -p chrome
         working-directory: ./h3_dart
 
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v2
         with:
           files: ./h3_dart/coverage/lcov.info
+          flags: h3_dart
 
+  h3_ffi_tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        sdk: [stable, beta, dev]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: ${{ matrix.sdk }}
+          architecture: x64
+
+      - name: Install coverage tool
+        run: dart pub global activate coverage
+  
+      - name: Prepare tests
+        run: sh scripts/prepare_tests.sh
+
+      - name: Override dependencies
+        run: dart scripts/dependency_override.dart
+
+      - name: Install dependencies
+        run: dart pub get
+        working-directory: ./h3_ffi
+
+      - name: Analyze
+        run: dart analyze
+        working-directory: ./h3_ffi
+
+      - name: Run tests
+        run: dart pub global run coverage:test_with_coverage
+        working-directory: ./h3_ffi
+
+      - name: Upload coverage to codecov
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./h3_ffi/coverage/lcov.info
+          flags: h3_ffi
 
   h3_flutter_test_desktop:
     runs-on: ${{ matrix.os }}
@@ -77,9 +201,7 @@ jobs:
       run: flutter config --enable-windows-desktop
     
     - name: Override dependencies
-      run: |
-        echo -e "\ndependency_overrides:\n  h3_dart:\n    path: ../h3_dart" >> './h3_flutter/pubspec.yaml'
-        echo -e "\ndependency_overrides:\n  h3_dart:\n    path: ../../h3_dart" >> './h3_flutter/example/pubspec.yaml'
+      run: dart scripts/dependency_override.dart
 
     - name: Pub get
       run: "flutter pub get"
@@ -87,6 +209,10 @@ jobs:
 
     - name: Analyze
       run: "flutter analyze"
+      working-directory: ./h3_flutter
+
+    - name: Disable web
+      run: flutter config --no-enable-web
       working-directory: ./h3_flutter
 
     - name: Run tests (linux)
@@ -100,3 +226,75 @@ jobs:
     - name: Run tests
       run: flutter test integration_test/app_test.dart
       working-directory: ./h3_flutter/example
+
+  h3_flutter_test_web:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup subosito/flutter-action@v2
+      uses: subosito/flutter-action@v2
+      with:
+        channel: beta
+        architecture: x64
+
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@latest
+
+    - name: Setup Chrome Driver
+      uses: nanasess/setup-chromedriver@v1
+
+    - run: |
+        export DISPLAY=:99
+        chromedriver --port=4444 &
+        sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+    
+    - name: Override dependencies
+      run: dart scripts/dependency_override.dart
+
+    - name: Pub get
+      run: "flutter pub get"
+      working-directory: ./h3_flutter
+
+    - name: Analyze
+      run: "flutter analyze"
+      working-directory: ./h3_flutter
+
+    - name: Disable linux
+      run: flutter config --no-enable-linux-desktop
+      working-directory: ./h3_flutter
+
+    - name: Run tests
+      run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server
+      working-directory: ./h3_flutter/example
+
+  h3_web_tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        sdk: [stable, beta, dev]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: ${{ matrix.sdk }}
+          architecture: x64
+
+      - name: Override dependencies
+        run: dart scripts/dependency_override.dart
+
+      - name: Install dependencies
+        run: dart pub get
+        working-directory: ./h3_web
+
+      - name: Analyze
+        run: dart analyze
+        working-directory: ./h3_web
+
+      - name: Run tests
+        run: dart test -p chrome
+        working-directory: ./h3_web

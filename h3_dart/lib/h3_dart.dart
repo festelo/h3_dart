@@ -1,12 +1,5 @@
-export 'src/h3.dart';
-export 'src/h3_factory.dart';
-export 'src/geojson2h3.dart';
-
-export 'src/models/geo_coord.dart';
-export 'src/models/coord_ij.dart';
-export 'src/models/h3_units.dart';
-export 'src/models/h3_exception.dart';
-export 'src/models/geo_coord.dart';
-export 'src/models/geo_coord_radians.dart';
-export 'src/converters/angle_converter.dart';
-export 'src/converters/geocoord_converter.dart';
+export 'package:h3_common/h3_common.dart';
+export 'package:geojson2h3/geojson2h3.dart';
+export 'src/h3_factory.dart'
+    if (dart.library.io) 'src/h3_factory.io.dart'
+    if (dart.library.html) 'src/h3_factory.web.dart';

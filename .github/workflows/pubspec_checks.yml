@@ -10,7 +10,7 @@ concurrency:
   
 jobs:
   h3_dart_check:
-    name: Check h3_dart version is the same in ./h3_dart and ./h3_flutter
+    name: Check h3 libraries versions are up-to-date
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -19,7 +19,7 @@ jobs:
         sdk: stable
         architecture: x64
 
-    - name: Check h3_dart version is synchronized
+    - name: Check h3 libraries versions are synchronized
       run: dart scripts/sync_h3_dart_version.dart
       env:
         test: true
