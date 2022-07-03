@@ -268,10 +268,7 @@ jobs:
       working-directory: ./h3_flutter
 
     - name: Run tests
-      run: flutter drive \
-        --driver=test_driver/integration_test.dart \
-        --target=integration_test/app_test.dart \
-        -d web-server
+      run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server
       working-directory: ./h3_flutter/example
 
   h3_web_tests:
