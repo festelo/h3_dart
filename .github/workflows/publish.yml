@@ -2,6 +2,7 @@ name: Publish to pub.dev, create tag and release
 
 on:
   push:
+  workflow_dispatch:
 
 concurrency:
   group: publish-${{ github.event.pull_request.number || github.ref }}
@@ -60,7 +61,7 @@ jobs:
           skip_test: true
           dry_run: ${{ github.ref != 'refs/heads/master' }}
           package_directory: ./${{ matrix.package }}
-        if: steps.get_existing_release.outputs.id == null
+        if: steps.get_existing_release.outputs.id == null && (github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch')
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
@@ -68,5 +69,5 @@ jobs:
           prerelease: false
           title: "${{ matrix.release_name }} v${{ env.VERSION }}"
           automatic_release_tag: "${{ matrix.package }}_${{ env.VERSION }}"
-        if: steps.get_existing_release.outputs.id == null && github.ref == 'refs/heads/master'
+        if: steps.get_existing_release.outputs.id == null && (github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch')
   
