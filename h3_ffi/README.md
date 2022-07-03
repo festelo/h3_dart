@@ -4,17 +4,20 @@
 <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License: Apache 2.0"></a>
 </p>
 
-## H3 Dart & Flutter
+## H3 Ffi
 
-H3 version: 3.7.2
+***In most cases you should not use this library directly, use [h3_dart](https://pub.dev/packages/h3_dart/) or [h3_flutter](https://pub.dev/packages/h3_flutter/) instead.***  
 
-The package allows to use [H3 library](https://github.com/uber/h3) directly in your Flutter or Dart application
+H3 C library version: 3.7.2
+
+The package allows to use [H3 library](https://github.com/uber/h3) directly in your Dart VM application
 
 The package uses C version under the hood. 
 Works via [FFI](https://pub.dev/packages/ffi), bindings are automatically generated using [ffigen](https://pub.dev/packages/ffige)
 
 ```dart
 // Get hexagons in specified triangle.
+final h3 = const H3FfiFactory().byPath('../h3.so');
 final hexagons = h3.polyfill(
   resolution: 5,
   coordinates: [
@@ -25,42 +28,35 @@ final hexagons = h3.polyfill(
 );
 ```  
 
-Most of C's `H3` functions are available in `H3` class, which you can get using `H3Factory`. But if you can't find method you need, you can call C function directly, althrough it's more complicated, because you'll need to work directly with FFI (you will need to worry about allocation and native types). If you want to try, you can use `H3CFactory` to get access to `H3C` instance (import 'package:h3_flutter/internal.dart' or 'package:h3_dart/internal.dart').
+Most of C's `H3` functions are available in `H3` class, which you can get using `H3Factory`. But if you can't find method you need, you can call C function directly, althrough it's more complicated, because you'll need to work directly with FFI (you will need to worry about allocation and native types). If you want to try, you can use `H3CFactory` to get access to `H3C` instance (import 'package:h3_ffi/internal.dart').
 
-The package also contains few methods ported from JS library [Geojson2H3](https://github.com/uber/geojson2h3).
-To access them you should instantiate Geojson2H3 class using `const Geojson2H3(h3)`.
+### Setup
 
-## Setup
-### Flutter
-
-Add `h3_flutter` package to `pubspec.yaml`, import it and load:
-```dart
-import 'package:h3_flutter/h3_flutter.dart';
-
-final h3 = const H3Factory().load();
-final geojson2h3 = Geojson2H3(h3);
-```
+***In most cases you should not use this library directly, use [h3_dart](https://pub.dev/packages/h3_dart/) or [h3_flutter](https://pub.dev/packages/h3_flutter/) instead.***  
+***If you use [h3_flutter](https://pub.dev/packages/h3_flutter/) you don't need to have compiled H3 C library, it will be built automatically***
 
 
-### Dart
-
-Add `h3_dart` package to `pubspec.yaml`.
+Add `h3_ffi` package to `pubspec.yaml`.
 
 Get compiled h3 library, depending on your platform it may have extension .so, .dll or any.
 
-You can compile it using C-code placed in `c` folder in this repository. It has small changes comparing to original Uber's code to make it more compatible with iOS and macOS versions of `h3_flutter`. This code is recompiled and used for testing everytime tests are launched, so it should work well.
+- You can run `scripts/build_h3.sh` script, the compiled library will be at `h3_ffi/c/h3lib/build/libh3lib.lib`
 
-Otherwise, you can compile original Uber's code, which also should work well, just make sure you use correct version - https://github.com/uber/h3
+- You can compile it by yourself using C-code placed in `c` folder in this repository. It has small changes comparing to original Uber's code to make it more compatible with iOS and macOS versions of `h3_flutter`. This code is recompiled and used for testing everytime tests are launched, so it should work well.
 
-Place your library somewhere and load it using `H3Factory().byPath('path/to/library.dll')`:
+- You can compile original Uber's code, which also should work well, just make sure you use correct version - https://github.com/uber/h3
+
+Place your library somewhere and load it using `H3FfiFactory().byPath('path/to/library.dll')`:
   
 -------------
-## Tests
+## For contributors:
 
-To make tests work you need to execute `scripts/prepare_tests.sh` script. The script builds h3 library from C code.  
-The script is designed for macOS and therefore it probably work only under this system.  
+### Tests
+
+To make tests work you need to execute `scripts/prepare_tests.sh` script. This script builds h3 library from C code.  
+The script works well under macOS, Linux and Windows (bash required).  
   
-## How to update the package to use latest H3 version
+### Upgrading the package to be compatible with new Uber's H3 library
 
 \~Good luck\~
   

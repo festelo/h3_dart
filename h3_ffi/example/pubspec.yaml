@@ -7,8 +7,8 @@ environment:
 
 
 dependencies:
-  h3_dart:
-    path: ../..
+  h3_ffi:
+    path: ..
 
 dev_dependencies:
   lints: ^1.0.0
