@@ -8,6 +8,8 @@ abstract class BaseH3Factory {
   /// final h3 = h3Factory.process();
   /// h3.degsToRads(123);
   /// ```
+  ///
+  /// This feature is not available on Windows.
   H3 process();
 
   /// Loads H3 using specified [libraryPath]
