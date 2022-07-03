@@ -11,6 +11,7 @@ dependencies:
   h3_ffi: ^0.6.0-dev
   h3_web: ^0.6.0-dev
   h3_common: ^0.6.0-dev
+  geojson2h3: ^0.6.0-dev
 
 dev_dependencies: 
   lints: ^2.0.0
