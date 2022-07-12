@@ -14,4 +14,6 @@ add_library( h3lib
             ${CSources}
             ${HSources})
 
-set_target_properties(h3lib PROPERTIES SUFFIX ".lib")
+if ( NOT ANDROID ) 
+    set_target_properties(h3lib PROPERTIES SUFFIX ".lib")
+endif()
