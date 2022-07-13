@@ -1,3 +1,8 @@
+## 0.6.2
+* Fix Android build
+* Add Android tests
+* Remove C files from GitHub stats
+
 ## 0.6.1
 * Fix Android build
 

@@ -173,6 +173,69 @@ jobs:
           files: ./h3_ffi/coverage/lcov.info
           flags: h3_ffi
 
+  h3_flutter_test_android:
+    runs-on: macos-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: Setup subosito/flutter-action@v2
+        uses: subosito/flutter-action@v2
+        with:
+          channel: beta
+          architecture: x64
+
+      - name: Disable macos
+        run: flutter config --no-enable-macos-desktop
+        working-directory: ./h3_flutter
+
+      - name: Disable web
+        run: flutter config --no-enable-web
+        working-directory: ./h3_flutter
+
+      - name: Override dependencies
+        run: dart scripts/dependency_override.dart
+
+      - name: Pub get
+        run: flutter pub get
+        working-directory: ./h3_flutter
+
+      - name: Analyze
+        run: flutter analyze
+        working-directory: ./h3_flutter
+
+      - name: Gradle cache
+        uses: gradle/gradle-build-action@v2
+
+      - name: AVD cache
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-29
+
+      - name: create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
+
+      - name: Run tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          working-directory: ./h3_flutter/example
+          script: flutter test integration_test/app_test.dart
+
   h3_flutter_test_desktop:
     runs-on: ${{ matrix.os }}
     strategy:
