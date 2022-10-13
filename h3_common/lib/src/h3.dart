@@ -85,6 +85,7 @@ abstract class H3 {
   /// ```
   List<BigInt> polyfill({
     required List<GeoCoord> coordinates,
+    List<List<GeoCoord>> holes,
     required int resolution,
   });
 
