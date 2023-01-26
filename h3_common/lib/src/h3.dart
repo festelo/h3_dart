@@ -86,6 +86,7 @@ abstract class H3 {
   List<BigInt> polyfill({
     required List<GeoCoord> coordinates,
     required int resolution,
+    List<List<GeoCoord>> holes,
   });
 
   /// Compact a set of hexagons of the same resolution into a set of hexagons

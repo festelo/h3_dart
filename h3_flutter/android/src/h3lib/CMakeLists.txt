@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.4.1)
-set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE INTERNAL "" FORCE)
 project(h3lib)
 
 FILE(GLOB CSources *.c)

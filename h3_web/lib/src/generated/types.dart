@@ -117,9 +117,7 @@ external List<String> hexRing(
 /// expected to be holes.
 /// pairs instead of [lat, lng]
 @JS("h3.polyfill")
-external List<String> polyfill(
-    List<List<dynamic>> /*List<List<num>>|List<List<List<num>>>*/ coordinates,
-    num res,
+external List<String> polyfill(List<List<List<num>>> coordinates, num res,
     [bool isGeoJson]);
 
 /// Get the outlines of a set of H3 hexagons, returned in GeoJSON MultiPolygon

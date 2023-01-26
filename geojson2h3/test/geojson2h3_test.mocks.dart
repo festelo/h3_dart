@@ -86,10 +86,16 @@ class MockH3 extends _i1.Mock implements _i2.H3 {
       (super.noSuchMethod(Invocation.method(#hexRing, [h3Index, ringSize]),
           returnValue: <BigInt>[]) as List<BigInt>);
   @override
-  List<BigInt> polyfill({List<_i2.GeoCoord>? coordinates, int? resolution}) =>
+  List<BigInt> polyfill(
+          {List<_i2.GeoCoord>? coordinates,
+          int? resolution,
+          List<List<_i2.GeoCoord>>? holes}) =>
       (super.noSuchMethod(
-          Invocation.method(#polyfill, [],
-              {#coordinates: coordinates, #resolution: resolution}),
+          Invocation.method(#polyfill, [], {
+            #coordinates: coordinates,
+            #resolution: resolution,
+            #holes: holes
+          }),
           returnValue: <BigInt>[]) as List<BigInt>);
   @override
   List<BigInt> compact(List<BigInt>? hexagons) =>

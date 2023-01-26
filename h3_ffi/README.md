@@ -103,7 +103,6 @@ To run it, you need to install LLVM:
 ```
 brew install llvm
 ```
-If you're using M1 Mac, as of now, you need to install x86 version of LLVM, to do it you need to install x86 version of Homebrew.
 
 All H3 public functions should be specified in ffigen.yaml file
 Run `flutter pub run ffigen --config ffigen.yaml` to generate bindings
