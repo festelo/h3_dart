@@ -1,6 +1,6 @@
 name: h3_common
 description: The package provides Dart version of the H3 Core library, a hexagon-based geographic grid system
-version: 0.6.0
+version: 0.6.1
 homepage: https://github.com/festelo/h3_dart
 
 environment:

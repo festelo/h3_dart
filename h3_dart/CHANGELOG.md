@@ -1,3 +1,10 @@
+## 0.6.1
+* Fix `h3_web` setup readme.
+* Add holes support to `polyfill` function (thanks [@iulian0512](https://github.com/iulian0512))
+* Fix Android build for `h3_flutter` (thanks [@rtviwe](https://github.com/iulian0512))
+* Fix `build_h3.sh` script for M1 mac
+* Tests fix
+
 ## 0.6.0
 * Split `h3_dart` library into 5 libraries - `h3_dart`, `h3_ffi`, `h3_web`, `h3_common`, `geojson2h3`
 * Use `BigInt` instead of `int` for h3 indexes due to `web` specific.

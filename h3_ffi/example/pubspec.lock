@@ -5,15 +5,17 @@ packages:
     dependency: transitive
     description:
       name: ffi
-      url: "https://pub.dartlang.org"
+      sha256: a38574032c5f1dd06c4aee541789906c12ccaab8ba01446e800d9c5b79c4a978
+      url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
   h3_common:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../../h3_common"
-      relative: true
-    source: path
+      name: h3_common
+      sha256: "06e8e8543e0c1cdd4dbedcd12f751166704b0bf5d239c27ba2a2e7527a745f2a"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.6.0"
   h3_ffi:
     dependency: "direct main"
@@ -26,15 +28,17 @@ packages:
     dependency: "direct dev"
     description:
       name: lints
-      url: "https://pub.dartlang.org"
+      sha256: "5e4a9cd06d447758280a8ac2405101e0e2094d2a1dbdd3756aec3fe7775ba593"
+      url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
   path:
     dependency: transitive
     description:
       name: path
-      url: "https://pub.dartlang.org"
+      sha256: "8829d8a55c13fc0e37127c29fedf290c102f4e40ae94ada574091fe0ff96c917"
+      url: "https://pub.dev"
     source: hosted
-    version: "1.8.2"
+    version: "1.8.3"
 sdks:
-  dart: ">=2.17.0 <3.0.0"
+  dart: ">=2.17.0 <4.0.0"
