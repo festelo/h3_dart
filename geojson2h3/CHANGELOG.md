@@ -1,3 +1,6 @@
+## 0.6.1
+* Update `h3_common` (v6.0.1) and `test` (v1.22.2) dependencies.
+
 ## 0.6.0
 * Split `h3_dart` library into 5 libraries - `h3_dart`, `h3_ffi`, `h3_web`, `h3_common`, `geojson2h3`
 * **[BREAKING]** Use `BigInt` instead of `int` for h3 indexes due to `web` specific.  
