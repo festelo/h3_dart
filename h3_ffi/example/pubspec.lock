@@ -9,11 +9,11 @@ packages:
     source: hosted
     version: "2.0.1"
   h3_common:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../../h3_common"
-      relative: true
-    source: path
+      name: h3_common
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.6.0"
   h3_ffi:
     dependency: "direct main"
@@ -28,7 +28,7 @@ packages:
       name: lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "2.0.1"
   path:
     dependency: transitive
     description:

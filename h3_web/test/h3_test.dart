@@ -11,7 +11,7 @@ import 'common.dart';
 import 'h3_js_injector.dart';
 
 void main() async {
-  await inject('https://unpkg.com/h3-js');
+  await inject('https://unpkg.com/h3-js@3.7.2');
 
   final h3 = H3Web();
 
