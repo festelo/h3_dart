@@ -1,5 +1,4 @@
 import 'dart:ffi';
-import 'package:h3_ffi/src/h3_ffi.dart';
 import 'package:test/test.dart';
 import 'package:h3_ffi/h3_ffi.dart';
 import 'package:path/path.dart' as p;

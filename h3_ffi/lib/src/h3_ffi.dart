@@ -202,10 +202,12 @@ class H3Ffi implements H3 {
   List<BigInt> polyfill({
     required List<GeoCoord> coordinates,
     required int resolution,
+    List<List<GeoCoord>> holes = const [],
   }) {
     assert(resolution >= 0 && resolution < 16,
         'Resolution must be in [0, 15] range');
     return using((arena) {
+      // polygon outer boundary
       final nativeCoordinatesPointer = arena<c.GeoCoord>(coordinates.length);
       for (var i = 0; i < coordinates.length; i++) {
         final pointer = Pointer<c.GeoCoord>.fromAddress(
@@ -217,12 +219,46 @@ class H3Ffi implements H3 {
       }
 
       final polygon = arena<c.GeoPolygon>();
-      final geofence = arena<c.Geofence>();
-      polygon.ref.geofence = geofence.ref;
+      final outergeofence = arena<c.Geofence>();
+
+      // outer boundary
+      polygon.ref.geofence = outergeofence.ref;
       polygon.ref.geofence.verts = nativeCoordinatesPointer;
       polygon.ref.geofence.numVerts = coordinates.length;
-      polygon.ref.numHoles = 0;
-      polygon.ref.holes = Pointer.fromAddress(0);
+
+      // polygon holes
+      if (holes.isNotEmpty) {
+        final holesgeofencePointer = arena<c.Geofence>(holes.length);
+        for (var h = 0; h < holes.length; h++) {
+          final holeCoords = holes[h];
+
+          final singleHoleGFencePointer = Pointer<c.Geofence>.fromAddress(
+            holesgeofencePointer.address + sizeOf<c.Geofence>() * h,
+          );
+
+          final holeNativeCoordinatesPointer =
+              arena<c.GeoCoord>(holeCoords.length);
+
+          // assign the hole coord to holeptr
+          for (var i = 0; i < holeCoords.length; i++) {
+            final coordPointer = Pointer<c.GeoCoord>.fromAddress(
+                holeNativeCoordinatesPointer.address +
+                    sizeOf<c.GeoCoord>() * i);
+            holeCoords[i]
+                .toRadians(_geoCoordConverter)
+                .assignToNative(coordPointer.ref);
+          }
+
+          singleHoleGFencePointer.ref.numVerts = holeCoords.length;
+          singleHoleGFencePointer.ref.verts = holeNativeCoordinatesPointer;
+        }
+
+        polygon.ref.numHoles = holes.length;
+        polygon.ref.holes = holesgeofencePointer;
+      } else {
+        polygon.ref.numHoles = 0;
+        polygon.ref.holes = Pointer.fromAddress(0);
+      }
 
       final nbIndex = _h3c.maxPolyfillSize(polygon, resolution);
 

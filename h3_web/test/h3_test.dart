@@ -11,7 +11,7 @@ import 'common.dart';
 import 'h3_js_injector.dart';
 
 void main() async {
-  await inject('https://unpkg.com/h3-js');
+  await inject('https://unpkg.com/h3-js@3.7.2');
 
   final h3 = H3Web();
 
@@ -348,6 +348,46 @@ void main() async {
         hexagons.length,
         1253,
       );
+    });
+
+    test('Hexagon with holes', () async {
+      final resolution = 5;
+      // wkt: POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10),(20 30, 35 35, 30 20, 20 30))
+      final hexagons = h3.polyfill(
+        coordinates: const [
+          GeoCoord(lon: 35, lat: 10),
+          GeoCoord(lon: 45, lat: 45),
+          GeoCoord(lon: 15, lat: 40),
+          GeoCoord(lon: 10, lat: 20),
+          GeoCoord(lon: 35, lat: 10)
+        ],
+        holes: const [
+          [
+            GeoCoord(lon: 20, lat: 30),
+            GeoCoord(lon: 35, lat: 35),
+            GeoCoord(lon: 30, lat: 20),
+            GeoCoord(lon: 20, lat: 30)
+          ]
+        ],
+        resolution: resolution,
+      );
+
+      // point inside the hole 28.037109375000004 28.84467368077179 (this should be classified as outside)
+      //point inside 18.45703125 21.616579336740614
+      //point outside (far away) 52.55859375 23.48340065432562
+
+      final insideHoleIndex = h3.geoToH3(
+          GeoCoord(lon: 28.037109375000004, lat: 28.84467368077179),
+          resolution);
+      expect(hexagons.contains(insideHoleIndex), false);
+
+      final insideIndex = h3.geoToH3(
+          GeoCoord(lon: 18.45703125, lat: 21.616579336740614), resolution);
+      expect(hexagons.contains(insideIndex), true);
+
+      final outsideIndex = h3.geoToH3(
+          GeoCoord(lon: 52.55859375, lat: 23.48340065432562), resolution);
+      expect(hexagons.contains(outsideIndex), false);
     });
 
     test('Transmeridian', () async {

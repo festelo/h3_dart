@@ -1,3 +1,13 @@
+## 0.6.3
+* Add `holes` param to `H3.polyfill` function (thanks [@iulian0512](https://github.com/iulian0512))
+* Fix web setup readme.
+* Fix web example
+* Fix web test
+* Fix android build (thanks [@rtviwe](https://github.com/iulian0512))
+* Update dependencies (incl. `h3_web`, `h3_ffi`, `h3_common`, `geojson2h3` v6.0.1 and others)
+* Fix android test setup (github actions)
+* Temporary disable macos test (github actions)
+
 ## 0.6.2
 * Fix Android build
 * Add Android tests

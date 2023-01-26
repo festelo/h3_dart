@@ -1,3 +1,8 @@
+## 0.6.1
+* Update test dependency
+* Add `holes` param to `H3.polyfill` function (thanks [@iulian0512](https://github.com/iulian0512))
+* Fix lint warning
+
 ## 0.6.0
 * Split `h3_dart` library into 5 libraries - `h3_dart`, `h3_ffi`, `h3_web`, `h3_common`, `geojson2h3`
 * Use `BigInt` instead of `int` for h3 indexes due to `web` specific.
