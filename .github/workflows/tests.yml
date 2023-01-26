@@ -243,6 +243,7 @@ jobs:
 
   h3_flutter_test_desktop:
     runs-on: ${{ matrix.os }}
+    if: ${{ false }} # disable macos while https://github.com/github/roadmap/issues/620 is open
     strategy:
       matrix:
         os: [macos-latest]
