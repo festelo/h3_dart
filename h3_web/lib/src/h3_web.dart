@@ -127,11 +127,20 @@ class H3Web implements H3 {
   List<BigInt> polyfill({
     required List<GeoCoord> coordinates,
     required int resolution,
+    List<List<GeoCoord>> holes = const [],
   }) {
     assert(resolution >= 0 && resolution < 16,
         'Resolution must be in [0, 15] range');
     return h3_js
-        .polyfill(coordinates.map((e) => [e.lat, e.lon]).toList(), resolution)
+        .polyfill(
+          [
+            coordinates.map((e) => [e.lat, e.lon]).toList(),
+            ...holes
+                .map((arr) => arr.map((e) => [e.lat, e.lon]).toList())
+                .toList(),
+          ],
+          resolution,
+        )
         .cast<String>()
         .map((e) => e.toBigInt())
         .toList();

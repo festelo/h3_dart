@@ -346,21 +346,25 @@ void main() {
 
     test('Hexagon with holes', () async {
       final resolution = 5;
-      //wkt: POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10),(20 30, 35 35, 30 20, 20 30))
-      final hexagons = h3.polyfill(coordinates: const [
-        GeoCoord(lon: 35, lat: 10),
-        GeoCoord(lon: 45, lat: 45),
-        GeoCoord(lon: 15, lat: 40),
-        GeoCoord(lon: 10, lat: 20),
-        GeoCoord(lon: 35, lat: 10)
-      ], holes: const [
-        [
-          GeoCoord(lon: 20, lat: 30),
-          GeoCoord(lon: 35, lat: 35),
-          GeoCoord(lon: 30, lat: 20),
-          GeoCoord(lon: 20, lat: 30)
-        ]
-      ], resolution: resolution);
+      // wkt: POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10),(20 30, 35 35, 30 20, 20 30))
+      final hexagons = h3.polyfill(
+        coordinates: const [
+          GeoCoord(lon: 35, lat: 10),
+          GeoCoord(lon: 45, lat: 45),
+          GeoCoord(lon: 15, lat: 40),
+          GeoCoord(lon: 10, lat: 20),
+          GeoCoord(lon: 35, lat: 10)
+        ],
+        holes: const [
+          [
+            GeoCoord(lon: 20, lat: 30),
+            GeoCoord(lon: 35, lat: 35),
+            GeoCoord(lon: 30, lat: 20),
+            GeoCoord(lon: 20, lat: 30)
+          ]
+        ],
+        resolution: resolution,
+      );
 
       // point inside the hole 28.037109375000004 28.84467368077179 (this should be classified as outside)
       //point inside 18.45703125 21.616579336740614

@@ -201,17 +201,18 @@ class H3Ffi implements H3 {
   @override
   List<BigInt> polyfill({
     required List<GeoCoord> coordinates,
-    List<List<GeoCoord>> holes = const [],
     required int resolution,
+    List<List<GeoCoord>> holes = const [],
   }) {
     assert(resolution >= 0 && resolution < 16,
         'Resolution must be in [0, 15] range');
     return using((arena) {
-      //polygon outer boundary
+      // polygon outer boundary
       final nativeCoordinatesPointer = arena<c.GeoCoord>(coordinates.length);
       for (var i = 0; i < coordinates.length; i++) {
         final pointer = Pointer<c.GeoCoord>.fromAddress(
-            nativeCoordinatesPointer.address + sizeOf<c.GeoCoord>() * i);
+          nativeCoordinatesPointer.address + sizeOf<c.GeoCoord>() * i,
+        );
         coordinates[i]
             .toRadians(_geoCoordConverter)
             .assignToNative(pointer.ref);
@@ -220,22 +221,25 @@ class H3Ffi implements H3 {
       final polygon = arena<c.GeoPolygon>();
       final outergeofence = arena<c.Geofence>();
 
-      //outer boundary
+      // outer boundary
       polygon.ref.geofence = outergeofence.ref;
       polygon.ref.geofence.verts = nativeCoordinatesPointer;
       polygon.ref.geofence.numVerts = coordinates.length;
 
-      //polygon holes
+      // polygon holes
       if (holes.isNotEmpty) {
         final holesgeofencePointer = arena<c.Geofence>(holes.length);
         for (var h = 0; h < holes.length; h++) {
           final holeCoords = holes[h];
+
           final singleHoleGFencePointer = Pointer<c.Geofence>.fromAddress(
-              holesgeofencePointer.address + sizeOf<c.Geofence>() * h);
+            holesgeofencePointer.address + sizeOf<c.Geofence>() * h,
+          );
 
           final holeNativeCoordinatesPointer =
               arena<c.GeoCoord>(holeCoords.length);
-          //assign the hole coord to holeptr
+
+          // assign the hole coord to holeptr
           for (var i = 0; i < holeCoords.length; i++) {
             final coordPointer = Pointer<c.GeoCoord>.fromAddress(
                 holeNativeCoordinatesPointer.address +
