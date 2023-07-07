@@ -4,8 +4,8 @@
 # This file should be version controlled.
 
 version:
-  revision: 25caf1461b8f643092a9f6f5b224453b5c057d10
-  channel: beta
+  revision: 84a1e904f44f9b0e9c4510138010edcc653163f8
+  channel: stable
 
 project_type: plugin
 
@@ -13,23 +13,23 @@ project_type: plugin
 migration:
   platforms:
     - platform: root
-      create_revision: 25caf1461b8f643092a9f6f5b224453b5c057d10
-      base_revision: 25caf1461b8f643092a9f6f5b224453b5c057d10
+      create_revision: 84a1e904f44f9b0e9c4510138010edcc653163f8
+      base_revision: 84a1e904f44f9b0e9c4510138010edcc653163f8
     - platform: android
-      create_revision: 25caf1461b8f643092a9f6f5b224453b5c057d10
-      base_revision: 25caf1461b8f643092a9f6f5b224453b5c057d10
+      create_revision: 84a1e904f44f9b0e9c4510138010edcc653163f8
+      base_revision: 84a1e904f44f9b0e9c4510138010edcc653163f8
     - platform: ios
-      create_revision: 25caf1461b8f643092a9f6f5b224453b5c057d10
-      base_revision: 25caf1461b8f643092a9f6f5b224453b5c057d10
-    - platform: linux
-      create_revision: 25caf1461b8f643092a9f6f5b224453b5c057d10
-      base_revision: 25caf1461b8f643092a9f6f5b224453b5c057d10
+      create_revision: 84a1e904f44f9b0e9c4510138010edcc653163f8
+      base_revision: 84a1e904f44f9b0e9c4510138010edcc653163f8
     - platform: macos
-      create_revision: 25caf1461b8f643092a9f6f5b224453b5c057d10
-      base_revision: 25caf1461b8f643092a9f6f5b224453b5c057d10
+      create_revision: 84a1e904f44f9b0e9c4510138010edcc653163f8
+      base_revision: 84a1e904f44f9b0e9c4510138010edcc653163f8
+    - platform: web
+      create_revision: 84a1e904f44f9b0e9c4510138010edcc653163f8
+      base_revision: 84a1e904f44f9b0e9c4510138010edcc653163f8
     - platform: windows
-      create_revision: 25caf1461b8f643092a9f6f5b224453b5c057d10
-      base_revision: 25caf1461b8f643092a9f6f5b224453b5c057d10
+      create_revision: 84a1e904f44f9b0e9c4510138010edcc653163f8
+      base_revision: 84a1e904f44f9b0e9c4510138010edcc653163f8
 
   # User provided section
 

@@ -16,7 +16,7 @@ class H3CFactory {
 
   /// Loads [H3C] by [libraryPath]
   /// ```dart
-  /// final h3c = h3CFactory.byPath('../h3_ffi/c/h3lib/build/libh3lib.lib');
+  /// final h3c = h3CFactory.byPath('../h3_ffi/c/h3lib/build/h3.so');
   /// ```
   H3C byPath(String libraryPath) {
     return byDynamicLibary(DynamicLibrary.open(libraryPath));

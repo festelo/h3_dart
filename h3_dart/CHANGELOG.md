@@ -1,3 +1,6 @@
+## 0.6.2
+* Rename `libh3lib.lib` file to `h3.so`
+
 ## 0.6.1
 * Add `holes` param to `H3.polyfill` function (thanks [@iulian0512](https://github.com/iulian0512))
 * Update dependencies

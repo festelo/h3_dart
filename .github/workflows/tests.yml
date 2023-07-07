@@ -219,13 +219,14 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-29
+          key: avd-31
 
       - name: create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 31
+          arch: x86_64
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
@@ -234,7 +235,8 @@ jobs:
       - name: Run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 31
+          arch: x86_64
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
@@ -243,10 +245,9 @@ jobs:
 
   h3_flutter_test_desktop:
     runs-on: ${{ matrix.os }}
-    if: ${{ false }} # disable macos while https://github.com/github/roadmap/issues/620 is open
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [ windows-latest ] # disable macos while https://github.com/github/roadmap/issues/620 is open
     steps:
     - uses: actions/checkout@v2
 

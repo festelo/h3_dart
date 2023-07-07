@@ -27,7 +27,7 @@ void main() async {
     }
 
     expect(
-      h3Factory.byPath('../h3_ffi/c/h3lib/build/libh3lib.lib'),
+      h3Factory.byPath('../h3_ffi/c/h3lib/build/h3.so'),
       isA<H3Ffi>(),
       reason: 'H3Factory.byPath returns H3Ffi',
     );

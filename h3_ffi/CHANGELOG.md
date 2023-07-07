@@ -1,3 +1,7 @@
+## 0.6.2
+* Flutter for Windows support
+* Rename `libh3lib.lib` file to `h3.so`
+
 ## 0.6.1
 * Add holes support to `polyfill` function (thanks [@iulian0512](https://github.com/iulian0512))
 * Fix Android build for `h3_flutter` (thanks [@rtviwe](https://github.com/iulian0512))
