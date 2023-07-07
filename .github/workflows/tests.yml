@@ -247,7 +247,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ windows-latest ] # disable macos while https://github.com/github/roadmap/issues/620 is open
+        os: [ windows-latest, ubuntu-latest ] # disable macos while https://github.com/github/roadmap/issues/620 is open
     steps:
     - uses: actions/checkout@v2
 
@@ -296,6 +296,7 @@ jobs:
     - name: Run tests
       run: flutter test integration_test/app_test.dart
       working-directory: ./h3_flutter/example
+      if: matrix.os != 'ubuntu-latest'
 
   h3_flutter_test_web:
     runs-on: ${{ matrix.os }}
