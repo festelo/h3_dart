@@ -9,5 +9,8 @@ DynamicLibrary resolveDynamicLibrary() {
   if (Platform.isAndroid) {
     return DynamicLibrary.open('libh3lib.so');
   }
+  if (Platform.isWindows) {
+    return DynamicLibrary.open('h3lib.dll');
+  }
   return DynamicLibrary.process();
 }

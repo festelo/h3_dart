@@ -1,3 +1,6 @@
+## 0.6.4
+* Flutter for Windows support
+
 ## 0.6.3
 * Add `holes` param to `H3.polyfill` function (thanks [@iulian0512](https://github.com/iulian0512))
 * Fix web setup readme.

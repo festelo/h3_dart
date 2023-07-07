@@ -18,6 +18,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      restorationScopeId: "h3_flutter_example",
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Plugin example app'),
