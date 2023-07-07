@@ -247,7 +247,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ windows-latest ] # disable macos while https://github.com/github/roadmap/issues/620 is open
+        os: [ windows-latest, ubuntu-latest ] # disable macos while https://github.com/github/roadmap/issues/620 is open
     steps:
     - uses: actions/checkout@v2
 

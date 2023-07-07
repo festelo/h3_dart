@@ -1,3 +1,6 @@
+## 0.6.5
+* Flutter for Linux support
+
 ## 0.6.4
 * Flutter for Windows support
 * Rename `libh3lib.lib` file to `h3.so`
