@@ -16,7 +16,7 @@ class H3FfiFactory {
   /// Loads H3 using [dynamicLibrary]
   /// ```dart
   /// final h3 = h3Factory.process(
-  ///   DynamicLibrary.open('../h3_ffi/c/h3lib/build/libh3lib.lib'),
+  ///   DynamicLibrary.open('../h3_ffi/c/h3lib/build/h3.so'),
   /// );
   /// h3.degsToRads(123);
   /// ```
@@ -26,7 +26,7 @@ class H3FfiFactory {
 
   /// Loads H3 by [libraryPath]
   /// ```dart
-  /// final h3 = h3Factory.process('../h3_ffi/c/h3lib/build/libh3lib.lib');
+  /// final h3 = h3Factory.process('../h3_ffi/c/h3lib/build/h3.so');
   /// h3.degsToRads(123);
   /// ```
   H3 byPath(String libraryPath) {

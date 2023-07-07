@@ -12,6 +12,6 @@ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/include/h3lib" "${CMAKE_CURRENT_BI
 
 set(h3_flutter_bundled_libraries
   # Defined in ../include/h3lib/CMakeLists.txt.
-  $<TARGET_FILE:h3lib>
+  $<TARGET_FILE:h3>
   PARENT_SCOPE
 )

@@ -7,10 +7,10 @@ DynamicLibrary resolveDynamicLibrary() {
     return DynamicLibrary.process();
   }
   if (Platform.isAndroid) {
-    return DynamicLibrary.open('libh3lib.so');
+    return DynamicLibrary.open('h3.so');
   }
   if (Platform.isWindows) {
-    return DynamicLibrary.open('h3lib.dll');
+    return DynamicLibrary.open('h3.dll');
   }
   return DynamicLibrary.process();
 }

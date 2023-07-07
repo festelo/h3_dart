@@ -39,7 +39,7 @@ There are also few methods ported from JS library [Geojson2H3](https://github.co
 
 Get compiled h3 c library, depending on your platform it may have extension .so, .dll or any.
 
-- You can run `scripts/build_h3.sh` script, the compiled library will be at `h3_ffi/c/h3lib/build/libh3lib.lib`
+- You can run `scripts/build_h3.sh` script, the compiled library will be at `h3_ffi/c/h3lib/build/h3.so`
 
 - You can compile it by yourself using C-code placed in `c` folder in this repository. It has small changes comparing to original Uber's code to make it more compatible with iOS and macOS versions of `h3_flutter`. This code is recompiled and used for testing everytime tests are launched, so it should work well.
 

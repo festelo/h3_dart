@@ -102,43 +102,39 @@ packages:
     source: sdk
     version: "0.0.0"
   geojson2h3:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: geojson2h3
-      sha256: "9786d9fa144f1a64063b63cfaf8e7b3ddec40d64f873f3ae9773500593080cd9"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../geojson2h3"
+      relative: true
+    source: path
     version: "0.6.1"
   h3_common:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: h3_common
-      sha256: "1d92424c97c0db1a2f4bd1ccd51f865934d01f211be9d33edaf12a2c68f8427f"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../h3_common"
+      relative: true
+    source: path
     version: "0.6.1"
   h3_ffi:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: h3_ffi
-      sha256: "70ecf394d240765de1e83e8704129f43b41fc18c4033fe3627f8bd1ca230e723"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.1"
+      path: "../../h3_ffi"
+      relative: true
+    source: path
+    version: "0.6.2"
   h3_flutter:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.6.3"
+    version: "0.6.4"
   h3_web:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: h3_web
-      sha256: "0997e3bcebefd2dcecbb3396b9e0a9dc6d9619c5eb2dfe6809b4046e05c7b0ac"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../h3_web"
+      relative: true
+    source: path
     version: "0.6.1"
   integration_test:
     dependency: "direct dev"
