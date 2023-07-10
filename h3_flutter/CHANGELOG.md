@@ -1,3 +1,6 @@
+## 0.6.6
+* Fix Android release build
+
 ## 0.6.5
 * Flutter for Linux support
 

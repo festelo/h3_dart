@@ -17,7 +17,7 @@ add_library( h3
             ${CSources}
             ${HSources})
 
-if (BuildForTests OR NOT WIN32) 
+if (BuildForTests OR NOT WIN32 AND NOT ANDROID) 
     set_target_properties(h3 PROPERTIES PREFIX "")
     set_target_properties(h3 PROPERTIES SUFFIX ".so")
 endif()
