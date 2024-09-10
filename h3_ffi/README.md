@@ -69,7 +69,15 @@ brew install cmake # install cmake
 Clone h3 repository and create work folders:
 ```
 git clone https://github.com/uber/h3 tmp/h3_sources 
-# git checkout ... - checkout on commit you need, currently stable versions are in stable-3.x branch
+# You need to specify the right version as parameter
+# You may want to use releases page to see your options 
+# https://github.com/uber/h3/releases
+git clone \
+  --depth 1 \
+  --branch <version> \
+  https://github.com/uber/h3 \
+  tmp/h3_sources
+
 mkdir tmp/h3_sources/build
 cd tmp/h3_sources/build
 ```
@@ -90,8 +98,9 @@ cp src/h3lib/include/* ../../c/h3lib
 cp src/h3lib/lib/* ../../c/h3lib
 ```
 
-Copy c/h3lib folder to ios and macos folders with `scripts/sync_h3lib.sh` script:
+Copy c/h3lib folder to ios and macos folders with [`scripts/sync_h3lib.sh`](../scripts/sync_h3lib.sh) script:
 ```
+cd ../../..
 sh scripts/sync_h3lib.sh
 ```
 
@@ -104,5 +113,5 @@ To run it, you need to install LLVM:
 brew install llvm
 ```
 
-All H3 public functions should be specified in ffigen.yaml file
-Run `flutter pub run ffigen --config ffigen.yaml` to generate bindings
+All H3 public functions should be specified in the [ffigen.yaml](ffigen.yaml) file.  
+Run `dart run ffigen --config ffigen.yaml` to generate bindings

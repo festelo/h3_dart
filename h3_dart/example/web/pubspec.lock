@@ -250,13 +250,12 @@ packages:
     source: hosted
     version: "3.2.0"
   geojson2h3:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: geojson2h3
-      sha256: "7e6352fcfc8a8e9bf2f6ee628845136f5cec91c64f5c666e63c291a79d29cfcc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.0"
+      path: "../../../geojson2h3"
+      relative: true
+    source: path
+    version: "0.6.1"
   glob:
     dependency: transitive
     description:
@@ -274,36 +273,33 @@ packages:
     source: hosted
     version: "2.2.0"
   h3_common:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: h3_common
-      sha256: "06e8e8543e0c1cdd4dbedcd12f751166704b0bf5d239c27ba2a2e7527a745f2a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.0"
+      path: "../../../h3_common"
+      relative: true
+    source: path
+    version: "0.6.1"
   h3_dart:
     dependency: "direct main"
     description:
       path: "../.."
       relative: true
     source: path
-    version: "0.6.0"
+    version: "0.6.2"
   h3_ffi:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: h3_ffi
-      sha256: "92ae60a423a3ea6b248df00e70ba892b458dc094286aff2842ec68eeeaece053"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.0"
+      path: "../../../h3_ffi"
+      relative: true
+    source: path
+    version: "0.6.2"
   h3_web:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: h3_web
-      sha256: f97291d19a5196641bca32bb4cb7d6378b1da076792a1969c094fb6389a24231
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.0"
+      path: "../../../h3_web"
+      relative: true
+    source: path
+    version: "0.6.1"
   http:
     dependency: transitive
     description:

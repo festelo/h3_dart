@@ -1,0 +1,7 @@
+name: h3_root # used only for melos
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  
+dev_dependencies:
+  melos: ^6.0.0

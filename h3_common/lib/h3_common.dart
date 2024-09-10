@@ -1,6 +1,7 @@
 export 'src/h3.dart';
 
 export 'src/models/coord_ij.dart';
+export 'src/models/h3_index.dart';
 export 'src/models/h3_units.dart';
 export 'src/models/h3_exception.dart';
 export 'src/models/geo_coord.dart';

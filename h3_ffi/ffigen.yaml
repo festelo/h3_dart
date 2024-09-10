@@ -4,75 +4,17 @@ description: Bindings to H3
 output: 'lib/src/generated/generated_bindings.dart'
 headers:
   entry-points:
-    - 'ios/Classes/h3lib/h3api.h'
+    - 'c/h3lib/h3api.h'
+  include-directives:
+    - 'c/h3lib/h3api.h' 
 comments:
   style: any
   length: full
 functions:
   include:
-    - geoToH3
-    - h3ToGeo
-    - h3ToGeoBoundary
-    - maxKringSize
-    - hexRange
-    - hexRangeDistances
-    - hexRanges
-    - kRing
-    - kRingDistances
-    - hexRing
-    - maxPolyfillSize
-    - polyfill
-    - h3SetToLinkedGeo
-    - destroyLinkedPolygon
-    - degsToRads
-    - radsToDegs
-    - pointDistRads
-    - pointDistKm
-    - pointDistM
-    - hexAreaKm2
-    - hexAreaM2
-    - cellAreaRads2
-    - cellAreaKm2
-    - cellAreaM2
-    - edgeLengthKm
-    - edgeLengthM
-    - exactEdgeLengthRads
-    - exactEdgeLengthKm
-    - exactEdgeLengthM
-    - numHexagons
-    - res0IndexCount
-    - getRes0Indexes
-    - pentagonIndexCount
-    - getPentagonIndexes
-    - h3GetResolution
-    - h3GetBaseCell
-    - stringToH3
-    - h3ToString
-    - h3IsValid
-    - h3ToParent
-    - maxH3ToChildrenSize
-    - h3ToChildren
-    - h3ToCenterChild
-    - compact
-    - maxUncompactSize
-    - uncompact
-    - h3IsResClassIII
-    - h3IsPentagon
-    - maxFaceCount
-    - h3GetFaces
-    - h3IndexesAreNeighbors
-    - getH3UnidirectionalEdge
-    - h3UnidirectionalEdgeIsValid
-    - getOriginH3IndexFromUnidirectionalEdge
-    - getDestinationH3IndexFromUnidirectionalEdge
-    - getH3IndexesFromUnidirectionalEdge
-    - getH3UnidirectionalEdgesFromHexagon
-    - getH3UnidirectionalEdgeBoundary
-    - h3Distance
-    - h3LineSize
-    - h3Line
-    - experimentalH3ToLocalIj
-    - experimentalLocalIjToH3
+    - .*
+  exclude:
+    - _(.*)
 structs:
   exclude:
     - .*

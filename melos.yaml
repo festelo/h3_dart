@@ -1,0 +1,7 @@
+name: h3_root
+
+packages:
+  - ./**
+
+ignore:
+  - .fvm/**

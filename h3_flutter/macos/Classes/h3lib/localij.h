@@ -23,7 +23,7 @@
 #include "coordijk.h"
 #include "h3api.h"
 
-int h3ToLocalIjk(H3Index origin, H3Index h3, CoordIJK* out);
-int localIjkToH3(H3Index origin, const CoordIJK* ijk, H3Index* out);
+H3Error cellToLocalIjk(H3Index origin, H3Index h3, CoordIJK *out);
+H3Error localIjkToCell(H3Index origin, const CoordIJK *ijk, H3Index *out);
 
 #endif

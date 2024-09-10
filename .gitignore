@@ -25,6 +25,7 @@
 pubspec.lock
 !example/pubspec.lock
 !**/example/**/pubspec.lock
+pubspec_overrides.yaml
 **/doc/api/
 .dart_tool/
 .packages
@@ -32,6 +33,8 @@ build/
 android/.cxx
 
 tmp/
-.fvm
 
 node_modules
+
+# FVM Version Cache
+.fvm/
