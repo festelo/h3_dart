@@ -1,3 +1,10 @@
+## 0.7.0
+* **[BREAKING]** Update `h3-js` to 4.2.1
+* **[BREAKING]** Update dependencies to the latest versions (min. Dart SDK 3.6.0)
+* Update tests to match the new h3-js version
+* Add `dart_test.yaml` file to simplify testing
+* Replace `dart:html` with `package:web` in tests and example
+
 ## 0.6.1
 * Fix web setup readme.
 * Fix web example
