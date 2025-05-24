@@ -28,9 +28,6 @@ jobs:
       - name: Install coverage tool
         run: dart pub global activate coverage
 
-      - name: Override dependencies
-        run: dart scripts/dependency_override.dart
-
       - name: Install dependencies
         run: dart pub get
         working-directory: ./geojson2h3
@@ -64,9 +61,6 @@ jobs:
 
       - name: Install coverage tool
         run: dart pub global activate coverage
-
-      - name: Override dependencies
-        run: dart scripts/dependency_override.dart
 
       - name: Install dependencies
         run: dart pub get
@@ -104,9 +98,6 @@ jobs:
   
       - name: Prepare tests
         run: sh scripts/prepare_tests.sh
-
-      - name: Override dependencies
-        run: dart scripts/dependency_override.dart
 
       - name: Install dependencies
         run: dart pub get
@@ -152,9 +143,6 @@ jobs:
       - name: Prepare tests
         run: sh scripts/prepare_tests.sh
 
-      - name: Override dependencies
-        run: dart scripts/dependency_override.dart
-
       - name: Install dependencies
         run: dart pub get
         working-directory: ./h3_ffi
@@ -197,9 +185,6 @@ jobs:
       - name: Disable web
         run: flutter config --no-enable-web
         working-directory: ./h3_flutter
-
-      - name: Override dependencies
-        run: dart scripts/dependency_override.dart
 
       - name: Pub get
         run: flutter pub get
@@ -269,9 +254,6 @@ jobs:
 
     - name: Enable windows
       run: flutter config --enable-windows-desktop
-    
-    - name: Override dependencies
-      run: dart scripts/dependency_override.dart
 
     - name: Pub get
       run: "flutter pub get"
@@ -322,9 +304,6 @@ jobs:
         export DISPLAY=:99
         chromedriver --port=4444 &
         sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
-    
-    - name: Override dependencies
-      run: dart scripts/dependency_override.dart
 
     - name: Pub get
       run: "flutter pub get"
@@ -354,9 +333,6 @@ jobs:
         with:
           sdk: ${{ matrix.sdk }}
           architecture: x64
-
-      - name: Override dependencies
-        run: dart scripts/dependency_override.dart
 
       - name: Install dependencies
         run: dart pub get

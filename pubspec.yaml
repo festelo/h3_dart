@@ -1,7 +1,23 @@
-name: h3_root # used only for melos
-
+name: h3_root
+publish_to: none
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>= 3.6.0'
   
+workspace:
+  - geojson2h3
+  - h3_common
+  - h3_dart
+  - h3_dart/example/ffi
+  - h3_dart/example/web
+  - h3_ffi
+  - h3_ffi/example
+  - h3_flutter
+  - h3_flutter/example
+  - h3_web
+  - h3_web/example
+
 dev_dependencies:
-  melos: ^6.0.0
+  lints: ^5.0.0
+  flutter_lints: ^5.0.0
+  test: ^1.25.15
+  collection: ^1.19.1

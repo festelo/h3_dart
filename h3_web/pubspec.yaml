@@ -1,7 +1,8 @@
 name: h3_web
 description: The package provides Dart version of the H3 Core library, a hexagon-based geographic grid system
-version: 7.0.0
+version: 0.7.0
 homepage: https://github.com/festelo/h3_dart
+resolution: workspace
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
@@ -11,10 +12,7 @@ dependencies:
   js: ^0.7.2
 
 dev_dependencies:
-  test: ^1.26.2
-  lints: ^6.0.0
-  collection: ^1.19.1
-  build_runner: ^2.4.15
-  build_web_compilers: ^4.1.5
-  build_test: ^2.2.3
+  test: # uses workspace's version
+  lints: # uses workspace's version
+  collection: # uses workspace's version
   web: ^1.1.1
