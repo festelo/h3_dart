@@ -103,9 +103,32 @@ void main() {
   test('H3Exception', () async {
     const testMessage = 'some message 123';
     expect(
-      H3Exception(testMessage).toString(),
+      H3Exception(H3ExceptionCode.internal, testMessage).toString(),
       contains(testMessage),
       reason: 'H3Exception.toString() shows message',
+    );
+
+    for (final code in H3ExceptionCode.values) {
+      if (code == H3ExceptionCode.internal) {
+        continue;
+      }
+
+      final exception = H3Exception.fromCode(code);
+      expect(
+        exception.code,
+        code,
+        reason: 'H3Exception.fromCode(code) contains passed code',
+      );
+      expect(
+        exception.message,
+        isNotEmpty,
+        reason: 'H3Exception.fromCode(code) has a message',
+      );
+    }
+
+    expect(
+      () => H3Exception.fromCode(H3ExceptionCode.internal),
+      throwsA(isA<ArgumentError>()),
     );
   });
 }
