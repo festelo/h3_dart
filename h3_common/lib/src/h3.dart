@@ -27,10 +27,10 @@ abstract class H3 {
   /// Works on both cells and unidirectional edges.
   int getResolution(H3Index h3Index);
 
-  /// Find the H3 index of the resolution res cell containing the lat/lng
-  H3Index geoToCell(GeoCoord geoCoord, int res);
+  /// Get the cell containing a [geoCoord] at [resolution]
+  H3Index geoToCell(GeoCoord geoCoord, int resolution);
 
-  /// Find the lat/lon center point g of the cell h3
+  /// Get the center of the cell
   GeoCoord cellToGeo(H3Index h3Index);
 
   /// Gives the cell boundary in lat/lon coordinates for the cell with index [h3Index]
@@ -93,6 +93,7 @@ abstract class H3 {
     required List<GeoCoord> perimeter,
     required int resolution,
     List<List<GeoCoord>> holes = const [],
+    PolygonToCellFlags flag = PolygonToCellFlags.containmentCenter,
   });
 
   /// Get the outlines of a set of H3 hexagons, returned in GeoJSON MultiPolygon
@@ -227,7 +228,7 @@ abstract class H3 {
   List<H3Index> getRes0Cells();
 
   /// Get the twelve pentagon indexes at a given resolution.
-  List<H3Index> getPentagons(int res);
+  List<H3Index> getPentagons(int resolution);
 
   /// Converts degrees to radians
   double degsToRads(double deg);
