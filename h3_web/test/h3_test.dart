@@ -125,7 +125,7 @@ void main() async {
   test('getResolution', () async {
     expect(
       () => h3.getResolution(BigInt.parse('-1')),
-      throwsA(isA<AssertionError>()),
+      throwsA(isA<H3Exception>()),
       reason: 'Throws error when an invalid index is passed',
     );
     for (var res = 0; res < 16; res++) {

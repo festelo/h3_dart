@@ -1,8 +1,8 @@
 import 'package:h3_common/h3_common.dart';
 import 'package:h3_web/src/generated/types.dart' as h3_js;
-import 'package:h3_web/src/mappers/big_int.dart';
+import 'package:h3_web/src/mappers/h3_index.dart';
 import 'package:h3_web/src/mappers/units.dart';
-import 'package:h3_web/src/mappers/js_error.dart';
+import 'package:h3_web/src/mappers/errors.dart';
 
 class H3Web implements H3 {
   const H3Web();
@@ -35,7 +35,10 @@ class H3Web implements H3 {
   @override
   int getResolution(H3Index h3Index) {
     if (!isValidCell(h3Index)) {
-      throw AssertionError('H3Index is not valid.');
+      throw H3Exception(
+        H3ExceptionCode.internal,
+        'H3Index is not valid.',
+      );
     }
     return h3_js.getResolution(h3Index.toH3JS()).toInt();
   }
@@ -44,7 +47,7 @@ class H3Web implements H3 {
   H3Index geoToCell(GeoCoord geoCoord, int res) {
     assert(res >= 0 && res < 16, 'Resolution must be in [0, 15] range');
     try {
-      return h3_js.latLngToCell(geoCoord.lat, geoCoord.lon, res).toBigInt();
+      return h3_js.latLngToCell(geoCoord.lat, geoCoord.lon, res).toH3Index();
     } catch (e) {
       wrapAndThrowJsException(e);
       rethrow;
@@ -80,7 +83,7 @@ class H3Web implements H3 {
           'Unexpected error happened, check the input',
         );
       }
-      return res.toBigInt();
+      return res.toH3Index();
     } catch (e) {
       wrapAndThrowJsException(e);
       rethrow;
@@ -95,7 +98,7 @@ class H3Web implements H3 {
       return h3_js
           .cellToChildren(h3Index.toH3JS(), resolution)
           .cast<String>()
-          .map((e) => e.toBigInt())
+          .map((e) => e.toH3Index())
           .toList();
     } catch (e) {
       wrapAndThrowJsException(e);
@@ -128,7 +131,7 @@ class H3Web implements H3 {
       if (res == null) {
         return BigInt.zero;
       }
-      return res.toBigInt();
+      return res.toH3Index();
     } catch (e) {
       wrapAndThrowJsException(e);
       rethrow;
@@ -161,7 +164,7 @@ class H3Web implements H3 {
     try {
       return h3_js
           .childPosToCell(childPosition, h3Index.toH3JS(), childResolution)
-          .toBigInt();
+          .toH3Index();
     } catch (e) {
       wrapAndThrowJsException(e);
       rethrow;
@@ -174,7 +177,7 @@ class H3Web implements H3 {
       return h3_js
           .gridDisk(h3Index.toH3JS(), ringSize)
           .cast<String>()
-          .map((e) => e.toBigInt())
+          .map((e) => e.toH3Index())
           .toList();
     } catch (e) {
       wrapAndThrowJsException(e);
@@ -188,7 +191,7 @@ class H3Web implements H3 {
       return h3_js
           .gridDiskDistances(h3Index.toH3JS(), ringSize)
           .cast<List>()
-          .map((e) => e.cast<String>().map((e) => e.toBigInt()).toList())
+          .map((e) => e.cast<String>().map((e) => e.toH3Index()).toList())
           .toList();
     } catch (e) {
       wrapAndThrowJsException(e);
@@ -202,7 +205,7 @@ class H3Web implements H3 {
       return h3_js
           .gridRingUnsafe(h3Index.toH3JS(), ringSize)
           .cast<String>()
-          .map((e) => e.toBigInt())
+          .map((e) => e.toH3Index())
           .toList();
     } catch (e) {
       wrapAndThrowJsException(e);
@@ -228,7 +231,7 @@ class H3Web implements H3 {
             resolution,
           )
           .cast<String>()
-          .map((e) => e.toBigInt())
+          .map((e) => e.toH3Index())
           .toList();
     } catch (e) {
       wrapAndThrowJsException(e);
@@ -256,7 +259,7 @@ class H3Web implements H3 {
             flag.name,
           )
           .cast<String>()
-          .map((e) => e.toBigInt())
+          .map((e) => e.toH3Index())
           .toList();
     } catch (e) {
       wrapAndThrowJsException(e);
@@ -293,7 +296,7 @@ class H3Web implements H3 {
       return h3_js
           .compactCells(hexagons.map((e) => e.toH3JS()).toList())
           .cast<String>()
-          .map((e) => e.toBigInt())
+          .map((e) => e.toH3Index())
           .toList();
     } catch (e) {
       wrapAndThrowJsException(e);
@@ -316,7 +319,7 @@ class H3Web implements H3 {
             resolution,
           )
           .cast<String>()
-          .map((e) => e.toBigInt())
+          .map((e) => e.toH3Index())
           .toList();
     } catch (e) {
       wrapAndThrowJsException(e);
@@ -348,7 +351,7 @@ class H3Web implements H3 {
       if (res == null) {
         return BigInt.zero;
       }
-      return res.toBigInt();
+      return res.toH3Index();
     } catch (e) {
       wrapAndThrowJsException(e);
       rethrow;
@@ -363,7 +366,7 @@ class H3Web implements H3 {
       if (res == null) {
         return BigInt.zero;
       }
-      return res.toBigInt();
+      return res.toH3Index();
     } catch (e) {
       wrapAndThrowJsException(e);
       rethrow;
@@ -379,7 +382,7 @@ class H3Web implements H3 {
       if (res == null) {
         return BigInt.zero;
       }
-      return res.toBigInt();
+      return res.toH3Index();
     } catch (e) {
       wrapAndThrowJsException(e);
       rethrow;
@@ -398,7 +401,7 @@ class H3Web implements H3 {
     final res = h3_js
         .directedEdgeToCells(edgeIndex.toH3JS())
         .cast<String>()
-        .map((e) => e.toBigInt())
+        .map((e) => e.toH3Index())
         .toList();
 
     return (origin: res[0], destination: res[1]);
@@ -409,7 +412,7 @@ class H3Web implements H3 {
     return h3_js
         .originToDirectedEdges(edgeIndex.toH3JS())
         .cast<String>()
-        .map((e) => e.toBigInt())
+        .map((e) => e.toH3Index())
         .toList();
   }
 
@@ -439,7 +442,7 @@ class H3Web implements H3 {
       return h3_js
           .gridPathCells(origin.toH3JS(), destination.toH3JS())
           .cast<String>()
-          .map((e) => e.toBigInt())
+          .map((e) => e.toH3Index())
           .toList();
     } catch (e) {
       wrapAndThrowJsException(e);
@@ -472,7 +475,7 @@ class H3Web implements H3 {
               j: coordinates.j,
             ),
           )
-          .toBigInt();
+          .toH3Index();
     } catch (e) {
       wrapAndThrowJsException(e);
       rethrow;
@@ -537,7 +540,7 @@ class H3Web implements H3 {
   H3Index cellToVertex(H3Index h3Index, int vertexNum) {
     assert(vertexNum >= 0);
     try {
-      return h3_js.cellToVertex(h3Index.toH3JS(), vertexNum).toBigInt();
+      return h3_js.cellToVertex(h3Index.toH3JS(), vertexNum).toH3Index();
     } catch (e) {
       wrapAndThrowJsException(e);
       rethrow;
@@ -549,7 +552,7 @@ class H3Web implements H3 {
     return h3_js
         .cellToVertexes(h3Index.toH3JS())
         .cast<String>()
-        .map((e) => e.toBigInt())
+        .map((e) => e.toH3Index())
         .toList();
   }
 
@@ -586,17 +589,20 @@ class H3Web implements H3 {
     return h3_js
         .getRes0Cells()
         .cast<String>()
-        .map((e) => e.toBigInt())
+        .map((e) => e.toH3Index())
         .toList();
   }
 
   @override
-  List<H3Index> getPentagons(int res) {
-    assert(res >= 0 && res < 16, 'Resolution must be in [0, 15] range');
+  List<H3Index> getPentagons(int resolution) {
+    assert(
+      resolution >= 0 && resolution < 16,
+      'Resolution must be in [0, 15] range',
+    );
     return h3_js
-        .getPentagons(res)
+        .getPentagons(resolution)
         .cast<String>()
-        .map((e) => e.toBigInt())
+        .map((e) => e.toH3Index())
         .toList();
   }
 

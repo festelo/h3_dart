@@ -16,7 +16,7 @@ class Geojson2H3 {
   ///
   /// It's possible to add optional feature [properties]
   Map h3ToFeature(BigInt h3Index, {Map? properties}) {
-    final boundary = _h3.h3ToGeoBoundary(h3Index);
+    final boundary = _h3.cellToBoundary(h3Index);
     // Wrap in an array for a single-loop polygon
     final coordinates = [
       [

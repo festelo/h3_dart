@@ -4,9 +4,9 @@ description: Bindings to H3
 output: 'lib/src/generated/generated_bindings.dart'
 headers:
   entry-points:
-    - 'c/h3lib/h3api.h'
+    - 'c/h3/build/src/h3lib/include/h3api.h'
   include-directives:
-    - 'c/h3lib/h3api.h' 
+    - 'c/h3/build/src/h3lib/include/h3api.h'
 comments:
   style: any
   length: full

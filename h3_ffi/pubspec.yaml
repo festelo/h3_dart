@@ -15,3 +15,4 @@ dependencies:
 dev_dependencies:
   ffigen: ^19.0.0
   collection: # uses workspace's version
+  test: # uses workspace's version
