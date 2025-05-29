@@ -10,7 +10,7 @@ environment:
 dependencies:
   h3_web:
     path: ..
-  web: ^1.1.1
+  web: # uses workspace's version
 
 dev_dependencies:
   lints: # uses workspace's version
