@@ -45,3 +45,14 @@ Add next line to your `index.html`:
     <script defer src="https://unpkg.com/h3-js@3.7.2"></script>
 ```  
 *Note, `main.dart.js` import should go after this line*  
+  
+-------------
+## For contributors:
+
+### Upgrading the package to a new version of H3 library
+  
+**As this library is built on top of `h3_web` and `h3_ffi`**  
+**You MUST update these packages first**  
+**Please refer to their `README` files**
+
+TBA

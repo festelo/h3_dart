@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: [
-            Text('180 degrees in radians is ${h3.degsToRads(180)}'),
+            Text('180 degrees in radians is ${h3.radsToDegs(180)}'),
             Text(
               '${h3.degsToRads(180)}',
               key: const ValueKey('degsToRadsText'),
