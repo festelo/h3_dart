@@ -6,19 +6,16 @@
 
 ## H3 Ffi
 
-***In most cases you should not use this library directly, use [h3_dart](https://pub.dev/packages/h3_dart/) or [h3_flutter](https://pub.dev/packages/h3_flutter/) instead.***  
+***In most cases, you should not use this library directly, use [h3_dart](https://pub.dev/packages/h3_dart/) or [h3_flutter](https://pub.dev/packages/h3_flutter/) instead.***  
 
-H3 C library version: 3.7.2
+H3 C library version: **4.2.1**
 
-The package allows to use [H3 library](https://github.com/uber/h3) directly in your Dart VM application
-
-The package uses C version under the hood. 
-Works via [FFI](https://pub.dev/packages/ffi), bindings are automatically generated using [ffigen](https://pub.dev/packages/ffige)
+This package allows you to use the [H3 library](https://github.com/uber/h3) directly in your Dart VM application. It wraps the native C implementation under the hood using [FFI](https://pub.dev/packages/ffi), with bindings automatically generated via [ffigen](https://pub.dev/packages/ffige).
 
 ```dart
-// Get hexagons in specified triangle.
+// Get hexagons within the specified triangle.
 final h3 = const H3FfiFactory().byPath('../h3.so');
-final hexagons = h3.polyfill(
+final hexagons = h3.polygonToCells(
   resolution: 5,
   coordinates: [
     GeoCoord(20.4522, 54.7104),
@@ -28,90 +25,65 @@ final hexagons = h3.polyfill(
 );
 ```  
 
-Most of C's `H3` functions are available in `H3` class, which you can get using `H3Factory`. But if you can't find method you need, you can call C function directly, althrough it's more complicated, because you'll need to work directly with FFI (you will need to worry about allocation and native types). If you want to try, you can use `H3CFactory` to get access to `H3C` instance (import 'package:h3_ffi/internal.dart').
+If, for some reason, the wrapper around the C library doesn't work for you, you can use the C library directly via FFI. `H3CFactory` (import 'package:h3_ffi/internal.dart') is provided to make it more convenient. However, in the vast majority of cases this is not needed.
 
 ### Setup
 
-***In most cases you should not use this library directly, use [h3_dart](https://pub.dev/packages/h3_dart/) or [h3_flutter](https://pub.dev/packages/h3_flutter/) instead.***  
-***If you use [h3_flutter](https://pub.dev/packages/h3_flutter/) you don't need to have compiled H3 C library, it will be built automatically***
+***In most cases, you should not use this library directly, use [h3_dart](https://pub.dev/packages/h3_dart/) or [h3_flutter](https://pub.dev/packages/h3_flutter/) instead.***  
+***If you use [h3_flutter](https://pub.dev/packages/h3_flutter/) you don't need to build the native library yourself***
 
 
-Add `h3_ffi` package to `pubspec.yaml`.
+1. Add `h3_ffi` package to `pubspec.yaml`.
 
-Get compiled h3 library, depending on your platform it may have extension .so, .dll or any.
+2. Compile the H3 library for your platform. Depending on your platform, it usually has the extension `.so` (Linux), `.dll` (Windows) or `.dylib` (macOS).  
 
-- You can run `scripts/build_h3.sh` script, the compiled library will be at `h3_ffi/c/h3lib/build/h3.so` (or `h3.dll` for Windows)
+   The most convenient way to do this is by using the `build_h3.sh` script from the repository.  
+   Clone it, then run `sh scripts/build_h3.sh`.  
+   Once the build is done, you'll find the library at `h3_ffi/c/h3/build/lib/`
 
-- You can compile it by yourself using C-code placed in `c` folder in this repository. It has small changes comparing to original Uber's code to make it more compatible with iOS and macOS versions of `h3_flutter`. This code is recompiled and used for testing everytime tests are launched, so it should work well.
-
-- You can compile original Uber's code, which also should work well, just make sure you use correct version - https://github.com/uber/h3
-
-Place your library somewhere and load it using `H3FfiFactory().byPath('path/to/library.dll')`:
+3. Load the binary: `H3FfiFactory().byPath('path/to/library.dll')`:
   
 -------------
 ## For contributors:
 
 ### Tests
 
-To make tests work you need to execute `scripts/prepare_tests.sh` script. This script builds h3 library from C code.  
-The script works well under macOS, Linux and Windows (bash required).  
+To make tests work, please run `build_h3.sh` script first.
   
-### Upgrading the package to be compatible with new Uber's H3 library
+### Upgrading the package to a new version of H3 library
 
 \~Good luck\~
-  
 
-You need cmake tool, if you're on macos use next command to install it:
+#### Insturctions are written for macOS, on other systems the process may differ
+
+You need cmake tool, install if you don't have it:
 ```
 brew install cmake # install cmake
 ```
 
-Clone h3 repository and create work folders:
-```
-git clone https://github.com/uber/h3 tmp/h3_sources 
-# You need to specify the right version as parameter
-# You may want to use releases page to see your options 
-# https://github.com/uber/h3/releases
-git clone \
-  --depth 1 \
-  --branch <version> \
-  https://github.com/uber/h3 \
-  tmp/h3_sources
+Switch [uber/h3](https://github.com/uber/h3) submodule to the wanted version:
 
-mkdir tmp/h3_sources/build
-cd tmp/h3_sources/build
+```
+# pwd: h3_ffi/
+cd c/h3
+git checkout <version>
 ```
 
-Generate `h3api.h` file and copy it to `c/h3lib` folder:
+Build the library:
 ```
-cmake ..
-rm -rf ../../../c/h3lib // recreate the folder to remove old h3 files
-mkdir ../../../c/h3lib
-
-cp src/h3lib/include/h3api.h ../../../c/h3lib
+sh ../scripts/build_h3.sh
 ```
-
-Copy other source files (*.h and *.c) to the folder.
-```
-cd ..
-cp src/h3lib/include/* ../../c/h3lib
-cp src/h3lib/lib/* ../../c/h3lib
-```
-
-Copy c/h3lib folder to ios and macos folders with [`scripts/sync_h3lib.sh`](../scripts/sync_h3lib.sh) script:
-```
-cd ../../..
-sh scripts/sync_h3lib.sh
-```
-
-You need to add .h and .c files to the project using XCode if you want to launch example (for iOS and macOS).  
-You can face some build errors, in my case i just followed xcode instructions to solve them.  
 
 Code generation tool called [ffigen](https://pub.dev/packages/ffige) is used to create C-to-Dart bindings.  
-To run it, you need to install LLVM:
+To use it, you need to have LLVM installed:
 ```
 brew install llvm
 ```
 
-All H3 public functions should be specified in the [ffigen.yaml](ffigen.yaml) file.  
-Run `dart run ffigen --config ffigen.yaml` to generate bindings
+Run `dart run ffigen --config ffigen.yaml` to generate the bindings
+
+Adapt [h3_ffi.dart](src/h3_ffi.dart) to the new changes. If necessary, apply changes to other packages in this repository. 
+
+Make sure all tests work succesfully. 
+
+Proceed to updating `h3_flutter` package.
