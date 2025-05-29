@@ -1,8 +1,4 @@
-group = "net.festelo.h3_flutter"
-version = "1.0-SNAPSHOT"
-
 buildscript {
-    ext.kotlin_version = "2.1.0"
     repositories {
         google()
         mavenCentral()
@@ -10,7 +6,6 @@ buildscript {
 
     dependencies {
         classpath("com.android.tools.build:gradle:8.7.3")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
     }
 }
 
@@ -22,26 +17,11 @@ allprojects {
 }
 
 apply plugin: "com.android.library"
-apply plugin: "kotlin-android"
 
 android {
     namespace = "net.festelo.h3_flutter"
 
     compileSdk = 35
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11
-    }
-
-    sourceSets {
-        main.java.srcDirs += "src/main/kotlin"
-        test.java.srcDirs += "src/test/kotlin"
-    }
 
     defaultConfig {
         minSdk = 21
