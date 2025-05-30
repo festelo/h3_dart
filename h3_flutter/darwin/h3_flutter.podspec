@@ -4,10 +4,10 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'h3_flutter'
-  s.version          = '0.4.2'
+  s.version          = '0.7.0'
   s.summary          = 'H3 Flutter plugin'
   s.description      = <<-DESC
-H3 Flutter plugin
+A Flutter plugin providing FFI bindings to the H3 C library.
                        DESC
   s.homepage         = 'https://github.com/festelo/h3_flutter'
   s.license          = { :file => '../LICENSE' }
@@ -34,10 +34,7 @@ H3 Flutter plugin
   }
 
   s.osx.pod_target_xcconfig = {
-    'OTHER_LDFLAGS' => [
-      "-force_load $(PODS_TARGET_SRCROOT)/Libs/h3.xcframework/macos-arm64_x86_64/libh3.a",
-    ]
+    'OTHER_LDFLAGS' => "-force_load $(PODS_TARGET_SRCROOT)/Libs/h3.xcframework/macos-arm64_x86_64/libh3.a",
   }
 
-  s.swift_version = '5.0'
 end
