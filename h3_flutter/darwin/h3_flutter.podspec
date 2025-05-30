@@ -40,5 +40,4 @@ H3 Flutter plugin
   }
 
   s.swift_version = '5.0'
-  s.resource_bundles = { "h3_flutter_privacy" => ["Resources/PrivacyInfo.xcprivacy"] }
 end
