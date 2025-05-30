@@ -12,7 +12,7 @@ dependencies:
   h3_ffi: ^0.7.0
   h3_web: ^0.7.0
   h3_common: ^0.7.0
-  geojson2h3: ^0.6.1
+  geojson2h3: ^0.7.0
 
 dev_dependencies:
   lints: # uses workspace's version
