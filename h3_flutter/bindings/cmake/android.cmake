@@ -1,5 +1,3 @@
-set(CMAKE_C_STANDARD 99)
-
 # Strip symbols in release
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s")
 

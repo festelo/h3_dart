@@ -1,4 +1,4 @@
-set(CMAKE_C_STANDARD 99)
+# Add embed-bitcode flag (for iOS)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fembed-bitcode")
 
 # Generate headers from .h.in files

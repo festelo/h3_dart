@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 project(h3 C)
 
 # Set standard C version
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 11)
 
 # Detect platform and delegate to the right cmake file
 if(ANDROID)
