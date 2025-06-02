@@ -2,21 +2,21 @@
 
 set -e  # Exit on any error
 
-cd "$(cd "$(dirname "$0")" > /dev/null && pwd)/../h3_ffi"
+cd "$(cd "$(dirname "$0")" > /dev/null && pwd)/.."
 
 # Build H3 library first
 echo "Building H3 library..."
-./build_h3.sh
+./scripts/build_h3.sh
 
 # Array of library files to check in order
 libraries=(
-    "c/h3/build/lib/libh3.dylib"
-    "c/h3/build/lib/libh3.so"
-    "c/h3/build/bin/libh3.dll"
+    "h3_ffi/c/h3/build/lib/libh3.dylib"
+    "h3_ffi/c/h3/build/lib/libh3.so"
+    "h3_ffi/c/h3/build/bin/libh3.dll"
 )
 
 # Target destination
-target="c/h3/build/test.common"
+target="h3_ffi/c/h3/build/test.common"
 
 # Check each library file in order
 for lib in "${libraries[@]}"; do
