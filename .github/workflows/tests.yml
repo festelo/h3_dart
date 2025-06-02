@@ -253,7 +253,7 @@ jobs:
         submodules: true
 
     - name: Install linux dependencies
-      run: sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+      run: sudo apt-get update && sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
       if: matrix.os == 'ubuntu-latest'
 
     - name: Setup subosito/flutter-action@v2
@@ -317,7 +317,7 @@ jobs:
       uses: browser-actions/setup-chrome@latest
 
     - name: Setup Chrome Driver
-      uses: nanasess/setup-chromedriver@v1
+      uses: nanasess/setup-chromedriver@v2
 
     - run: |
         export DISPLAY=:99
