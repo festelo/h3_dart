@@ -17,24 +17,25 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        sdk: [stable, beta, dev]
+        sdk: [stable, beta]
     steps:
       - uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1.3
+      - name: Setup subosito/flutter-action@v2
+        uses: subosito/flutter-action@v2
         with:
-          sdk: ${{ matrix.sdk }}
+          channel: ${{ matrix.sdk }}
           architecture: x64
 
-      - name: Install coverage tool
-        run: dart pub global activate coverage
-
       - name: Install dependencies
-        run: dart pub get
+        run: flutter pub get
         working-directory: ./geojson2h3
 
       - name: Analyze
         run: dart analyze
         working-directory: ./geojson2h3
+
+      - name: Install coverage tool
+        run: dart pub global activate coverage
 
       - name: Run tests
         run: dart pub global run coverage:test_with_coverage
@@ -51,20 +52,21 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        sdk: [stable, beta, dev]
+        sdk: [stable, beta]
     steps:
       - uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1.3
+      - name: Setup subosito/flutter-action@v2
+        uses: subosito/flutter-action@v2
         with:
-          sdk: ${{ matrix.sdk }}
+          channel: ${{ matrix.sdk }}
           architecture: x64
+
+      - name: Install dependencies
+        run: flutter pub get
+        working-directory: ./h3_common
 
       - name: Install coverage tool
         run: dart pub global activate coverage
-
-      - name: Install dependencies
-        run: dart pub get
-        working-directory: ./h3_common
 
       - name: Analyze
         run: dart analyze
@@ -85,25 +87,24 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        sdk: [stable, beta, dev]
+        sdk: [stable, beta]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           submodules: true
-      - uses: dart-lang/setup-dart@v1.3
-        with:
-          sdk: ${{ matrix.sdk }}
-          architecture: x64
 
-      - name: Install coverage tool
-        run: dart pub global activate coverage
+      - name: Setup subosito/flutter-action@v2
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ matrix.sdk }}
+          architecture: x64
   
       - name: Prepare tests
         run: sh scripts/prepare_tests.sh
 
       - name: Install dependencies
-        run: dart pub get
+        run: flutter pub get
         working-directory: ./h3_dart
 
       - name: Analyze
@@ -112,6 +113,9 @@ jobs:
 
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@latest
+
+      - name: Install coverage tool
+        run: dart pub global activate coverage
 
       - name: Run tests (VM)
         run: dart pub global run coverage:test_with_coverage
@@ -132,30 +136,31 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        sdk: [stable, beta, dev]
+        sdk: [stable, beta]
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: true
 
-      - uses: dart-lang/setup-dart@v1.3
+      - name: Setup subosito/flutter-action@v2
+        uses: subosito/flutter-action@v2
         with:
-          sdk: ${{ matrix.sdk }}
+          channel: ${{ matrix.sdk }}
           architecture: x64
-
-      - name: Install coverage tool
-        run: dart pub global activate coverage
   
       - name: Prepare tests
         run: sh scripts/prepare_tests.sh
 
       - name: Install dependencies
-        run: dart pub get
+        run: flutter pub get
         working-directory: ./h3_ffi
 
       - name: Analyze
         run: dart analyze
         working-directory: ./h3_ffi
+
+      - name: Install coverage tool
+        run: dart pub global activate coverage
 
       - name: Run tests
         run: dart pub global run coverage:test_with_coverage
@@ -178,7 +183,7 @@ jobs:
       - name: Setup subosito/flutter-action@v2
         uses: subosito/flutter-action@v2
         with:
-          channel: beta
+          channel: stable
           architecture: x64
       
       - uses: actions/setup-java@v3
@@ -340,16 +345,17 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        sdk: [stable, beta, dev]
+        sdk: [stable, beta]
     steps:
       - uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1.3
+      - name: Setup subosito/flutter-action@v2
+        uses: subosito/flutter-action@v2
         with:
-          sdk: ${{ matrix.sdk }}
+          channel: ${{ matrix.sdk }}
           architecture: x64
 
       - name: Install dependencies
-        run: dart pub get
+        run: flutter pub get
         working-directory: ./h3_web
 
       - name: Analyze

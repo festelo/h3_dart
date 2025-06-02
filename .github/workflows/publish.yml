@@ -37,11 +37,6 @@ jobs:
         with:
           submodules: true
 
-      - uses: dart-lang/setup-dart@v1.3
-        with:
-          sdk: stable
-          architecture: x64
-
       - name: Remove symlinks
         run: sh h3_flutter/bindings/scripts/toggle_h3lib.sh
         if: matrix.package == 'h3_flutter'
