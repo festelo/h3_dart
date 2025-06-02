@@ -15,7 +15,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/h3lib/include)
 # Gather source files
 file(GLOB CSources "${CMAKE_CURRENT_SOURCE_DIR}/h3lib/lib/*.c")
 
-# Build static library
+# Build library
 add_library(h3 STATIC ${CSources})
 
 # Install library and headers
