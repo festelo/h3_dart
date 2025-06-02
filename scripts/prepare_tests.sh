@@ -1,8 +1,8 @@
 #!/bin/bash
 
-set -e  # Exit on any error
+set -e # Exit on any error
 
-cd "$(cd "$(dirname "$0")" > /dev/null && pwd)/.."
+cd "$(cd "$(dirname "$0")" >/dev/null && pwd)/.."
 
 # Build H3 library first
 echo "Building H3 library..."
@@ -33,4 +33,4 @@ echo "Error: None of the H3 libraries were found:"
 for lib in "${libraries[@]}"; do
     echo "  - $lib"
 done
-exit 1 
+exit 1

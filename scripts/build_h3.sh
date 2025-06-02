@@ -1,10 +1,10 @@
 #!/bin/bash
 
-set -e  # Exit on any error
+set -e # Exit on any error
 
-cd "$(cd "$(dirname "$0")" > /dev/null && pwd)/.."
+cd "$(cd "$(dirname "$0")" >/dev/null && pwd)/.."
 
-rm -rf h3_ffi/c/h3/build 
+rm -rf h3_ffi/c/h3/build
 mkdir h3_ffi/c/h3/build
 cd h3_ffi/c/h3/build
 cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release \
