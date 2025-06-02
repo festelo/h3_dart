@@ -1,3 +1,12 @@
+# Optimize release builds for MSVC
+if(MSVC)
+    # Enable link-time optimizations and dead code elimination
+    set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /OPT:REF /OPT:ICF")
+else()
+    # For MinGW/Clang on Windows, use Unix-style symbol stripping
+    set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} -s")
+endif()
+
 # Generate headers from .h.in files
 file(GLOB H3_TEMPLATE_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/h3lib/include/*.in")
 foreach(infile ${H3_TEMPLATE_HEADERS})
