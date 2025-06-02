@@ -13,4 +13,5 @@ dependencies:
 dev_dependencies:
   test: # uses workspace's version
   lints: # uses workspace's version
-  mockito: ^5.2.0
+  mockito: ^5.4.6
+  build_runner: ^2.4.15
