@@ -49,10 +49,19 @@ Add next line to your `index.html`:
 -------------
 ## For contributors:
 
+### Running iOS and Mac builds locally (not from pub)
+
+As Xcode doesn't bundle CMake—unlike Android's NDK—it cannot build H3 source files directly, since H3 uses CMake.
+
+This is why GitHub Actions prebuilds a static library before publishing `h3_flutter` to pub.dev, providing a smoother experience for users of this library. However, this prebuild step doesn't happen when you clone the library directly from git. 
+
+To build the library locally for iOS/macOS development, you need to build the `xcframework` yourself by running:
+```bash
+bindings/scripts/build_darwin_static_lib.sh
+```
+
 ### Upgrading the package to a new version of H3 library
   
-**As this library is built on top of `h3_web` and `h3_ffi`**  
-**You MUST update these packages first**  
-**Please refer to their `README` files**
-
-TBA
+As this library is built on top of `h3_web` and `h3_ffi`, you must update these packages first, please refer to their `README` files.
+Once they are updated, try to run the example for all the platforms.
+Ideally, it would work out of the box.
