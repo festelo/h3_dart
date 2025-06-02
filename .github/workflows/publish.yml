@@ -38,11 +38,11 @@ jobs:
           submodules: true
 
       - name: Remove symlinks
-        run: sh h3_flutter/bindings/scripts/toggle_h3lib.sh
+        run: h3_flutter/bindings/scripts/toggle_h3lib.sh
         if: matrix.package == 'h3_flutter'
 
       - name: Prebuild iOS & macOS library
-        run: sh h3_flutter/bindings/scripts/build_darwin_static_lib.sh
+        run: h3_flutter/bindings/scripts/build_darwin_static_lib.sh
         if: matrix.package == 'h3_flutter'
 
       - name: Pubspec Metadata
