@@ -101,7 +101,7 @@ jobs:
           architecture: x64
   
       - name: Prepare tests
-        run: sh scripts/prepare_tests.sh
+        run: scripts/prepare_tests.sh
 
       - name: Install dependencies
         run: flutter pub get
@@ -149,7 +149,7 @@ jobs:
           architecture: x64
   
       - name: Prepare tests
-        run: sh scripts/prepare_tests.sh
+        run: scripts/prepare_tests.sh
 
       - name: Install dependencies
         run: flutter pub get
