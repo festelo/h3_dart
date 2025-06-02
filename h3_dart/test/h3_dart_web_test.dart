@@ -5,7 +5,7 @@ import 'package:h3_dart/h3_dart.dart';
 import 'h3_js_injector.dart';
 
 void main() async {
-  await inject('https://unpkg.com/h3-js@3.7.2');
+  await inject('https://unpkg.com/h3-js@4.2.1');
 
   final h3Factory = const H3Factory();
 

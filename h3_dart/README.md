@@ -52,7 +52,7 @@ Place your library somewhere and load it using `final h3 = const H3Factory().byP
 Web version is built on top of `h3-js`, you have to import it.  
 Add next line to your `index.html`:
 ```html
-    <script defer src="https://unpkg.com/h3-js@3.7.2"></script>
+    <script defer src="https://unpkg.com/h3-js@4.2.1"></script>
 ```  
 *Note, `main.dart.js` import should go after this line*  
 

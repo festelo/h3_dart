@@ -71,6 +71,8 @@ git checkout <version>
 
 Build the library:
 ```
+git submodule init
+git submodule update
 sh ../scripts/build_h3.sh
 ```
 

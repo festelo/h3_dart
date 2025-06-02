@@ -7,7 +7,7 @@ import 'package:collection/collection.dart';
 import 'common.dart';
 
 void main() {
-  final h3 = H3FfiFactory().byPath('c/h3lib/build/h3.so');
+  final h3 = H3FfiFactory().byPath('c/h3/build/test.common');
 
   test('radsToDegs', () async {
     expect(h3.radsToDegs(pi / 2), 90);

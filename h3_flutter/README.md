@@ -39,10 +39,10 @@ final geojson2h3 = Geojson2H3(h3);
 
 ### Web
 
-Web version is built on top of `h3-js` v3.7.2, you have to import it.  
+Web version is built on top of `h3-js` v4.2.1, you have to import it.  
 Add next line to your `index.html`:
 ```html
-    <script defer src="https://unpkg.com/h3-js@3.7.2"></script>
+    <script defer src="https://unpkg.com/h3-js@4.2.1"></script>
 ```  
 *Note, `main.dart.js` import should go after this line*  
   
