@@ -21,7 +21,7 @@ void main() async {
       reason: 'H3Factory.process throws error',
     );
     expect(
-      () => h3Factory.byPath('../h3_ffi/c/h3lib/build/h3.so'),
+      () => h3Factory.byPath('../h3_ffi/c/h3/build/test.common'),
       throwsA(isA<UnsupportedError>()),
       reason: 'H3Factory.byPath throws error',
     );
