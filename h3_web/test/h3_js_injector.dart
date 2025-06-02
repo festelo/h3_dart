@@ -4,7 +4,6 @@ import 'package:web/web.dart';
 
 /// Injects the library by its [url]
 Future<void> inject(String url) async {
-  print('a');
   if (_isImported(url)) {
     return;
   }

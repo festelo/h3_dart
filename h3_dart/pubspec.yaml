@@ -17,3 +17,4 @@ dependencies:
 dev_dependencies:
   lints: # uses workspace's version
   test: # uses workspace's version
+  web: # uses workspace's version

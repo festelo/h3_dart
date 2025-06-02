@@ -1,6 +1,3 @@
-@TestOn('vm')
-library h3_dart.test.vm;
-
 import 'dart:io';
 
 import 'package:test/test.dart';
