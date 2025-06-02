@@ -5,7 +5,7 @@
 
 set -e  # Exit on any error
 
-cd "$(cd "$(dirname "$0")" > /dev/null && pwd)/.."
+cd "$(cd "$(dirname "$0")" > /dev/null && pwd)/../../.."
 
 # Define paths
 TARGET_DIR="h3_flutter/bindings/h3lib"
