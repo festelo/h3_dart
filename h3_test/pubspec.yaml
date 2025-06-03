@@ -1,0 +1,13 @@
+name: h3_test
+description: The package provides common tests shared between other h3 packages
+homepage: https://github.com/festelo/h3_dart
+resolution: workspace
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+dependencies:
+  collection: ^1.19.1
+  test: # uses workspace's version
+  lints: # uses workspace's version
+  h3_common: # uses workspace's version

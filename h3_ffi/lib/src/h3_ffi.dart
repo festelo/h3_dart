@@ -268,6 +268,7 @@ class H3Ffi implements H3 {
       final polygonPointer = arena<c.GeoPolygon>();
       polygonPointer.ref.assign(
         perimeter: perimeter,
+        holes: holes,
         converter: _geoCoordConverter,
         allocator: arena,
       );
@@ -302,6 +303,7 @@ class H3Ffi implements H3 {
       final polygonPointer = arena<c.GeoPolygon>();
       polygonPointer.ref.assign(
         perimeter: perimeter,
+        holes: holes,
         converter: _geoCoordConverter,
         allocator: arena,
       );

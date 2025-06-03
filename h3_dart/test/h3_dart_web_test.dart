@@ -1,3 +1,6 @@
+@TestOn('browser')
+library;
+
 import 'package:h3_web/h3_web.dart';
 import 'package:test/test.dart';
 import 'package:h3_dart/h3_dart.dart';

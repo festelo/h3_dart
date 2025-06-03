@@ -14,5 +14,5 @@ dependencies:
 dev_dependencies:
   test: # uses workspace's version
   lints: # uses workspace's version
-  collection: # uses workspace's version
   web: # uses workspace's version
+  h3_test: # uses workspace's version

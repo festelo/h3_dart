@@ -15,10 +15,10 @@ workspace:
   - h3_flutter/example
   - h3_web
   - h3_web/example
+  - h3_test
 
 dev_dependencies:
   lints: ^5.0.0
   flutter_lints: ^5.0.0
   test: ^1.25.15
-  collection: ^1.19.1
   web: ^1.1.1

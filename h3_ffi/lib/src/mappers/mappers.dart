@@ -97,6 +97,7 @@ extension GeoPolygonToNativeMapperExtension on c.GeoPolygon {
     );
 
     this.holes = allocator(holes.length);
+    numHoles = holes.length;
     for (var i = 0; i < holes.length; i++) {
       final hole = this.holes + i;
       hole.ref.assign(
@@ -105,6 +106,7 @@ extension GeoPolygonToNativeMapperExtension on c.GeoPolygon {
         allocator: allocator,
       );
     }
+    print('a');
   }
 }
 
