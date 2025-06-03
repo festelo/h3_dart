@@ -12,7 +12,6 @@ concurrency:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -31,6 +30,8 @@ jobs:
             release_name: "H3 Dart"
           - package: h3_flutter
             release_name: "H3 Flutter"
+            os: macos-latest
+    runs-on: ${{ matrix.os || 'ubuntu-latest' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
