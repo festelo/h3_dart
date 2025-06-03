@@ -11,6 +11,10 @@ concurrency:
   group: build-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   geojson2h3_tests:
     runs-on: ${{ matrix.os }}
@@ -24,6 +28,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: ${{ matrix.sdk }}
+          cache: true
 
       - name: Install dependencies
         run: flutter pub get
@@ -58,6 +63,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: ${{ matrix.sdk }}
+          cache: true
 
       - name: Install dependencies
         run: flutter pub get
@@ -96,6 +102,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: ${{ matrix.sdk }}
+          cache: true
   
       - name: Prepare tests
         run: scripts/prepare_tests.sh
@@ -143,6 +150,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: ${{ matrix.sdk }}
+          cache: true
   
       - name: Prepare tests
         run: scripts/prepare_tests.sh
@@ -180,6 +188,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
       
       - uses: actions/setup-java@v3
         with:
@@ -259,6 +268,7 @@ jobs:
       uses: subosito/flutter-action@v2
       with:
         channel: beta
+        cache: true
 
     - name: Enable linux
       run: flutter config --enable-linux-desktop
@@ -309,6 +319,7 @@ jobs:
       uses: subosito/flutter-action@v2
       with:
         channel: beta
+        cache: true
 
     - name: Setup Chrome
       uses: browser-actions/setup-chrome@latest
@@ -349,6 +360,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: ${{ matrix.sdk }}
+          cache: true
 
       - name: Install dependencies
         run: flutter pub get
