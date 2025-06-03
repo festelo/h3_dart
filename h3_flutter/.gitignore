@@ -31,3 +31,7 @@ android/.cxx
 
 tmp/
 .fvm
+
+# Project-specific
+darwin/Libs/h3.xcframework
+android/local.properties
