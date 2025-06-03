@@ -12,7 +12,6 @@ echo "Building H3 library..."
 libraries=(
     "h3_ffi/c/h3/build/lib/libh3.dylib"
     "h3_ffi/c/h3/build/lib/libh3.so"
-    "h3_ffi/c/h3/build/bin/libh3.dll"
     "h3_ffi/c/h3/build/bin/Release/h3.dll"
 )
 
