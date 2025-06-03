@@ -43,7 +43,7 @@ class H3Ffi implements H3 {
     return using((arena) {
       final count = arena<Int>();
       throwIfError(_h3c.maxFaceCount(h3IndexInt, count));
-      final out = arena<Int>();
+      final out = arena<Int>(count.value);
       _h3c.getIcosahedronFaces(h3IndexInt, out);
       return out
           .cast<Int32>()
@@ -122,6 +122,9 @@ class H3Ffi implements H3 {
 
   @override
   List<H3Index> cellToChildren(H3Index h3Index, int resolution) {
+    assert(resolution >= 0 && resolution < 16,
+        'Resolution must be in [0, 15] range');
+
     // Bad input in this case can potentially result in high computation volume
     // using the current C algorithm. Validate and return an empty array on failure.
     if (!isValidCell(h3Index)) {
@@ -139,6 +142,9 @@ class H3Ffi implements H3 {
 
   @override
   int cellToChildrenSize(H3Index h3Index, int resolution) {
+    assert(resolution >= 0 && resolution < 16,
+        'Resolution must be in [0, 15] range');
+
     if (!isValidCell(h3Index)) {
       throw H3Exception.fromCode(H3ExceptionCode.cellInvalid);
     }
@@ -192,7 +198,7 @@ class H3Ffi implements H3 {
       final out = arena<Uint64>();
       throwIfError(
         _h3c.childPosToCell(
-          h3Index.toNative(),
+          childPosition,
           h3Index.toNative(),
           childResolution,
           out,
@@ -335,6 +341,10 @@ class H3Ffi implements H3 {
 
   @override
   List<List<List<GeoCoord>>> cellsToMultiPolygon(List<H3Index> h3Indexes) {
+    if (h3Indexes.isEmpty) {
+      return [];
+    }
+
     return using((arena) {
       final h3IndexesPointer = arena<Uint64>(h3Indexes.length);
       for (var i = 0; i < h3Indexes.length; i++) {

@@ -136,6 +136,7 @@ void testH3(
       );
     }
   });
+
   test('cellToGeo', () async {
     expect(
       ComparableGeoCoord.fromGeoCoord(
@@ -939,14 +940,11 @@ void testH3(
       final multiPolygon = h3.cellsToMultiPolygon([h3Index]);
       final vertices = h3.cellToBoundary(h3Index);
 
-      expect(
-        const DeepCollectionEquality().equals(
-          multiPolygon,
-          [
-            [vertices]
-          ],
-        ),
-        true,
+      assertMultiPolygon(
+        multiPolygon,
+        [
+          [vertices]
+        ],
       );
     });
     test('Contiguous 2', () async {
@@ -1152,6 +1150,7 @@ void testH3(
       false,
     );
   });
+
   test('isResClassIII', () async {
     // Test all even indexes
     for (var i = 0; i < 15; i += 2) {
@@ -1170,6 +1169,7 @@ void testH3(
       expect(h3.isResClassIII(h3Index), true);
     }
   });
+
   test('getIcosahedronFaces', () async {
     void testFace(String name, BigInt h3Index, int expected) {
       final faces = h3.getIcosahedronFaces(h3Index);

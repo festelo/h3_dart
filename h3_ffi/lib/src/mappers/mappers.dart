@@ -106,7 +106,6 @@ extension GeoPolygonToNativeMapperExtension on c.GeoPolygon {
         allocator: allocator,
       );
     }
-    print('a');
   }
 }
 
