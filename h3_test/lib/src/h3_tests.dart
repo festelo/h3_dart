@@ -1123,17 +1123,20 @@ void testH3(
         );
       });
 
-      test('uncompactCells - Out of bounds', () async {
-        expect(
-          () => h3.uncompactCells(
-            [BigInt.parse('0x8029fffffffffff')],
-            resolution: 15,
-          ),
-          throwsA(isA<H3Exception>()),
-        );
-      });
+      test(
+        'uncompactCells - Out of bounds',
+        () async {
+          expect(
+            () => h3.uncompactCells(
+              [BigInt.parse('0x8029fffffffffff')],
+              resolution: 15,
+            ),
+            throwsA(isA<H3Exception>()),
+          );
+        },
+        skip: !testOutOfBounds,
+      );
     },
-    skip: !testOutOfBounds,
   );
 
   test('isPentagon', () async {
