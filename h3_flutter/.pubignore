@@ -35,5 +35,3 @@ tmp/
 # Project-specific
 android/local.properties
 android/.gradle
-
-darwin/Libs/h3.xcframework
