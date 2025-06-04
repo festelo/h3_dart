@@ -1,6 +1,6 @@
 PODS:
   - FlutterMacOS (1.0.0)
-  - h3_flutter (0.4.2):
+  - h3_flutter (0.7.0):
     - Flutter
     - FlutterMacOS
 
@@ -16,7 +16,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  h3_flutter: 4bf7edd746baae0e48e3266246100afb284afab2
+  h3_flutter: 1314de83f8d68f7384ba44b82daaf98e0640bfe4
 
 PODFILE CHECKSUM: 7eb978b976557c8c1cd717d8185ec483fd090a82
 

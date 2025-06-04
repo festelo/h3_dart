@@ -16,6 +16,7 @@ A Flutter plugin providing FFI bindings to the H3 C library.
 
   s.vendored_frameworks = 'Libs/h3.xcframework'
   s.preserve_paths = 'Libs/h3.xcframework/**/*'
+  s.source_files = 'include.c'
 
   s.ios.dependency 'Flutter'
   s.osx.dependency 'FlutterMacOS'
@@ -28,9 +29,9 @@ A Flutter plugin providing FFI bindings to the H3 C library.
 
   s.ios.pod_target_xcconfig = {
     # Flutter.framework does not contain a i386 slice.
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386'
-    'OTHER_LDFLAGS[sdk=iphoneos*]' => "-force_load $(PODS_TARGET_SRCROOT)/Libs/h3.xcframework/ios-arm64/libh3.a",
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
     'OTHER_LDFLAGS[sdk=iphonesimulator*]' => "-force_load $(PODS_TARGET_SRCROOT)/Libs/h3.xcframework/ios-arm64_x86_64-simulator/libh3.a",
+    'OTHER_LDFLAGS[sdk=iphoneos*]' => "-force_load $(PODS_TARGET_SRCROOT)/Libs/h3.xcframework/ios-arm64/libh3.a",
   }
 
   s.osx.pod_target_xcconfig = {
