@@ -5,7 +5,7 @@ import 'package:h3_ffi/internal.dart';
 import 'package:h3_ffi/src/h3_ffi.dart';
 import 'package:path/path.dart' as p;
 
-/// H3FfiFactory is used to build H3Ffo instance
+/// H3FfiFactory is used to build H3Ffi instance
 class H3FfiFactory {
   const H3FfiFactory({
     H3CFactory h3cFactory = const H3CFactory(),
