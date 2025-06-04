@@ -27,7 +27,7 @@ void main() {
     testEquals(buildA, buildB);
     expect(
       buildA().toString(),
-      allOf(contains(latA.toString()), contains(latA.toString())),
+      allOf(contains(latA.toString()), contains(lonA.toString())),
       reason: 'GeoCoord.toString() works fine',
     );
     expect(
@@ -66,7 +66,6 @@ void main() {
         const GeoCoordRadians(lat: latB * pi, lon: lonB);
 
     testHashCode(buildA, buildB);
-    testEquals(buildA, buildB);
     testEquals(buildA, buildB);
 
     expect(
