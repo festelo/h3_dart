@@ -67,5 +67,5 @@ jobs:
         with:
           workflow: pub.yml
           ref: "${{ matrix.package }}_${{ steps.pubspec.outputs.version-number }}"
-          inputs: '{ "message": "blah blah", "something": true }'
+          inputs: '{ "package": "${{ matrix.package }}" }'
         if: steps.release.outputs.id != null
