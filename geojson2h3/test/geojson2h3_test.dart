@@ -11,7 +11,7 @@ void main() {
   final h3 = MockH3();
   final geojson2H3 = Geojson2H3(h3);
 
-  when(h3.h3ToGeoBoundary(BigInt.from(0x89283082837ffff))).thenAnswer(
+  when(h3.cellToBoundary(BigInt.from(0x89283082837ffff))).thenAnswer(
     (_) => [
       GeoCoord(lon: -122.42778275313196, lat: 37.77598951883772),
       GeoCoord(lon: -122.42671162907995, lat: 37.77767221484916),
@@ -21,7 +21,7 @@ void main() {
       GeoCoord(lon: -122.43011350268341, lat: 37.77581120251895),
     ],
   );
-  when(h3.h3ToGeoBoundary(BigInt.from(0x89283085507ffff))).thenAnswer(
+  when(h3.cellToBoundary(BigInt.from(0x89283085507ffff))).thenAnswer(
     (_) => [
       GeoCoord(lon: -122.4748582327671, lat: 37.85878356045377),
       GeoCoord(lon: -122.47378734444061, lat: 37.86046562198416),
@@ -32,7 +32,7 @@ void main() {
     ],
   );
 
-  when(h3.h3ToGeoBoundary(BigInt.from(0x892830855b3ffff))).thenAnswer(
+  when(h3.cellToBoundary(BigInt.from(0x892830855b3ffff))).thenAnswer(
     (_) => [
       GeoCoord(lon: -122.48147295617734, lat: 37.85187534491365),
       GeoCoord(lon: -122.48040229236013, lat: 37.85355749750207),
@@ -43,7 +43,7 @@ void main() {
     ],
   );
 
-  when(h3.h3ToGeoBoundary(BigInt.from(0x85283473fffffff))).thenAnswer(
+  when(h3.cellToBoundary(BigInt.from(0x85283473fffffff))).thenAnswer(
     (_) => [
       GeoCoord(lon: -121.91508032705622, lat: 37.27135586673191),
       GeoCoord(lon: -121.86222328902491, lat: 37.353926450852256),
@@ -56,7 +56,7 @@ void main() {
 
   test('h3ToFeature', () async {
     final hexagon = BigInt.from(0x89283082837ffff);
-    final coordinates = h3.h3ToGeoBoundary(hexagon);
+    final coordinates = h3.cellToBoundary(hexagon);
     coordinates.add(coordinates.first); // close loop
     final feature = {
       'id': hexagon.toString(),

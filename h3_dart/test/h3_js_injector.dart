@@ -1,34 +1,37 @@
 import 'dart:async';
-import 'dart:html' as html;
+import 'dart:js_interop';
+import 'package:web/web.dart';
 
 /// Injects the library by its [url]
 Future<void> inject(String url) async {
-  final head = html.querySelector('head');
-
-  if (!_isImported(url)) {
-    final scriptTag = _createScriptTag(url);
-    head!.children.add(scriptTag);
-    await scriptTag.onLoad.first;
+  if (_isImported(url)) {
+    return;
   }
+
+  final head = document.querySelector('head')!;
+  final scriptTag = _createScriptTag(url);
+  head.appendChild(scriptTag);
+  await scriptTag.onLoad.first;
 }
 
 bool _isImported(String url) {
-  final head = html.querySelector('head');
   if (url.startsWith("./")) {
     url = url.replaceFirst("./", "");
   }
-  for (var element in head!.children) {
-    if (element is html.ScriptElement) {
-      if (element.src.endsWith(url)) {
-        return true;
-      }
+
+  final head = document.querySelector('head')!;
+  for (var i = 0; i < head.children.length; i++) {
+    final element = head.children.item(i);
+    if (element.isA<HTMLScriptElement>() &&
+        (element as HTMLScriptElement).src.endsWith(url)) {
+      return true;
     }
   }
   return false;
 }
 
-html.ScriptElement _createScriptTag(String library) {
-  final html.ScriptElement script = html.ScriptElement()
+HTMLScriptElement _createScriptTag(String library) {
+  final HTMLScriptElement script = HTMLScriptElement()
     ..type = "text/javascript"
     ..charset = "utf-8"
     ..async = true

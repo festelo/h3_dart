@@ -24,24 +24,22 @@ extension H3UnitsMapperExt on H3Units {
   }
 }
 
-extension H3AreaUnitsMapperExt on H3AreaUnits {
+extension H3MetricUnitsMapperExt on H3MetricUnits {
   String toH3JS() {
     switch (this) {
-      case H3AreaUnits.m2:
-        return 'm2';
-      case H3AreaUnits.km2:
-        return 'km2';
+      case H3MetricUnits.m:
+        return 'm';
+      case H3MetricUnits.km:
+        return 'km';
     }
   }
-}
 
-extension H3EdgeLengthUnitsMapperExt on H3EdgeLengthUnits {
-  String toH3JS() {
+  String toH3JSSquare() {
     switch (this) {
-      case H3EdgeLengthUnits.m:
-        return 'm';
-      case H3EdgeLengthUnits.km:
-        return 'km';
+      case H3MetricUnits.m:
+        return 'm2';
+      case H3MetricUnits.km:
+        return 'km2';
     }
   }
 }

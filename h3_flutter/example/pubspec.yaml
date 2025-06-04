@@ -2,9 +2,10 @@ name: h3_flutter_example
 description: Demonstrates how to use the h3_flutter plugin.
 
 publish_to: 'none'
+resolution: workspace
 
 environment:
-  sdk: ">=2.16.0-80.1.beta <3.0.0"
+  sdk: '>= 3.5.0'
 
 dependencies:
   flutter:
@@ -19,7 +20,7 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
-  flutter_lints: ^2.0.1
+  flutter_lints: # uses workspace's version
 
 flutter:
   uses-material-design: true

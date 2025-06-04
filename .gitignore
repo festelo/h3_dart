@@ -21,10 +21,9 @@
 #.vscode/
 
 # Flutter/Dart/Pub related
-# Libraries should not include pubspec.lock, per https://dart.dev/guides/libraries/private-files#pubspeclock.
-pubspec.lock
 !example/pubspec.lock
 !**/example/**/pubspec.lock
+pubspec_overrides.yaml
 **/doc/api/
 .dart_tool/
 .packages
@@ -32,6 +31,10 @@ build/
 android/.cxx
 
 tmp/
-.fvm
 
 node_modules
+
+# FVM Version Cache
+.fvm/
+.fvmrc
+.flutter-plugins-dependencies

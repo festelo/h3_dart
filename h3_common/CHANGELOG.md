@@ -1,3 +1,9 @@
+## 0.7.0
+* H3AreaUnits and H3EdgeLengthUnits were removed, use H3Units and H3MetricUnits instead.
+* H3Exception now has an H3ExceptionCode
+* H3 abstract class was updated to match [version 4.2.1](https://github.com/uber/h3/releases/tag/v4.2.1)
+* Dependencies were updated
+
 ## 0.6.1
 * Update test dependency
 * Add `holes` param to `H3.polyfill` function (thanks [@iulian0512](https://github.com/iulian0512))

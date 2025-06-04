@@ -1,3 +1,9 @@
+## 0.7.0
+* **[BREAKING]** Update `h3` to 4.2.1
+* **[BREAKING]** Update dependencies to the latest versions (min. Dart SDK 3.5.0)
+* Update tests to match the new `h3` version
+* Replace `h3` source files with git submodule
+
 ## 0.6.2
 * Flutter for Windows support
 * Rename `libh3lib.lib` file to `h3.so`

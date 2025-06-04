@@ -1,5 +1,8 @@
+## 0.7.0
+* Update `h3_common` (v0.7.0) and other dependencies.
+
 ## 0.6.1
-* Update `h3_common` (v6.0.1) and `test` (v1.22.2) dependencies.
+* Update `h3_common` (v0.6.1) and `test` (v1.22.2) dependencies.
 
 ## 0.6.0
 * Split `h3_dart` library into 5 libraries - `h3_dart`, `h3_ffi`, `h3_web`, `h3_common`, `geojson2h3`

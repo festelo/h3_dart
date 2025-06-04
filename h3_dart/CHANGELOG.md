@@ -1,3 +1,7 @@
+## 0.7.0
+* **[BREAKING]** Update `h3` to 4.2.1
+* **[BREAKING]** Update dependencies to the latest versions (min. Dart SDK 3.5.0)
+
 ## 0.6.2
 * Rename `libh3lib.lib` file to `h3.so`
 

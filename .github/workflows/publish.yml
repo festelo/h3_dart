@@ -12,7 +12,6 @@ concurrency:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -31,26 +30,34 @@ jobs:
             release_name: "H3 Dart"
           - package: h3_flutter
             release_name: "H3 Flutter"
+            os: macos-latest
+    runs-on: ${{ matrix.os || 'ubuntu-latest' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
-
-      - uses: dart-lang/setup-dart@v1.3
+        uses: actions/checkout@v4
         with:
-          sdk: stable
-          architecture: x64
+          submodules: true
 
-      - name: Get version
-        run: echo "VERSION=$(dart scripts/get_package_version.dart)" >> $GITHUB_ENV
-        env:
-          target:  ${{ matrix.package }}
+      - name: Remove symlinks
+        run: h3_flutter/bindings/scripts/toggle_h3lib.sh
+        if: matrix.package == 'h3_flutter'
+
+      - name: Prebuild iOS & macOS library
+        run: h3_flutter/bindings/scripts/build_darwin_static_lib.sh
+        if: matrix.package == 'h3_flutter'
+
+      - name: Pubspec Metadata
+        uses: altive/pubspec-metadata@v1
+        id: pubspec
+        with:
+          pubspec-file: ./${{ matrix.package }}/pubspec.yaml
 
       - id: get_existing_release
         uses: cardinalby/git-get-release-action@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          tag: ${{ matrix.package }}_${{ env.VERSION }}
+          tag: ${{ matrix.package }}_${{ steps.pubspec.outputs.version-number }}
         continue-on-error: true
 
       - name: Publish to pub
@@ -67,7 +74,7 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-          title: "${{ matrix.release_name }} v${{ env.VERSION }}"
-          automatic_release_tag: "${{ matrix.package }}_${{ env.VERSION }}"
+          title: "${{ matrix.release_name }} v${{ steps.pubspec.outputs.version-number }}"
+          automatic_release_tag: "${{ matrix.package }}_${{ steps.pubspec.outputs.version-number }}"
         if: steps.get_existing_release.outputs.id == null && (github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch')
   
