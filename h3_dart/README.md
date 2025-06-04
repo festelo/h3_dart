@@ -6,11 +6,10 @@
 
 ## H3 Dart
 
-***If you're developing Flutter application, use should use [h3_flutter](https://pub.dev/packages/h3_flutter/) instead.***  
+***If you are building a Flutter app use [h3_flutter](https://pub.dev/packages/h3_flutter/) instead.***
 
-The package allows to use Uber's [H3 library](https://github.com/uber/h3) directly in your Dart application
-
-The package uses [h3_ffi](https://pub.dev/packages/h3_ffi) and [h3_web](https://pub.dev/packages/h3_web) under the hood. 
+A platform neutral wrapper around Uber's [H3](https://github.com/uber/h3) library.
+Internally it delegates to [h3_ffi](https://pub.dev/packages/h3_ffi) on the VM and to [h3_web](https://pub.dev/packages/h3_web) on the web.
 
 ```dart
 final h3Factory = const H3Factory();
@@ -33,27 +32,27 @@ There are also few methods ported from JS library [Geojson2H3](https://github.co
 
 ## Setup
 
-***If you're developing Flutter application, use should use [h3_flutter](https://pub.dev/packages/h3_flutter/) instead.***  
+***If you are building a Flutter app use [h3_flutter](https://pub.dev/packages/h3_flutter/) instead.***  
 
 ### VM
 
-Get compiled h3 c library, depending on your platform it may have extension .so, .dll or any.
+1. Build the native library using `scripts/build_h3.sh` or compile the C source manually.
+   The `h3_ffi/c` directory has a git submodule pointing to the original H3 repository, pinned to the correct version.
 
-- You can do this via `scripts/build_h3.sh` script
-
-- You can compile it by yourself using C-code placed in `c` folder in this repository. It has small changes comparing to original Uber's code to make it more compatible with iOS and macOS versions of `h3_flutter`. This code is recompiled and used for testing everytime tests are launched, so it should work well.
-
-- You can compile original Uber's code, which also should work well, just make sure you use correct version - https://github.com/uber/h3
-
-Place your library somewhere and load it using `final h3 = const H3Factory().byPath('path/to/library.dll');`
+2. Load the compiled binary with `H3Factory().byPath()`:
+   ```dart
+   final h3 = const H3Factory().byPath('path/to/library.dll')
+   ```
 
 ### Web
 
-Web version is built on top of `h3-js`, you have to import it.  
-Add next line to your `index.html`:
-```html
-    <script defer src="https://unpkg.com/h3-js@4.2.1"></script>
-```  
-*Note, `main.dart.js` import should go after this line*  
+1. Include `h3-js` in your `index.html`:
+   ```html
+   <script defer src="https://unpkg.com/h3-js@4.2.1"></script>
+   ```  
+   *Note, `main.dart.js` import should go after this line*  
 
-You can load the web version using `final h3 = const H3Factory().web();`
+2. Load the web implementation: 
+   ```dart
+   final h3 = const H3Factory().web();
+   ```

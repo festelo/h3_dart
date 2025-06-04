@@ -6,9 +6,8 @@
 
 ## H3 Flutter
 
-The package allows to use Uber's [H3 library](https://github.com/uber/h3) directly in your Dart application
-
-The package uses [h3_ffi](https://pub.dev/packages/h3_ffi) and [h3_web](https://pub.dev/packages/h3_web) under the hood. 
+Cross‑platform Flutter plugin for Uber's [H3](https://github.com/uber/h3) library.
+Internally it delegates to [h3_ffi](https://pub.dev/packages/h3_ffi) on the VM and to [h3_web](https://pub.dev/packages/h3_web) on the web. 
 
 ```dart
 final h3Factory = const H3Factory();
@@ -24,12 +23,12 @@ final hexagons = h3.polyfill(
 );
 ```  
 
-There are also few methods ported from JS library [Geojson2H3](https://github.com/uber/geojson2h3), to access them you should instantiate Geojson2H3 class using `const Geojson2H3(h3)`. It uses [package:geojson2h3](https://pub.dev/packages/geojson2h3) internally.
+There are also a few methods ported from the JS library [Geojson2H3](https://github.com/uber/geojson2h3). To access them, instantiate the `Geojson2H3` class using `const Geojson2H3(h3)`. It uses [package:geojson2h3](https://pub.dev/packages/geojson2h3) internally.
 
 ## Setup
 ### Mobile, Desktop
 
-Add `h3_flutter` package to `pubspec.yaml`, import it and load, no further actions required.
+Add `h3_flutter` package to `pubspec.yaml`, import it, and load, no further actions required.
 ```dart
 import 'package:h3_flutter/h3_flutter.dart';
 
@@ -39,15 +38,15 @@ final geojson2h3 = Geojson2H3(h3);
 
 ### Web
 
-Web version is built on top of `h3-js` v4.2.1, you have to import it.  
+Web version is built on top of `h3-js` v4.2.1, you have to include it.  
 Add next line to your `index.html`:
 ```html
-    <script defer src="https://unpkg.com/h3-js@4.2.1"></script>
+<script defer src="https://unpkg.com/h3-js@4.2.1"></script>
 ```  
-*Note, `main.dart.js` import should go after this line*  
-  
+*Note: Make sure to place this <script> tag before the main.dart.js import in your index.html.*
+
 -------------
-## For contributors:
+## For contributors
 
 ### Running iOS and Mac builds locally (not from pub)
 
