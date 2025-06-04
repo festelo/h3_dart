@@ -281,6 +281,11 @@ jobs:
     - name: Enable windows
       run: flutter config --enable-windows-desktop
 
+    - name: Prebuild iOS & macOS library
+      run: bindings/scripts/build_darwin_static_lib.sh
+      working-directory: ./h3_flutter
+      if: matrix.os == 'macos-latest'
+
     - name: Pub get
       run: "flutter pub get"
       working-directory: ./h3_flutter
