@@ -1,0 +1,71 @@
+name: Create tag and release
+
+on:
+  push:
+    branches:
+      - master
+
+  workflow_dispatch:
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        package: [h3_common, geojson2h3, h3_ffi, h3_web, h3_dart, h3_flutter]
+        include:
+          - package: h3_common
+            release_name: "H3 Common"
+          - package: geojson2h3
+            release_name: "Geojson2H3"
+          - package: h3_ffi
+            release_name: "H3 Ffi"
+          - package: h3_web
+            release_name: "H3 Web"
+          - package: h3_dart
+            release_name: "H3 Dart"
+          - package: h3_flutter
+            release_name: "H3 Flutter"
+            os: macos-latest
+    runs-on: ${{ matrix.os || 'ubuntu-latest' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Remove symlinks
+        run: h3_flutter/bindings/scripts/toggle_h3lib.sh
+        if: matrix.package == 'h3_flutter'
+
+      - name: Prebuild iOS & macOS library
+        run: h3_flutter/bindings/scripts/build_darwin_static_lib.sh
+        if: matrix.package == 'h3_flutter'
+
+      - name: Pubspec Metadata
+        uses: altive/pubspec-metadata@v1
+        id: pubspec
+        with:
+          pubspec-file: ./${{ matrix.package }}/pubspec.yaml
+
+      - name: Create Github Release
+        uses: ncipollo/release-action@v1
+        id: release
+        with:
+          generateReleaseNotes: true
+          name: "${{ matrix.release_name }} v${{ steps.pubspec.outputs.version-number }}"
+          tag: "${{ matrix.package }}_${{ steps.pubspec.outputs.version-number }}"
+          skipIfReleaseExists: true
+
+      - name: Invoke pub workflow
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: pub.yml
+          ref: "${{ matrix.package }}_${{ steps.pubspec.outputs.version-number }}"
+          inputs: '{ "message": "blah blah", "something": true }'
+        if: steps.release.outputs.id != null
