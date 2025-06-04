@@ -332,6 +332,21 @@ jobs:
         chromedriver --port=4444 &
         sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
 
+        # Wait for Chromedriver to be ready
+        for i in {1..10}; do
+          if curl -s http://localhost:4444/status | grep -q '"ready": true'; then
+            echo "Chromedriver is ready."
+            break
+          fi
+          echo "Waiting for chromedriver..."
+          sleep 2
+        done
+
+        if ! curl -s http://localhost:4444/status | grep -q '"ready": true'; then
+          echo "Chromedriver did not start in time"
+          exit 1
+        fi
+
     - name: Pub get
       run: "flutter pub get"
       working-directory: ./h3_flutter
@@ -345,7 +360,7 @@ jobs:
       working-directory: ./h3_flutter
 
     - name: Run tests
-      run: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server
+      run: timeout 300s flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d chrome
       working-directory: ./h3_flutter/example
 
   h3_web_tests:
