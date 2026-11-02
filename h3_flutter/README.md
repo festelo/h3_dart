@@ -39,11 +39,18 @@ final geojson2h3 = Geojson2H3(h3);
 ### Web
 
 Web version is built on top of `h3-js` v4.2.1, you have to include it.  
-Add next line to your `index.html`:
+Add this line to your `web/index.html`, **before** the `flutter_bootstrap.js` script:
 ```html
-<script defer src="https://unpkg.com/h3-js@4.2.1"></script>
-```  
-*Note: Make sure to place this <script> tag before the main.dart.js import in your index.html.*
+<script src="https://unpkg.com/h3-js@4.2.1"></script>
+<script src="flutter_bootstrap.js" async></script>
+```
+
+Do not add `defer` or `async` to the h3-js script. Flutter loads `flutter_bootstrap.js`
+with `async`, which can run before a `defer` script, most often when the page is loaded
+from the browser cache. Your app then starts before h3-js is loaded.
+
+Both web compilers are supported: `flutter build web` (JavaScript) and
+`flutter build web --wasm` (WebAssembly).
 
 -------------
 ## For contributors

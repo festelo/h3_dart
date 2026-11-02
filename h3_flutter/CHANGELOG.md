@@ -1,3 +1,8 @@
+## 0.7.2
+* Support WebAssembly (`flutter build web --wasm`). Select the web implementation with `dart.library.js_interop`, which is available with both dart2js and dart2wasm (`dart.library.html` is not available with dart2wasm).
+* Use `h3_web` 0.7.1
+* Fix the web setup in the readme and the example: load h3-js without `defer`, because `flutter_bootstrap.js` is loaded with `async` and can run first.
+
 ## 0.7.1
 * Adjust Android cmake configuration to force 16KB page size (thanks [@erfran-git](https://github.com/erfan-git), [#37](https://github.com/festelo/h3_dart/pull/37))
 
