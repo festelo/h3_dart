@@ -1,9 +1,11 @@
-import 'package:h3_ffi/h3_ffi.dart';
-import 'package:h3_web/h3_web.dart';
+import 'package:h3_common/h3_common.dart';
 
-class H3Factory {
+import 'h3_factory.base.dart';
+
+class H3Factory implements BaseH3Factory {
   const H3Factory();
 
+  @override
   H3 load() {
     throw UnimplementedError();
   }
