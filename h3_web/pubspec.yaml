@@ -9,7 +9,6 @@ environment:
 
 dependencies:
   h3_common: ^0.7.0
-  js: ^0.7.2
 
 dev_dependencies:
   test: # uses workspace's version
