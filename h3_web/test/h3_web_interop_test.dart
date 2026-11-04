@@ -5,6 +5,8 @@
 import 'package:h3_web/h3_web.dart';
 import 'package:test/test.dart';
 
+import 'package:h3_web/src/js/h3_js.dart' show defaultH3JsUrl;
+
 import 'h3_js_injector.dart';
 
 Matcher throwsH3(H3ExceptionCode code) => throwsA(
@@ -16,7 +18,7 @@ void main() {
   final cell = BigInt.parse('0x85283473fffffff'); // resolution 5
 
   setUpAll(() async {
-    await inject('https://unpkg.com/h3-js@4.5.0');
+    await inject(defaultH3JsUrl);
   });
 
   test('isH3JsLoaded is true once h3-js is on the page', () {

@@ -12,4 +12,7 @@ class H3Factory implements BaseH3Factory {
   H3 load() {
     return _internal.byDynamicLibary(resolveDynamicLibrary());
   }
+
+  @override
+  Future<H3> loadAsync({String? h3JsUrl}) async => load();
 }

@@ -38,8 +38,19 @@ final geojson2h3 = Geojson2H3(h3);
 
 ### Web
 
-Web version is built on top of `h3-js` v4.5.0, you have to include it.  
-Add this line to your `web/index.html`, **before** the `flutter_bootstrap.js` script:
+Web version is built on top of `h3-js` v4.5.0. Load H3 with `loadAsync`; on Web it adds
+h3-js to the page if it is not there yet, so `web/index.html` needs no changes:
+```dart
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final h3 = await const H3Factory().loadAsync();
+  runApp(MyApp(h3: h3));
+}
+```
+
+`loadAsync` works on every platform. The synchronous `load()` also works on Web, but
+then you have to add h3-js to `web/index.html` yourself, **before** the
+`flutter_bootstrap.js` script:
 ```html
 <script src="https://unpkg.com/h3-js@4.5.0"></script>
 <script src="flutter_bootstrap.js" async></script>

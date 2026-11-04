@@ -29,14 +29,23 @@ final hexagons = h3.polyfill(
 
 ***In most cases you should not use this library directly, use [h3_dart](https://pub.dev/packages/h3_dart/) or [h3_flutter](https://pub.dev/packages/h3_flutter/) instead.***  
 
-This library is built on top of `h3-js`, you have to import it.  
-Add this line to your `index.html`, before the script that loads your app:
+This library is built on top of `h3-js` v4.5.0. Load it before the first H3 call:
+```dart
+await H3Web.ensureLoaded();
+const h3 = H3Web();
+```
+`ensureLoaded` adds the h3-js script to the page and waits for it. Nothing is needed in
+`index.html`, and the order of scripts does not matter. It does nothing if h3-js is
+already on the page. Pass `url` to load h3-js from another location, for example your own
+server.
+
+If you prefer a `<script>` tag, add it to `index.html` before the script that loads
+your app:
 ```html
     <script src="https://unpkg.com/h3-js@4.5.0"></script>
 ```
-If you add `defer` to it, the script that loads your app must use `defer` too, so that
-they run in order. Do not use `defer` with an `async` app script, such as Flutter's
-`flutter_bootstrap.js`.
+Do not use `defer` on it when the app script is `async`, such as Flutter's
+`flutter_bootstrap.js`: the app can start before h3-js.
 
 `H3Web.isH3JsLoaded` tells you whether h3-js is on the page. While it is `false`, every
 call throws a `StateError`.

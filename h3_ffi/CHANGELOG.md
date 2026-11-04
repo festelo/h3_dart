@@ -2,6 +2,7 @@
 * **[BREAKING]** Update `h3` to 4.5.0
 * Add `isValidIndex`, `getIndexDigit`, `constructCell`, `gridRing` and `reverseDirectedEdge`
 * Regenerate the bindings
+* Report an unknown H3 error code as an internal `H3Exception` instead of a `RangeError`
 
 ## 0.7.0
 * **[BREAKING]** Update `h3` to 4.2.1

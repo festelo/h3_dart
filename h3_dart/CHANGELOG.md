@@ -1,6 +1,7 @@
 ## 0.8.0
 * **[BREAKING]** Update `h3` to 4.5.0 and `h3-js` to 4.5.0
 * Add `isValidIndex`, `getIndexDigit`, `constructCell`, `gridRing` and `reverseDirectedEdge`
+* Add `H3Factory.webAsync`, which loads h3-js when it is not on the page yet
 * Support WebAssembly (dart2wasm). Select the web implementation with `dart.library.js_interop`, which is available with both dart2js and dart2wasm (`dart.library.html` is not available with dart2wasm).
 * Use `h3_web` 0.8.0
 

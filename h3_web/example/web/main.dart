@@ -2,7 +2,8 @@ import 'package:web/web.dart';
 
 import 'package:h3_web/h3_web.dart';
 
-void main() {
+Future<void> main() async {
+  await H3Web.ensureLoaded();
   const h3 = H3Web();
   final isValid = h3.isValidCell(BigInt.parse('0x85283473fffffff'));
   document.getElementById('output')?.textContent =

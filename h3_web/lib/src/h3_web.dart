@@ -2,6 +2,7 @@ import 'dart:js_interop';
 
 import 'package:h3_common/h3_common.dart';
 import 'package:h3_web/src/js/h3_js.dart';
+import 'package:h3_web/src/js/h3_js_loader.dart';
 import 'package:h3_web/src/mappers/coords.dart';
 import 'package:h3_web/src/mappers/h3_index.dart';
 import 'package:h3_web/src/mappers/units.dart';
@@ -19,6 +20,15 @@ class H3Web implements H3 {
   ///
   /// Every other method throws a [StateError] while this is `false`.
   static bool get isH3JsLoaded => isH3JsLoadedOnPage;
+
+  /// Loads h3-js by adding a script tag to the page, unless it is already
+  /// loaded. Await it before the first H3 call; then no `<script>` tag in
+  /// `index.html` is needed.
+  ///
+  /// [url] overrides the default location of h3-js (unpkg, the version this
+  /// package is built for). Throws a [StateError] when the script cannot be
+  /// loaded.
+  static Future<void> ensureLoaded({String? url}) => ensureH3JsLoaded(url: url);
 
   @override
   bool isValidCell(H3Index h3Index) {

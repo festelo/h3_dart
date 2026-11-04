@@ -9,9 +9,9 @@ environment:
 
 dependencies:
   h3_common: ^0.8.0
+  web: ^1.1.1
 
 dev_dependencies:
   test: # uses workspace's version
   lints: # uses workspace's version
-  web: # uses workspace's version
   h3_test: # uses workspace's version

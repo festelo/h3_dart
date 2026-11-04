@@ -8,6 +8,12 @@ library;
 
 import 'dart:js_interop';
 
+/// The version of h3-js that this package is built for.
+const h3JsVersion = '4.5.0';
+
+/// The default location of h3-js, used by the automatic loader.
+const defaultH3JsUrl = 'https://unpkg.com/h3-js@$h3JsVersion';
+
 /// The `h3` object that h3-js puts on `globalThis`.
 @JS('h3')
 external H3Js? get _h3Global;
@@ -23,9 +29,9 @@ H3Js get h3js {
   final h3 = _h3Global;
   if (h3 == null) {
     throw StateError(
-      'h3-js is not loaded. Add '
-      '<script src="https://unpkg.com/h3-js@4.5.0"></script> '
-      'to web/index.html, before the script that loads your app '
+      'h3-js is not loaded. Call await H3Web.ensureLoaded() before using H3, '
+      'or add <script src="$defaultH3JsUrl"></script> to web/index.html, '
+      'before the script that loads your app '
       '(flutter_bootstrap.js in a Flutter app), without defer or async.',
     );
   }

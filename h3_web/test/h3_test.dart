@@ -2,13 +2,15 @@ import 'package:test/test.dart';
 import 'package:h3_web/h3_web.dart';
 import 'package:h3_test/h3_test.dart';
 
+import 'package:h3_web/src/js/h3_js.dart' show defaultH3JsUrl;
+
 import 'h3_js_injector.dart';
 
 void main() async {
   final h3 = H3Web();
 
   setUpAll(() async {
-    await inject('https://unpkg.com/h3-js@4.5.0');
+    await inject(defaultH3JsUrl);
   });
 
   testH3(

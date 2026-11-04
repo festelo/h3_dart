@@ -21,4 +21,9 @@ abstract class BaseH3Factory {
 
   /// Loads H3 on Web
   H3 web();
+
+  /// Loads h3-js if it is not on the page yet, then loads H3 on Web.
+  ///
+  /// [h3JsUrl] overrides the default location of h3-js.
+  Future<H3> webAsync({String? h3JsUrl});
 }

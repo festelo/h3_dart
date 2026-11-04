@@ -19,4 +19,11 @@ class H3Factory implements BaseH3Factory {
   H3 web() {
     throw UnsupportedError('H3Factory.web() is not supported under Dart VM');
   }
+
+  @override
+  Future<H3> webAsync({String? h3JsUrl}) {
+    throw UnsupportedError(
+      'H3Factory.webAsync() is not supported under Dart VM',
+    );
+  }
 }

@@ -23,4 +23,10 @@ class H3Factory implements BaseH3Factory {
   H3 web() {
     return H3Web();
   }
+
+  @override
+  Future<H3> webAsync({String? h3JsUrl}) async {
+    await H3Web.ensureLoaded(url: h3JsUrl);
+    return const H3Web();
+  }
 }

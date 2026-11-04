@@ -46,15 +46,13 @@ There are also few methods ported from JS library [Geojson2H3](https://github.co
 
 ### Web
 
-1. Include `h3-js` in your `index.html`:
-   ```html
-   <script defer src="https://unpkg.com/h3-js@4.5.0"></script>
-   ```  
-   *Note, `main.dart.js` import should go after this line. If you load `main.dart.js` with `async`, remove `defer` from the h3-js line.*  
+Load the web implementation. It adds `h3-js` v4.5.0 to the page if it is not there yet:
+```dart
+final h3 = await const H3Factory().webAsync();
+```
 
-   Both dart2js and dart2wasm are supported.
+Both dart2js and dart2wasm are supported.
 
-2. Load the web implementation: 
-   ```dart
-   final h3 = const H3Factory().web();
-   ```
+If you add `h3-js` to `index.html` yourself, you can use the synchronous
+`const H3Factory().web()` instead. Add the script before the script that loads your app,
+and do not use `defer` on it when the app script is `async`.
