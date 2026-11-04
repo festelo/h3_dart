@@ -48,7 +48,7 @@ There are also few methods ported from JS library [Geojson2H3](https://github.co
 
 1. Include `h3-js` in your `index.html`:
    ```html
-   <script defer src="https://unpkg.com/h3-js@4.2.1"></script>
+   <script defer src="https://unpkg.com/h3-js@4.5.0"></script>
    ```  
    *Note, `main.dart.js` import should go after this line. If you load `main.dart.js` with `async`, remove `defer` from the h3-js line.*  
 

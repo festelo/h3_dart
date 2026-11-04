@@ -1,4 +1,6 @@
-## 0.7.1
+## 0.8.0
+* **[BREAKING]** Update `h3-js` to 4.5.0
+* Add `isValidIndex`, `getIndexDigit`, `constructCell`, `gridRing` and `reverseDirectedEdge`
 * Support WebAssembly (dart2wasm, `flutter build web --wasm`). The h3-js bindings now use `dart:js_interop` instead of `package:js`, which is removed from the dependencies.
 * Replace the generated `dart_js_facade_gen` bindings with typed bindings written by hand ([#32](https://github.com/festelo/h3_dart/issues/32)).
 * Throw a `StateError` that says how to fix the setup when h3-js is not loaded, and add `H3Web.isH3JsLoaded`.

@@ -26,6 +26,11 @@ class H3Web implements H3 {
   }
 
   @override
+  bool isValidIndex(H3Index h3Index) {
+    return h3js.isValidIndex(h3Index.toH3JS());
+  }
+
+  @override
   bool isPentagon(H3Index h3Index) {
     return h3js.isPentagon(h3Index.toH3JS());
   }
@@ -38,6 +43,36 @@ class H3Web implements H3 {
   @override
   int getBaseCellNumber(H3Index h3Index) {
     return h3js.getBaseCellNumber(h3Index.toH3JS());
+  }
+
+  @override
+  int getIndexDigit(H3Index h3Index, int digit) {
+    try {
+      return h3js.getIndexDigit(h3Index.toH3JS(), digit);
+    } catch (e) {
+      wrapAndThrowJsException(e);
+      rethrow;
+    }
+  }
+
+  @override
+  H3Index constructCell(
+    int baseCellNumber,
+    List<int> digits, {
+    int? resolution,
+  }) {
+    try {
+      return h3js
+          .constructCell(
+            baseCellNumber,
+            [for (final digit in digits) digit.toJS].toJS,
+            resolution ?? digits.length,
+          )
+          .toH3Index();
+    } catch (e) {
+      wrapAndThrowJsException(e);
+      rethrow;
+    }
   }
 
   @override
@@ -197,6 +232,16 @@ class H3Web implements H3 {
   }
 
   @override
+  List<H3Index> gridRing(H3Index h3Index, int ringSize) {
+    try {
+      return h3js.gridRing(h3Index.toH3JS(), ringSize).toH3Indexes();
+    } catch (e) {
+      wrapAndThrowJsException(e);
+      rethrow;
+    }
+  }
+
+  @override
   List<H3Index> gridRingUnsafe(H3Index h3Index, int ringSize) {
     try {
       return h3js.gridRingUnsafe(h3Index.toH3JS(), ringSize).toH3Indexes();
@@ -344,6 +389,16 @@ class H3Web implements H3 {
   @override
   bool isValidDirectedEdge(H3Index edgeIndex) {
     return h3js.isValidDirectedEdge(edgeIndex.toH3JS());
+  }
+
+  @override
+  H3Index reverseDirectedEdge(H3Index edgeIndex) {
+    try {
+      return h3js.reverseDirectedEdge(edgeIndex.toH3JS()).toH3Index();
+    } catch (e) {
+      wrapAndThrowJsException(e);
+      rethrow;
+    }
   }
 
   @override

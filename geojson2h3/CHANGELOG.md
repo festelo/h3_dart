@@ -1,3 +1,6 @@
+## 0.8.0
+* Update `h3_common` (v0.8.0).
+
 ## 0.7.0
 * Update `h3_common` (v0.7.0) and other dependencies.
 

@@ -38,10 +38,10 @@ final geojson2h3 = Geojson2H3(h3);
 
 ### Web
 
-Web version is built on top of `h3-js` v4.2.1, you have to include it.  
+Web version is built on top of `h3-js` v4.5.0, you have to include it.  
 Add this line to your `web/index.html`, **before** the `flutter_bootstrap.js` script:
 ```html
-<script src="https://unpkg.com/h3-js@4.2.1"></script>
+<script src="https://unpkg.com/h3-js@4.5.0"></script>
 <script src="flutter_bootstrap.js" async></script>
 ```
 

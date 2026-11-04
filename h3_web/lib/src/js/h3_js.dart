@@ -24,7 +24,7 @@ H3Js get h3js {
   if (h3 == null) {
     throw StateError(
       'h3-js is not loaded. Add '
-      '<script src="https://unpkg.com/h3-js@4.2.1"></script> '
+      '<script src="https://unpkg.com/h3-js@4.5.0"></script> '
       'to web/index.html, before the script that loads your app '
       '(flutter_bootstrap.js in a Flutter app), without defer or async.',
     );
@@ -44,9 +44,16 @@ typedef JSLoop = JSArray<JSCoordPair>;
 extension type H3Js._(JSObject _) implements JSObject {
   // Indexing and inspection
   external bool isValidCell(String h3Index);
+  external bool isValidIndex(String h3Index);
   external bool isPentagon(String h3Index);
   external bool isResClassIII(String h3Index);
   external int getBaseCellNumber(String h3Index);
+  external int getIndexDigit(String h3Index, int digit);
+  external String constructCell(
+    int baseCellNumber,
+    JSArray<JSNumber> digits,
+    int res,
+  );
   external JSArray<JSNumber> getIcosahedronFaces(String h3Index);
   external int getResolution(String h3Index);
   external String latLngToCell(double lat, double lng, int res);
@@ -73,6 +80,7 @@ extension type H3Js._(JSObject _) implements JSObject {
     int ringSize,
   );
   external JSArray<JSString> gridRingUnsafe(String h3Index, int ringSize);
+  external JSArray<JSString> gridRing(String h3Index, int ringSize);
   external int gridDistance(String origin, String destination);
   external JSArray<JSString> gridPathCells(String origin, String destination);
   external JSCoordIJ cellToLocalIj(String origin, String destination);
@@ -98,6 +106,7 @@ extension type H3Js._(JSObject _) implements JSObject {
   external String? getDirectedEdgeOrigin(String edgeIndex);
   external String? getDirectedEdgeDestination(String edgeIndex);
   external bool isValidDirectedEdge(String edgeIndex);
+  external String reverseDirectedEdge(String edgeIndex);
   external JSArray<JSString> directedEdgeToCells(String edgeIndex);
   external JSArray<JSString> originToDirectedEdges(String h3Index);
   external JSLoop directedEdgeToBoundary(String edgeIndex);

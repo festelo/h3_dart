@@ -5,6 +5,11 @@ abstract class H3 {
   /// Determines if [h3Index] is a valid cell (hexagon or pentagon)
   bool isValidCell(H3Index h3Index);
 
+  /// Whether a given index is a valid H3 index
+  /// (e.g. it may be a cell, directed edge, vertex.)
+  /// Use [isValidCell] to check for a valid hexagon (or pentagon) cell ID.
+  bool isValidIndex(H3Index h3Index);
+
   /// Determines if [h3Index] is a valid pentagon
   bool isPentagon(H3Index h3Index);
 
@@ -18,6 +23,23 @@ abstract class H3 {
   /// Note: Technically works on H3 edges, but will return base cell of the
   /// origin cell.
   int getBaseCellNumber(H3Index h3Index);
+
+  /// Get the number of the indexing digit for an H3 index
+  ///
+  /// [digit] is the resolution of the indexing digit to get, from 1 to the
+  /// resolution of [h3Index]. Returns a value in [0, 7] range.
+  int getIndexDigit(H3Index h3Index, int digit);
+
+  /// Creates a cell from its components (resolution, base cell number, and indexing digits).
+  /// This is the inverse operation of [getResolution], [getBaseCellNumber], and [getIndexDigit].
+  /// Only allows creating valid cells.
+  ///
+  /// [resolution] is optional, if not specified, it is inferred from the length of [digits].
+  H3Index constructCell(
+    int baseCellNumber,
+    List<int> digits, {
+    int? resolution,
+  });
 
   /// Find all icosahedron faces intersected by a given H3 index
   List<int> getIcosahedronFaces(H3Index h3Index);
@@ -78,6 +100,9 @@ abstract class H3 {
   List<List<H3Index>> gridDiskDistances(H3Index h3Index, int ringSize);
 
   /// Get all hexagons in a hollow hexagonal ring centered at origin with sides of a given length.
+  List<H3Index> gridRing(H3Index h3Index, int ringSize);
+
+  /// Get all hexagons in a hollow hexagonal ring centered at origin with sides of a given length.
   /// Unlike gridDisk, this function will throw an error if there is a pentagon anywhere in the ring.
   List<H3Index> gridRingUnsafe(H3Index h3Index, int ringSize);
 
@@ -131,6 +156,9 @@ abstract class H3 {
 
   /// Whether the input is a valid unidirectional edge
   bool isValidDirectedEdge(H3Index edgeIndex);
+
+  /// Returns the directed edge with origin and destination cells reversed
+  H3Index reverseDirectedEdge(H3Index edgeIndex);
 
   /// Get the origin, destination pair represented by a unidirectional edge
   ({H3Index origin, H3Index destination}) directedEdgeToCells(

@@ -32,7 +32,7 @@ final hexagons = h3.polyfill(
 This library is built on top of `h3-js`, you have to import it.  
 Add this line to your `index.html`, before the script that loads your app:
 ```html
-    <script src="https://unpkg.com/h3-js@4.2.1"></script>
+    <script src="https://unpkg.com/h3-js@4.5.0"></script>
 ```
 If you add `defer` to it, the script that loads your app must use `defer` too, so that
 they run in order. Do not use `defer` with an `async` app script, such as Flutter's

@@ -1,3 +1,9 @@
+## 0.8.0
+* **[BREAKING]** H3 abstract class was updated to match [version 4.5.0](https://github.com/uber/h3/releases/tag/v4.5.0): new methods must be implemented
+* Add `isValidIndex`, `getIndexDigit`, `constructCell`, `gridRing` and `reverseDirectedEdge`
+* Add `H3ExceptionCode.indexInvalid`, `baseCellDomain`, `digitDomain` and `deletedDigit`
+* Add tests for the new methods ported from [h3-js](https://github.com/uber/h3-js)
+
 ## 0.7.0
 * H3AreaUnits and H3EdgeLengthUnits were removed, use H3Units and H3MetricUnits instead.
 * H3Exception now has an H3ExceptionCode
