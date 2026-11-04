@@ -1,3 +1,11 @@
+## 0.7.1
+* Support WebAssembly (dart2wasm, `flutter build web --wasm`). The h3-js bindings now use `dart:js_interop` instead of `package:js`, which is removed from the dependencies.
+* Replace the generated `dart_js_facade_gen` bindings with typed bindings written by hand ([#32](https://github.com/festelo/h3_dart/issues/32)).
+* Throw a `StateError` that says how to fix the setup when h3-js is not loaded, and add `H3Web.isH3JsLoaded`.
+* Keep Dart exceptions (such as `AssertionError`) unchanged when they pass through the h3-js error mapping.
+* Fix the web setup in the readme: `defer` on the h3-js script can run after an `async` app script.
+* Run the tests with both dart2js and dart2wasm. Add tests for H3 error codes, 64-bit indexes and large results.
+
 ## 0.7.0
 * **[BREAKING]** Update `h3-js` to 4.2.1
 * **[BREAKING]** Update dependencies to the latest versions (min. Dart SDK 3.6.0)

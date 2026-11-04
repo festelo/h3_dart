@@ -50,7 +50,9 @@ There are also few methods ported from JS library [Geojson2H3](https://github.co
    ```html
    <script defer src="https://unpkg.com/h3-js@4.2.1"></script>
    ```  
-   *Note, `main.dart.js` import should go after this line*  
+   *Note, `main.dart.js` import should go after this line. If you load `main.dart.js` with `async`, remove `defer` from the h3-js line.*  
+
+   Both dart2js and dart2wasm are supported.
 
 2. Load the web implementation: 
    ```dart

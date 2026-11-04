@@ -127,8 +127,12 @@ jobs:
         run: dart pub global run coverage:test_with_coverage
         working-directory: ./h3_dart
 
-      - name: Run tests (Web)
+      - name: Run tests (Web, dart2js)
         run: dart test -p chrome
+        working-directory: ./h3_dart
+
+      - name: Run tests (Web, dart2wasm)
+        run: dart test -p chrome -c dart2wasm
         working-directory: ./h3_dart
 
       - name: Upload coverage to codecov
@@ -337,6 +341,36 @@ jobs:
         run: dart analyze
         working-directory: ./h3_web
 
-      - name: Run tests
+      - name: Run tests (dart2js)
         run: dart test -p chrome
         working-directory: ./h3_web
+
+      - name: Run tests (dart2wasm)
+        run: dart test -p chrome -c dart2wasm
+        working-directory: ./h3_web
+
+  h3_flutter_test_web:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sdk: [stable, beta]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup subosito/flutter-action@v2
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ matrix.sdk }}
+          cache: true
+
+      - name: Pub get
+        run: flutter pub get
+        working-directory: ./h3_flutter/example
+
+      - name: Build web (JavaScript)
+        run: flutter build web
+        working-directory: ./h3_flutter/example
+
+      - name: Build web (WebAssembly)
+        run: flutter build web --wasm
+        working-directory: ./h3_flutter/example
