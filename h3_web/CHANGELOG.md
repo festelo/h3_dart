@@ -1,13 +1,13 @@
 ## 0.8.0
 * **[BREAKING]** Update `h3-js` to 4.5.0
-* Add `isValidIndex`, `getIndexDigit`, `constructCell`, `gridRing` and `reverseDirectedEdge`
-* Add `H3Web.ensureLoaded`, which adds h3-js to the page when it is not there yet; a `<script>` tag in `index.html` is no longer required
-* Fix an unknown error code from h3-js being reported without a message
 * Support WebAssembly (dart2wasm, `flutter build web --wasm`). The h3-js bindings now use `dart:js_interop` instead of `package:js`, which is removed from the dependencies.
 * Replace the generated `dart_js_facade_gen` bindings with typed bindings written by hand ([#32](https://github.com/festelo/h3_dart/issues/32)).
+* Add `isValidIndex`, `getIndexDigit`, `constructCell`, `gridRing` and `reverseDirectedEdge`
+* Add `H3Web.ensureLoaded`, which adds h3-js to the page when it is not there yet; a `<script>` tag in `index.html` is no longer required
+* Add `package:h3_web/constants.dart` with `h3JsVersion` and `defaultH3JsUrl`
 * Throw a `StateError` that says how to fix the setup when h3-js is not loaded, and add `H3Web.isH3JsLoaded`.
 * Keep Dart exceptions (such as `AssertionError`) unchanged when they pass through the h3-js error mapping.
-* Fix the web setup in the readme: `defer` on the h3-js script can run after an `async` app script.
+* Report an unknown error code from h3-js as an internal `H3Exception` with a message
 * Run the tests with both dart2js and dart2wasm. Add tests for H3 error codes, 64-bit indexes and large results.
 
 ## 0.7.0
