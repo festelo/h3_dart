@@ -8,11 +8,7 @@ library;
 
 import 'dart:js_interop';
 
-/// The version of h3-js that this package is built for.
-const h3JsVersion = '4.5.0';
-
-/// The default location of h3-js, used by the automatic loader.
-const defaultH3JsUrl = 'https://unpkg.com/h3-js@$h3JsVersion';
+import 'package:h3_common/h3_common.dart' show defaultH3JsUrl;
 
 /// The `h3` object that h3-js puts on `globalThis`.
 @JS('h3')

@@ -10,6 +10,9 @@ abstract class BaseH3Factory {
   /// ```
   ///
   /// This feature is not available on Windows.
+  ///
+  /// On Web, uses h3-js that is already loaded on the page, so the `<script>`
+  /// tag of h3-js must run before your app. Use [byUrl] to load it automatically.
   H3 process();
 
   /// Loads H3 using specified [libraryPath]
@@ -17,13 +20,16 @@ abstract class BaseH3Factory {
   /// final h3 = h3Factory.byPath('../h3_ffi/c/h3lib/build/h3.so');
   /// h3.degsToRads(123);
   /// ```
+  ///
+  /// Not available on Web, use [byUrl] instead.
   H3 byPath(String libraryPath);
 
-  /// Loads H3 on Web
-  H3 web();
-
-  /// Loads h3-js if it is not on the page yet, then loads H3 on Web.
+  /// Loads h3-js from [libraryUrl] if it is not on the page yet, then loads H3
+  /// ```dart
+  /// final h3 = await h3Factory.byUrl();
+  /// h3.degsToRads(123);
+  /// ```
   ///
-  /// [h3JsUrl] overrides the default location of h3-js.
-  Future<H3> webAsync({String? h3JsUrl});
+  /// Only available on Web, use [byPath] or [process] on other platforms.
+  Future<H3> byUrl({String libraryUrl = defaultH3JsUrl});
 }

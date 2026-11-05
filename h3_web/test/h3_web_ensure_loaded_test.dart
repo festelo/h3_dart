@@ -2,7 +2,6 @@
 library;
 
 import 'package:h3_web/h3_web.dart';
-import 'package:h3_web/src/js/h3_js.dart' show defaultH3JsUrl;
 import 'package:test/test.dart';
 import 'package:web/web.dart' as web;
 

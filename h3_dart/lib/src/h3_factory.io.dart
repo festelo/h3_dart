@@ -16,14 +16,8 @@ class H3Factory implements BaseH3Factory {
   H3 byPath(String libraryPath) => _internal.byPath(libraryPath);
 
   @override
-  H3 web() {
-    throw UnsupportedError('H3Factory.web() is not supported under Dart VM');
-  }
-
-  @override
-  Future<H3> webAsync({String? h3JsUrl}) {
+  Future<H3> byUrl({String libraryUrl = defaultH3JsUrl}) {
     throw UnsupportedError(
-      'H3Factory.webAsync() is not supported under Dart VM',
-    );
+        'H3Factory.byUrl(...) is not supported under Dart VM');
   }
 }

@@ -16,12 +16,7 @@ class H3Factory implements BaseH3Factory {
   }
 
   @override
-  H3 web() {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<H3> webAsync({String? h3JsUrl}) {
+  Future<H3> byUrl({String libraryUrl = defaultH3JsUrl}) {
     throw UnimplementedError();
   }
 }

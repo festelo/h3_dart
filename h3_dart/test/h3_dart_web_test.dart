@@ -8,20 +8,15 @@ import 'package:h3_dart/h3_dart.dart';
 import 'h3_js_injector.dart';
 
 void main() async {
-  await inject('https://unpkg.com/h3-js@4.5.0');
+  await inject(defaultH3JsUrl);
 
   final h3Factory = const H3Factory();
 
   test('H3Factory tests', () async {
     expect(
-      h3Factory.web(),
+      h3Factory.process(),
       isA<H3Web>(),
-      reason: 'H3Factory.web returns H3Web instance on Web',
-    );
-    expect(
-      () => h3Factory.process(),
-      throwsA(isA<UnsupportedError>()),
-      reason: 'H3Factory.process throws error',
+      reason: 'H3Factory.process returns H3Web instance on Web',
     );
     expect(
       () => h3Factory.byPath('../h3_ffi/c/h3/build/test.common'),

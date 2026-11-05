@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:h3_common/h3_common.dart' show defaultH3JsUrl;
 import 'package:h3_web/src/js/h3_js.dart';
 import 'package:web/web.dart' as web;
 

@@ -5,8 +5,6 @@
 import 'package:h3_web/h3_web.dart';
 import 'package:test/test.dart';
 
-import 'package:h3_web/src/js/h3_js.dart' show defaultH3JsUrl;
-
 import 'h3_js_injector.dart';
 
 Matcher throwsH3(H3ExceptionCode code) => throwsA(
