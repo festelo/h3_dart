@@ -1,4 +1,5 @@
 import 'package:h3_common/h3_common.dart';
+import 'package:h3_web/constants.dart';
 
 import 'h3_factory.base.dart';
 
@@ -16,7 +17,7 @@ class H3Factory implements BaseH3Factory {
   }
 
   @override
-  H3 web() {
+  Future<H3> byUrl({String libraryUrl = defaultH3JsUrl}) {
     throw UnimplementedError();
   }
 }

@@ -14,8 +14,8 @@ Internally it delegates to [h3_ffi](https://pub.dev/packages/h3_ffi) on the VM a
 ```dart
 final h3Factory = const H3Factory();
 const kIsWeb = identical(0, 0.0); // taken from https://api.flutter.dev/flutter/foundation/kIsWeb-constant.html
-final h3 = kIsWeb 
-  ? h3Factory.web() 
+final h3 = kIsWeb
+  ? await h3Factory.byUrl()
   : h3Factory.byPath('path/to/library.dll');
 // Get hexagons in specified triangle.
 final hexagons = h3.polyfill(
@@ -46,13 +46,15 @@ There are also few methods ported from JS library [Geojson2H3](https://github.co
 
 ### Web
 
-1. Include `h3-js` in your `index.html`:
-   ```html
-   <script defer src="https://unpkg.com/h3-js@4.2.1"></script>
-   ```  
-   *Note, `main.dart.js` import should go after this line*  
+Load H3 by URL. It adds `h3-js` v4.5.0 to the page if it is not there yet:
+```dart
+final h3 = await const H3Factory().byUrl();
+```
 
-2. Load the web implementation: 
-   ```dart
-   final h3 = const H3Factory().web();
-   ```
+Pass `libraryUrl` to load h3-js from another location, for example your own server.
+
+Both dart2js and dart2wasm are supported.
+
+If you add `h3-js` to `index.html` yourself, you can use the synchronous
+`const H3Factory().process()` instead. Add the script before the script that loads your app,
+and do not use `defer` on it when the app script is `async`.

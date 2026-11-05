@@ -2,30 +2,40 @@ import 'dart:js_interop';
 
 import 'package:h3_common/h3_common.dart';
 
+/// An h3-js error: a JS `Error` with the H3 error code in `code`.
 @JS('Error')
 extension type _H3JSError._(JSObject _) implements JSObject {
   external JSAny? get message;
   external JSAny? get code;
 }
 
+/// Throws an [H3Exception] when [o] is an error thrown by h3-js.
+///
+/// Returns normally for anything else, so the caller can `rethrow` it.
 void wrapAndThrowJsException(Object o) {
-  if (!(o as JSObject).isA<_H3JSError>()) {
+  // A Dart exception (an AssertionError, an H3Exception) is not a JS value.
+  // Casting it to JSObject throws a TypeError under dart2wasm, so check first.
+  // ignore: invalid_runtime_check_with_js_interop_types
+  if (o is! JSObject || !o.isA<_H3JSError>()) {
     return;
   }
 
   final error = o as _H3JSError;
-  final isCodeNumeric = error.code?.isA<JSNumber>() ?? false;
-  if (!isCodeNumeric) {
+  final code = error.code;
+  if (code == null || !code.isA<JSNumber>()) {
     return;
   }
 
-  final numericCode = (error.code as JSNumber).toDartInt;
-
-  final code = numericCode >= 1000
-      ? H3ExceptionCode.internal
-      : H3ExceptionCode.values[numericCode];
-  final message = error.message?.toString();
-  final exception =
-      message == null ? H3Exception.fromCode(code) : H3Exception(code, message);
-  throw exception;
+  final numericCode = (code as JSNumber).toDartInt;
+  final exceptionCode =
+      numericCode >= 0 && numericCode < H3ExceptionCode.internal.index
+          ? H3ExceptionCode.values[numericCode]
+          : H3ExceptionCode.internal;
+  final message = error.message;
+  if (message != null && message.isA<JSString>()) {
+    throw H3Exception(exceptionCode, (message as JSString).toDart);
+  }
+  throw exceptionCode == H3ExceptionCode.internal
+      ? H3Exception(exceptionCode, 'Unknown H3 error code $numericCode')
+      : H3Exception.fromCode(exceptionCode);
 }

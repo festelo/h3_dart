@@ -12,9 +12,9 @@ void main() async {
 
   test('H3Factory tests', () async {
     expect(
-      () => h3Factory.web(),
+      () => h3Factory.byUrl(),
       throwsA(isA<UnsupportedError>()),
-      reason: 'H3Factory.web throws error',
+      reason: 'H3Factory.byUrl throws error',
     );
 
     if (!Platform.isWindows) {

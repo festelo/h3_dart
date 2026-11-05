@@ -33,6 +33,7 @@ jobs:
             release_name: "H3 Flutter"
             os: macos-latest
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
+    environment: release
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,6 +45,37 @@ jobs:
         id: pubspec
         with:
           pubspec-file: ./${{ matrix.package }}/pubspec.yaml
+
+      - name: Create tag
+        env:
+          TAG: ${{ matrix.package }}_${{ steps.pubspec.outputs.version-number }}
+          RELEASE_DEPLOY_KEY: ${{ secrets.RELEASE_DEPLOY_KEY }}
+        run: |
+          set +e
+          git ls-remote --exit-code --tags origin "refs/tags/${TAG}" > /dev/null
+          status=$?
+          set -e
+          case "$status" in
+            0)
+              echo "Tag ${TAG} already exists, nothing to do"
+              exit 0
+              ;;
+            2)
+              ;;
+            *)
+              echo "::error::Failed to query tags (git exit code $status)"
+              exit "$status"
+              ;;
+          esac
+
+          key_file="$(mktemp "${RUNNER_TEMP}/release_deploy_key.XXXXXX")"
+          trap 'rm -f "$key_file"' EXIT
+          chmod 600 "$key_file"
+          printf '%s\n' "$RELEASE_DEPLOY_KEY" > "$key_file"
+
+          git tag "${TAG}" "${GITHUB_SHA}"
+          GIT_SSH_COMMAND="ssh -i $key_file -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new" \
+            git push "git@github.com:${GITHUB_REPOSITORY}.git" "refs/tags/${TAG}"
 
       - name: Create Github Release
         uses: ncipollo/release-action@v1

@@ -23,6 +23,11 @@ class H3Ffi implements H3 {
   }
 
   @override
+  bool isValidIndex(H3Index h3Index) {
+    return _h3c.isValidIndex(h3Index.toNative()) == 1;
+  }
+
+  @override
   bool isPentagon(H3Index h3Index) {
     return _h3c.isPentagon(h3Index.toNative()) == 1;
   }
@@ -35,6 +40,36 @@ class H3Ffi implements H3 {
   @override
   int getBaseCellNumber(H3Index h3Index) {
     return _h3c.getBaseCellNumber(h3Index.toNative());
+  }
+
+  @override
+  int getIndexDigit(H3Index h3Index, int digit) {
+    return using((arena) {
+      final out = arena<Int>();
+      throwIfError(_h3c.getIndexDigit(h3Index.toNative(), digit, out));
+      return out.value;
+    });
+  }
+
+  @override
+  H3Index constructCell(
+    int baseCellNumber,
+    List<int> digits, {
+    int? resolution,
+  }) {
+    final res = resolution ?? digits.length;
+    if (digits.length != res || digits.length > 15) {
+      throw H3Exception.fromCode(H3ExceptionCode.digitDomain);
+    }
+    return using((arena) {
+      final digitsPtr = arena<Int>(digits.isEmpty ? 1 : digits.length);
+      for (var i = 0; i < digits.length; i++) {
+        digitsPtr[i] = digits[i];
+      }
+      final out = arena<Uint64>();
+      throwIfError(_h3c.constructCell(res, baseCellNumber, digitsPtr, out));
+      return out.toH3Index();
+    });
   }
 
   @override
@@ -244,6 +279,16 @@ class H3Ffi implements H3 {
         }
       }
       return out;
+    });
+  }
+
+  @override
+  List<H3Index> gridRing(H3Index h3Index, int ringSize) {
+    final maxCount = ringSize == 0 ? 1 : 6 * ringSize;
+    return using((arena) {
+      final out = arena<Uint64>(maxCount);
+      throwIfError(_h3c.gridRing(h3Index.toNative(), ringSize, out));
+      return out.asTypedList(maxCount).toH3IndexList();
     });
   }
 
@@ -487,6 +532,15 @@ class H3Ffi implements H3 {
   @override
   bool isValidDirectedEdge(H3Index edgeIndex) {
     return _h3c.isValidDirectedEdge(edgeIndex.toNative()) == 1;
+  }
+
+  @override
+  H3Index reverseDirectedEdge(H3Index edgeIndex) {
+    return using((arena) {
+      final out = arena<Uint64>();
+      throwIfError(_h3c.reverseDirectedEdge(edgeIndex.toNative(), out));
+      return out.toH3Index();
+    });
   }
 
   @override

@@ -11,7 +11,7 @@ Internally it delegates to [h3_ffi](https://pub.dev/packages/h3_ffi) on the VM a
 
 ```dart
 final h3Factory = const H3Factory();
-final h3 = h3Factory.load();
+final h3 = await h3Factory.load();
 // Get hexagons in specified triangle.
 final hexagons = h3.polyfill(
   resolution: 5,
@@ -38,12 +38,33 @@ final geojson2h3 = Geojson2H3(h3);
 
 ### Web
 
-Web version is built on top of `h3-js` v4.2.1, you have to include it.  
-Add next line to your `index.html`:
+Web version is built on top of `h3-js` v4.5.0. `load()` adds h3-js to the page if it is
+not there yet, so `web/index.html` needs no changes. Await it before the first H3 call:
+```dart
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final h3 = await const H3Factory().load();
+  runApp(MyApp(h3: h3));
+}
+```
+
+`load()` returns a `FutureOr<H3>`: on mobile and desktop, and on Web when h3-js is already
+on the page, the value is available immediately. Pass `libraryUrl` to load h3-js from
+another location, for example your own server.
+
+If you prefer a `<script>` tag, add h3-js to `web/index.html` **before** the
+`flutter_bootstrap.js` script:
 ```html
-<script defer src="https://unpkg.com/h3-js@4.2.1"></script>
-```  
-*Note: Make sure to place this <script> tag before the main.dart.js import in your index.html.*
+<script src="https://unpkg.com/h3-js@4.5.0"></script>
+<script src="flutter_bootstrap.js" async></script>
+```
+
+Do not add `defer` or `async` to the h3-js script. Flutter loads `flutter_bootstrap.js`
+with `async`, which can run before a `defer` script, most often when the page is loaded
+from the browser cache. Your app then starts before h3-js is loaded.
+
+Both web compilers are supported: `flutter build web` (JavaScript) and
+`flutter build web --wasm` (WebAssembly).
 
 -------------
 ## For contributors

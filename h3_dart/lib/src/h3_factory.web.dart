@@ -6,11 +6,7 @@ class H3Factory implements BaseH3Factory {
   const H3Factory();
 
   @override
-  H3 process() {
-    throw UnsupportedError(
-      'H3Factory.process() is not supported when compiled to Web',
-    );
-  }
+  H3 process() => const H3Web();
 
   @override
   H3 byPath(String libraryPath) {
@@ -20,7 +16,8 @@ class H3Factory implements BaseH3Factory {
   }
 
   @override
-  H3 web() {
-    return H3Web();
+  Future<H3> byUrl({String libraryUrl = defaultH3JsUrl}) async {
+    await H3Web.ensureLoaded(url: libraryUrl);
+    return const H3Web();
   }
 }

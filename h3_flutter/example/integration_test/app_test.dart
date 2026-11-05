@@ -10,7 +10,7 @@ void main() {
   group('test that app loads h3 lib correctly', () {
     testWidgets('verify that h3.degsToRads(180) returns correct result',
         (tester) async {
-      app.main();
+      await app.main();
       await tester.pumpAndSettle();
 
       final degsToRadsText = tester
