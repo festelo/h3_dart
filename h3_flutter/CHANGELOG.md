@@ -1,7 +1,7 @@
 ## 0.8.0
 * **[BREAKING]** Update `h3` to 4.5.0 and `h3-js` to 4.5.0
 * Add `isValidIndex`, `getIndexDigit`, `constructCell`, `gridRing` and `reverseDirectedEdge`
-* Add `H3Factory.loadAsync`, which loads h3-js on Web when it is not on the page yet; `web/index.html` no longer needs a h3-js script tag
+* **[BREAKING]** `H3Factory.load()` returns `FutureOr<H3>`: on Web it loads h3-js when it is not on the page yet, so `web/index.html` no longer needs a h3-js script tag. Use `await`.
 * Support WebAssembly (`flutter build web --wasm`). Select the web implementation with `dart.library.js_interop`, which is available with both dart2js and dart2wasm (`dart.library.html` is not available with dart2wasm).
 * Use `h3_web` 0.8.0
 * Fix the web setup in the readme and the example: load h3-js without `defer`, because `flutter_bootstrap.js` is loaded with `async` and can run first.

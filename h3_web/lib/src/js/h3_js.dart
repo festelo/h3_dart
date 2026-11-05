@@ -8,7 +8,7 @@ library;
 
 import 'dart:js_interop';
 
-import 'package:h3_common/h3_common.dart' show defaultH3JsUrl;
+import 'package:h3_web/constants.dart';
 
 /// The `h3` object that h3-js puts on `globalThis`.
 @JS('h3')

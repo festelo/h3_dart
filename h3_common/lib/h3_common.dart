@@ -1,5 +1,4 @@
 export 'src/h3.dart';
-export 'src/h3_js.dart';
 
 export 'src/models/coord_ij.dart';
 export 'src/models/h3_index.dart';

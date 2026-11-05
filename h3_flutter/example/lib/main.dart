@@ -3,7 +3,7 @@ import 'package:h3_flutter/h3_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final h3 = await const H3Factory().loadAsync();
+  final h3 = await const H3Factory().load();
   runApp(MyApp(h3: h3));
 }
 

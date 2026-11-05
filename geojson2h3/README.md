@@ -15,7 +15,7 @@ It's a Dart port of the JavaScript library [geojson2h3](https://github.com/uber/
 import 'package:h3_flutter/h3_flutter.dart';
 
 final h3Factory = const H3Factory();
-final h3 = h3Factory.load();
+final h3 = await h3Factory.load();
 final geojson2h3 = Geojson2H3(h3);
 
 final hexagon = H3Index.from(0x89283082837ffff);

@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:h3_ffi/h3_ffi.dart';
+import 'package:h3_web/constants.dart';
 
 import 'h3_factory.base.dart';
 

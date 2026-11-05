@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:h3_ffi/h3_ffi.dart';
+import 'package:h3_web/constants.dart';
 
 import 'dynamic_library_resolver.dart';
 import 'h3_factory.base.dart';
@@ -9,10 +12,7 @@ class H3Factory implements BaseH3Factory {
   final _internal = const H3FfiFactory();
 
   @override
-  H3 load() {
+  FutureOr<H3> load({String libraryUrl = defaultH3JsUrl}) {
     return _internal.byDynamicLibary(resolveDynamicLibrary());
   }
-
-  @override
-  Future<H3> loadAsync({String? h3JsUrl}) async => load();
 }
