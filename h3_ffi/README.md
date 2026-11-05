@@ -8,7 +8,7 @@
 
 ***In most cases, you should not use this library directly, use [h3_dart](https://pub.dev/packages/h3_dart/) or [h3_flutter](https://pub.dev/packages/h3_flutter/) instead.***  
 
-H3 C library version: **4.2.1**
+H3 C library version: **4.5.0**
 
 This package allows you to use the [H3 library](https://github.com/uber/h3) directly in your Dart VM application. It wraps the native C implementation under the hood using [FFI](https://pub.dev/packages/ffi), with bindings automatically generated via [ffigen](https://pub.dev/packages/ffige).
 

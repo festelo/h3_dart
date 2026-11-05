@@ -2355,4 +2355,381 @@ void testH3(
       );
     });
   });
+
+  test('isValidIndex', () async {
+    expect(
+      h3.isValidIndex(BigInt.parse('0x85283473fffffff')),
+      true,
+      reason: 'H3 index is considered an index',
+    );
+    expect(
+      h3.isValidIndex(BigInt.parse('0x821C37FFFFFFFFF')),
+      true,
+      reason: 'H3 index in upper case is considered an index',
+    );
+    expect(
+      h3.isValidIndex(BigInt.parse('0x085283473fffffff')),
+      true,
+      reason: 'H3 index with leading zero is considered an index',
+    );
+    expect(
+      h3.isValidIndex(BigInt.parse('0xff283473fffffff')),
+      false,
+      reason: 'Hexidecimal string with incorrect bits is not valid',
+    );
+    for (var res = 0; res < 16; res++) {
+      expect(
+        h3.isValidIndex(h3.geoToCell(const GeoCoord(lat: 37, lon: -122), res)),
+        true,
+        reason: 'H3 index is considered an index',
+      );
+    }
+  });
+
+  test('isValidIndex directedEdge', () async {
+    final origin = BigInt.parse('0x891ea6d6533ffff');
+    final destination = BigInt.parse('0x891ea6d65afffff');
+
+    expect(
+      h3.isValidIndex(BigInt.parse('0x1591ea6d6533ffff')),
+      true,
+      reason: 'Edge index is valid',
+    );
+    expect(
+      h3.isValidIndex(h3.cellsToDirectedEdge(origin, destination)),
+      true,
+      reason: 'Output of cellsToDirectedEdge is valid',
+    );
+    expect(
+      h3.isValidIndex(BigInt.from(42)),
+      false,
+      reason: '42 is not valid',
+    );
+  });
+
+  test('isValidIndex vertex', () async {
+    expect(
+      h3.isValidIndex(BigInt.parse('0x2222597fffffffff')),
+      true,
+      reason: 'vertex index is an index',
+    );
+  });
+
+  group('getIndexDigit', () {
+    final cell = BigInt.parse('0x8928308280fffff');
+
+    test('Basic', () async {
+      const expected = [0, 6, 0, 4, 0, 5, 0, 0, 3, 7];
+      for (var digit = 1; digit <= expected.length; digit++) {
+        expect(
+          h3.getIndexDigit(cell, digit),
+          expected[digit - 1],
+          reason: 'digit $digit',
+        );
+      }
+    });
+
+    test('Invalid', () async {
+      for (final digit in [0, 16]) {
+        expect(
+          () => h3.getIndexDigit(cell, digit),
+          throwsA(
+            isA<H3Exception>().having(
+              (e) => e.code,
+              'code',
+              H3ExceptionCode.resolutionDomain,
+            ),
+          ),
+          reason: 'bad digit $digit',
+        );
+      }
+    });
+  });
+
+  group('constructCell', () {
+    Matcher throwsH3(H3ExceptionCode code) => throwsA(
+          isA<H3Exception>().having((e) => e.code, 'code', code),
+        );
+
+    test('Basic', () async {
+      expect(
+        h3.constructCell(0, []),
+        BigInt.parse('0x8001fffffffffff'),
+        reason: 'construct cell res 0',
+      );
+      expect(
+        h3.constructCell(4, [0]),
+        BigInt.parse('0x81083ffffffffff'),
+        reason: 'construct cell pentagon',
+      );
+      expect(
+        h3.constructCell(28, [1, 2]),
+        BigInt.parse('0x823857fffffffff'),
+        reason: 'construct cell hexagon',
+      );
+    });
+
+    test('With explicit resolution', () async {
+      expect(
+        h3.constructCell(0, [], resolution: 0),
+        BigInt.parse('0x8001fffffffffff'),
+        reason: 'construct cell res 0',
+      );
+      expect(
+        h3.constructCell(4, [0], resolution: 1),
+        BigInt.parse('0x81083ffffffffff'),
+        reason: 'construct cell pentagon',
+      );
+      expect(
+        h3.constructCell(28, [1, 2], resolution: 2),
+        BigInt.parse('0x823857fffffffff'),
+        reason: 'construct cell hexagon',
+      );
+    });
+
+    test('Invalid', () async {
+      expect(
+        () => h3.constructCell(
+          0,
+          List.generate(19, (i) => i),
+          resolution: 0,
+        ),
+        throwsH3(H3ExceptionCode.digitDomain),
+        reason: 'bad digit array',
+      );
+      expect(
+        () => h3.constructCell(0, [], resolution: 2),
+        throwsH3(H3ExceptionCode.digitDomain),
+        reason: 'bad digit length',
+      );
+      expect(
+        () => h3.constructCell(0, List.filled(16, 0), resolution: 16),
+        throwsH3(H3ExceptionCode.digitDomain),
+        reason: 'too many digits',
+      );
+      expect(
+        () => h3.constructCell(4, [1]),
+        throwsH3(H3ExceptionCode.deletedDigit),
+        reason: 'deleted digit',
+      );
+      expect(
+        () => h3.constructCell(4, [1], resolution: 1),
+        throwsH3(H3ExceptionCode.deletedDigit),
+        reason: 'deleted digit with explicit resolution',
+      );
+    });
+  });
+
+  group('gridRing', () {
+    final origin = BigInt.parse('0x8928308280fffff');
+    final pentagon = BigInt.parse('0x821c07fffffffff');
+
+    test('ringSize - 1', () async {
+      expect(
+        const DeepCollectionEquality.unordered().equals(
+          h3.gridRing(origin, 1),
+          [
+            BigInt.parse('0x8928308280bffff'),
+            BigInt.parse('0x89283082807ffff'),
+            BigInt.parse('0x89283082877ffff'),
+            BigInt.parse('0x89283082803ffff'),
+            BigInt.parse('0x89283082873ffff'),
+            BigInt.parse('0x8928308283bffff'),
+          ],
+        ),
+        true,
+      );
+    });
+
+    test('ringSize - 2', () async {
+      expect(
+        const DeepCollectionEquality.unordered().equals(
+          h3.gridRing(origin, 2),
+          [
+            BigInt.parse('0x89283082813ffff'),
+            BigInt.parse('0x89283082817ffff'),
+            BigInt.parse('0x8928308281bffff'),
+            BigInt.parse('0x89283082863ffff'),
+            BigInt.parse('0x89283082823ffff'),
+            BigInt.parse('0x8928308287bffff'),
+            BigInt.parse('0x89283082833ffff'),
+            BigInt.parse('0x8928308282bffff'),
+            BigInt.parse('0x89283082857ffff'),
+            BigInt.parse('0x892830828abffff'),
+            BigInt.parse('0x89283082847ffff'),
+            BigInt.parse('0x89283082867ffff'),
+          ],
+        ),
+        true,
+      );
+    });
+
+    test('ringSize - 0', () async {
+      expect(h3.gridRing(origin, 0), [origin], reason: 'Got origin in ring 0');
+    });
+
+    test('Pentagon', () async {
+      expect(
+        const DeepCollectionEquality.unordered().equals(
+          h3.gridRing(pentagon, 2),
+          [
+            BigInt.parse('0x821d5ffffffffff'),
+            BigInt.parse('0x821d1ffffffffff'),
+            BigInt.parse('0x821daffffffffff'),
+            BigInt.parse('0x821ca7fffffffff'),
+            BigInt.parse('0x821d8ffffffffff'),
+            BigInt.parse('0x821cf7fffffffff'),
+            BigInt.parse('0x821d57fffffffff'),
+            BigInt.parse('0x821ce7fffffffff'),
+            BigInt.parse('0x821caffffffffff'),
+            BigInt.parse('0x821d0ffffffffff'),
+          ],
+        ),
+        true,
+      );
+      expect(
+        const DeepCollectionEquality.unordered().equals(
+          h3.gridRing(pentagon, 1),
+          [
+            BigInt.parse('0x821c37fffffffff'),
+            BigInt.parse('0x821c17fffffffff'),
+            BigInt.parse('0x821c1ffffffffff'),
+            BigInt.parse('0x821c27fffffffff'),
+            BigInt.parse('0x821c2ffffffffff'),
+          ],
+        ),
+        true,
+      );
+      expect(h3.gridRing(pentagon, 5), hasLength(25));
+    });
+  });
+
+  group('reverseDirectedEdge', () {
+    test('Basic', () async {
+      final origin = BigInt.parse('0x85283473fffffff');
+      for (final edge in h3.originToDirectedEdges(origin)) {
+        final reversed = h3.reverseDirectedEdge(edge);
+        expect(
+          h3.getDirectedEdgeDestination(reversed),
+          origin,
+          reason: 'Destination is as expected',
+        );
+        expect(
+          h3.reverseDirectedEdge(reversed),
+          edge,
+          reason: 'Reversing twice gives the original edge',
+        );
+      }
+    });
+
+    test('Invalid', () async {
+      expect(
+        () => h3.reverseDirectedEdge(BigInt.zero),
+        throwsA(
+          isA<H3Exception>().having(
+            (e) => e.code,
+            'code',
+            H3ExceptionCode.dirEdgeInvalid,
+          ),
+        ),
+        reason: 'Zero is not a directed edge',
+      );
+      expect(
+        () => h3.reverseDirectedEdge(BigInt.parse('0x85283473fffffff')),
+        throwsA(
+          isA<H3Exception>().having(
+            (e) => e.code,
+            'code',
+            H3ExceptionCode.dirEdgeInvalid,
+          ),
+        ),
+        reason: 'A cell is not a directed edge',
+      );
+    });
+  });
+
+  group('geoToCell - invalid lat/lng', () {
+    Matcher throwsLatLng() => throwsA(
+          isA<H3Exception>().having(
+            (e) => e.code,
+            'code',
+            H3ExceptionCode.latlngDomain,
+          ),
+        );
+
+    test('non-finite lat throws', () async {
+      expect(
+        () => h3.geoToCell(const GeoCoord(lat: double.infinity, lon: 0), 5),
+        throwsLatLng(),
+      );
+      expect(
+        () => h3.geoToCell(const GeoCoord(lat: double.nan, lon: 0), 5),
+        throwsLatLng(),
+      );
+    });
+
+    test('non-finite lng throws', () async {
+      expect(
+        () => h3.geoToCell(const GeoCoord(lat: 0, lon: double.infinity), 5),
+        throwsLatLng(),
+      );
+      expect(
+        () => h3.geoToCell(const GeoCoord(lat: 0, lon: double.nan), 5),
+        throwsLatLng(),
+      );
+    });
+  });
+
+  test('compactCells - Res 0 edge case, issue #159', () async {
+    final cells = h3.gridDisk(BigInt.parse('0x820807fffffffff'), 4);
+
+    expect(
+      h3.compactCells(cells).length,
+      11,
+      reason: 'got an appropriate number of hexagons back',
+    );
+  });
+
+  test(
+    'cellToChildren - Out of bounds',
+    () async {
+      expect(
+        () => h3.cellToChildren(BigInt.parse('0x8029fffffffffff'), 15),
+        throwsA(isA<H3Exception>()),
+        reason: 'throws if the output is too large',
+      );
+    },
+    skip: !testOutOfBounds,
+  );
+
+  test(
+    'gridDisk and gridDiskDistances - oversize call does not corrupt subsequent calls',
+    () async {
+      final cell = h3.geoToCell(const GeoCoord(lat: 45, lon: 45), 15);
+
+      expect(h3.gridDisk(cell, 2).length, 19);
+      expect(
+        h3.gridDiskDistances(cell, 2).map((ring) => ring.length).toList(),
+        [1, 6, 12],
+      );
+
+      expect(() => h3.gridDisk(cell, 10000), throwsA(isA<H3Exception>()));
+      expect(
+        () => h3.gridDiskDistances(cell, 10000),
+        throwsA(isA<H3Exception>()),
+      );
+
+      expect(
+        h3.gridDisk(cell, 2).length,
+        19,
+        reason: 'subsequent calls still work',
+      );
+      expect(
+        h3.gridDiskDistances(cell, 2).map((ring) => ring.length).toList(),
+        [1, 6, 12],
+        reason: 'subsequent calls still work',
+      );
+    },
+    skip: !testOutOfBounds,
+  );
 }

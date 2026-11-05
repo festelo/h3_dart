@@ -1,4 +1,5 @@
 export 'package:h3_common/h3_common.dart';
+export 'package:h3_web/constants.dart';
 export 'package:geojson2h3/geojson2h3.dart';
 export 'src/h3_factory.dart'
     if (dart.library.io) 'src/h3_factory.io.dart'

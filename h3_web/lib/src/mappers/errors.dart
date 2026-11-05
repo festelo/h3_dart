@@ -28,11 +28,14 @@ void wrapAndThrowJsException(Object o) {
 
   final numericCode = (code as JSNumber).toDartInt;
   final exceptionCode =
-      numericCode >= 0 && numericCode < H3ExceptionCode.values.length
+      numericCode >= 0 && numericCode < H3ExceptionCode.internal.index
           ? H3ExceptionCode.values[numericCode]
           : H3ExceptionCode.internal;
   final message = error.message;
-  throw message != null && message.isA<JSString>()
-      ? H3Exception(exceptionCode, (message as JSString).toDart)
+  if (message != null && message.isA<JSString>()) {
+    throw H3Exception(exceptionCode, (message as JSString).toDart);
+  }
+  throw exceptionCode == H3ExceptionCode.internal
+      ? H3Exception(exceptionCode, 'Unknown H3 error code $numericCode')
       : H3Exception.fromCode(exceptionCode);
 }

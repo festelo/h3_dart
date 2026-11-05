@@ -16,7 +16,7 @@ void main() {
   final cell = BigInt.parse('0x85283473fffffff'); // resolution 5
 
   setUpAll(() async {
-    await inject('https://unpkg.com/h3-js@4.2.1');
+    await inject(defaultH3JsUrl);
   });
 
   test('isH3JsLoaded is true once h3-js is on the page', () {

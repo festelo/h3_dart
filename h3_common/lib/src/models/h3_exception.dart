@@ -18,6 +18,10 @@ enum H3ExceptionCode {
   memoryAlloc,
   memoryBounds,
   optionInvalid,
+  indexInvalid,
+  baseCellDomain,
+  digitDomain,
+  deletedDigit,
   internal,
 }
 
@@ -51,6 +55,12 @@ class H3Exception implements Exception {
             'Bounds of provided memory were insufficient',
           H3ExceptionCode.optionInvalid =>
             'Mode or flags argument was not valid',
+          H3ExceptionCode.indexInvalid => 'Index argument was not valid',
+          H3ExceptionCode.baseCellDomain =>
+            'Base cell number was outside of acceptable range',
+          H3ExceptionCode.digitDomain => 'Child indexing digits invalid',
+          H3ExceptionCode.deletedDigit =>
+            'Child indexing digits refer to a deleted subsequence',
           H3ExceptionCode.internal => throw ArgumentError(
               'Do not use H3Exception.fromCode(code) with H3ExceptionCode.internal as code',
             )

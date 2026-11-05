@@ -8,7 +8,7 @@ void main() async {
   final h3 = H3Web();
 
   setUpAll(() async {
-    await inject('https://unpkg.com/h3-js@4.2.1');
+    await inject(defaultH3JsUrl);
   });
 
   testH3(

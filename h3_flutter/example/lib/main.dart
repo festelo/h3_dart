@@ -1,30 +1,32 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:h3_flutter/h3_flutter.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final h3 = await const H3Factory().load();
+  runApp(MyApp(h3: h3));
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key, required this.h3});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final h3 = const H3Factory().load();
+  final H3 h3;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      restorationScopeId: "h3_flutter_example",
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
+    return WidgetsApp(
+      restorationScopeId: 'h3_flutter_example',
+      color: const Color(0xFF2196F3),
+      builder: (context, child) => DefaultTextStyle(
+        style: const TextStyle(
+          color: Color(0xFF000000),
+          fontSize: 16,
+          decoration: TextDecoration.none,
         ),
-        body: Column(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const Text('Plugin example app'),
             Text('180 degrees in radians is ${h3.degsToRads(180)}'),
             Text(
               '${h3.degsToRads(180)}',

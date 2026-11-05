@@ -2,6 +2,7 @@ import 'dart:js_interop';
 
 import 'package:h3_common/h3_common.dart';
 import 'package:h3_web/src/js/h3_js.dart';
+import 'package:h3_web/src/js/h3_js_loader.dart';
 import 'package:h3_web/src/mappers/coords.dart';
 import 'package:h3_web/src/mappers/h3_index.dart';
 import 'package:h3_web/src/mappers/units.dart';
@@ -20,9 +21,23 @@ class H3Web implements H3 {
   /// Every other method throws a [StateError] while this is `false`.
   static bool get isH3JsLoaded => isH3JsLoadedOnPage;
 
+  /// Loads h3-js by adding a script tag to the page, unless it is already
+  /// loaded. Await it before the first H3 call; then no `<script>` tag in
+  /// `index.html` is needed.
+  ///
+  /// [url] overrides the default location of h3-js (unpkg, the version this
+  /// package is built for). Throws a [StateError] when the script cannot be
+  /// loaded.
+  static Future<void> ensureLoaded({String? url}) => ensureH3JsLoaded(url: url);
+
   @override
   bool isValidCell(H3Index h3Index) {
     return h3js.isValidCell(h3Index.toH3JS());
+  }
+
+  @override
+  bool isValidIndex(H3Index h3Index) {
+    return h3js.isValidIndex(h3Index.toH3JS());
   }
 
   @override
@@ -38,6 +53,36 @@ class H3Web implements H3 {
   @override
   int getBaseCellNumber(H3Index h3Index) {
     return h3js.getBaseCellNumber(h3Index.toH3JS());
+  }
+
+  @override
+  int getIndexDigit(H3Index h3Index, int digit) {
+    try {
+      return h3js.getIndexDigit(h3Index.toH3JS(), digit);
+    } catch (e) {
+      wrapAndThrowJsException(e);
+      rethrow;
+    }
+  }
+
+  @override
+  H3Index constructCell(
+    int baseCellNumber,
+    List<int> digits, {
+    int? resolution,
+  }) {
+    try {
+      return h3js
+          .constructCell(
+            baseCellNumber,
+            [for (final digit in digits) digit.toJS].toJS,
+            resolution ?? digits.length,
+          )
+          .toH3Index();
+    } catch (e) {
+      wrapAndThrowJsException(e);
+      rethrow;
+    }
   }
 
   @override
@@ -197,6 +242,16 @@ class H3Web implements H3 {
   }
 
   @override
+  List<H3Index> gridRing(H3Index h3Index, int ringSize) {
+    try {
+      return h3js.gridRing(h3Index.toH3JS(), ringSize).toH3Indexes();
+    } catch (e) {
+      wrapAndThrowJsException(e);
+      rethrow;
+    }
+  }
+
+  @override
   List<H3Index> gridRingUnsafe(H3Index h3Index, int ringSize) {
     try {
       return h3js.gridRingUnsafe(h3Index.toH3JS(), ringSize).toH3Indexes();
@@ -344,6 +399,16 @@ class H3Web implements H3 {
   @override
   bool isValidDirectedEdge(H3Index edgeIndex) {
     return h3js.isValidDirectedEdge(edgeIndex.toH3JS());
+  }
+
+  @override
+  H3Index reverseDirectedEdge(H3Index edgeIndex) {
+    try {
+      return h3js.reverseDirectedEdge(edgeIndex.toH3JS()).toH3Index();
+    } catch (e) {
+      wrapAndThrowJsException(e);
+      rethrow;
+    }
   }
 
   @override

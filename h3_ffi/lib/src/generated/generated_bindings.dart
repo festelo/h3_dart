@@ -262,11 +262,29 @@ class H3C {
   late final _gridDiskDistances = _gridDiskDistancesPtr.asFunction<
       int Function(int, int, ffi.Pointer<ffi.Uint64>, ffi.Pointer<ffi.Int>)>();
 
-  /// @defgroup gridRingUnsafe gridRingUnsafe
-  /// Functions for gridRingUnsafe
+  /// @defgroup gridRing gridRing
+  /// Functions for gridRing
   /// @{
   /// /
-  /// /** @brief hollow hexagon ring at some origin
+  /// /** @brief maximum number of hexagons in hollow k-ring
+  int maxGridRingSize(
+    int k,
+    ffi.Pointer<ffi.Int64> out,
+  ) {
+    return _maxGridRingSize(
+      k,
+      out,
+    );
+  }
+
+  late final _maxGridRingSizePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Uint32 Function(
+              ffi.Int, ffi.Pointer<ffi.Int64>)>>('maxGridRingSize');
+  late final _maxGridRingSize = _maxGridRingSizePtr
+      .asFunction<int Function(int, ffi.Pointer<ffi.Int64>)>();
+
+  /// @brief hollow hexagon ring k distance from origin
   int gridRingUnsafe(
     int origin,
     int k,
@@ -284,6 +302,26 @@ class H3C {
           ffi.Uint32 Function(
               ffi.Uint64, ffi.Int, ffi.Pointer<ffi.Uint64>)>>('gridRingUnsafe');
   late final _gridRingUnsafe = _gridRingUnsafePtr
+      .asFunction<int Function(int, int, ffi.Pointer<ffi.Uint64>)>();
+
+  /// @brief hollow hexagon ring k distance from origin
+  int gridRing(
+    int origin,
+    int k,
+    ffi.Pointer<ffi.Uint64> out,
+  ) {
+    return _gridRing(
+      origin,
+      k,
+      out,
+    );
+  }
+
+  late final _gridRingPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Uint32 Function(
+              ffi.Uint64, ffi.Int, ffi.Pointer<ffi.Uint64>)>>('gridRing');
+  late final _gridRing = _gridRingPtr
       .asFunction<int Function(int, int, ffi.Pointer<ffi.Uint64>)>();
 
   /// @defgroup polygonToCells polygonToCells
@@ -399,7 +437,7 @@ class H3C {
   /// Functions for cellsToMultiPolygon (currently a binding-only concept)
   /// @{
   /// /
-  /// /** @brief Create a LinkedGeoPolygon from a set of contiguous hexagons
+  /// /** @brief Create a LinkedGeoPolygon from a set of cells
   int cellsToLinkedMultiPolygon(
     ffi.Pointer<ffi.Uint64> h3Set,
     int numHexes,
@@ -888,6 +926,60 @@ class H3C {
   late final _getBaseCellNumber =
       _getBaseCellNumberPtr.asFunction<int Function(int)>();
 
+  /// @defgroup getIndexDigit getIndexDigit
+  /// Functions for getIndexDigit
+  /// @{
+  /// /
+  /// /** @brief returns the indexing digit of the provided H3 cell at a given
+  /// resolution
+  ///
+  /// Indexing digits are 1-indexed beginning with the digit for resolution 1.
+  int getIndexDigit(
+    int h,
+    int res,
+    ffi.Pointer<ffi.Int> out,
+  ) {
+    return _getIndexDigit(
+      h,
+      res,
+      out,
+    );
+  }
+
+  late final _getIndexDigitPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Uint32 Function(
+              ffi.Uint64, ffi.Int, ffi.Pointer<ffi.Int>)>>('getIndexDigit');
+  late final _getIndexDigit = _getIndexDigitPtr
+      .asFunction<int Function(int, int, ffi.Pointer<ffi.Int>)>();
+
+  /// @defgroup constructCell constructCell
+  /// Functions for constructCell
+  /// @{
+  /// /
+  /// /** @brief create a cell from its components
+  /// Only allows for constructing valid H3 cells.
+  int constructCell(
+    int res,
+    int baseCellNumber,
+    ffi.Pointer<ffi.Int> digits,
+    ffi.Pointer<ffi.Uint64> out,
+  ) {
+    return _constructCell(
+      res,
+      baseCellNumber,
+      digits,
+      out,
+    );
+  }
+
+  late final _constructCellPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Uint32 Function(ffi.Int, ffi.Int, ffi.Pointer<ffi.Int>,
+              ffi.Pointer<ffi.Uint64>)>>('constructCell');
+  late final _constructCell = _constructCellPtr.asFunction<
+      int Function(int, int, ffi.Pointer<ffi.Int>, ffi.Pointer<ffi.Uint64>)>();
+
   /// @defgroup stringToH3 stringToH3
   /// Functions for stringToH3
   /// @{
@@ -951,6 +1043,25 @@ class H3C {
   late final _isValidCellPtr =
       _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Uint64)>>('isValidCell');
   late final _isValidCell = _isValidCellPtr.asFunction<int Function(int)>();
+
+  /// @defgroup isValidIndex isValidIndex
+  /// Functions for isValidIndex
+  /// @{
+  /// /
+  /// /** @brief confirms if an H3Index is valid for any mode (cell, directed edge, or
+  /// vertex) Returns 1 if the H3 index is valid for any supported type, 0
+  /// otherwise
+  int isValidIndex(
+    int h,
+  ) {
+    return _isValidIndex(
+      h,
+    );
+  }
+
+  late final _isValidIndexPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Uint64)>>('isValidIndex');
+  late final _isValidIndex = _isValidIndexPtr.asFunction<int Function(int)>();
 
   /// @defgroup cellToParent cellToParent
   /// Functions for cellToParent
@@ -1434,6 +1545,28 @@ class H3C {
               ffi.Pointer<CellBoundary>)>>('directedEdgeToBoundary');
   late final _directedEdgeToBoundary = _directedEdgeToBoundaryPtr
       .asFunction<int Function(int, ffi.Pointer<CellBoundary>)>();
+
+  /// @defgroup reverseDirectedEdge reverseDirectedEdge
+  /// Functions for reverseDirectedEdge
+  /// @{
+  /// /
+  /// /** @brief Returns the directed edge with origin and destination cells reversed
+  int reverseDirectedEdge(
+    int edge,
+    ffi.Pointer<ffi.Uint64> out,
+  ) {
+    return _reverseDirectedEdge(
+      edge,
+      out,
+    );
+  }
+
+  late final _reverseDirectedEdgePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Uint32 Function(
+              ffi.Uint64, ffi.Pointer<ffi.Uint64>)>>('reverseDirectedEdge');
+  late final _reverseDirectedEdge = _reverseDirectedEdgePtr
+      .asFunction<int Function(int, ffi.Pointer<ffi.Uint64>)>();
 
   /// @defgroup cellToVertex cellToVertex
   /// Functions for cellToVertex
