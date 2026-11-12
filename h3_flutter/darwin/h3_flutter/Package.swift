@@ -6,8 +6,8 @@ import PackageDescription
 let package = Package(
     name: "h3_flutter",
     platforms: [
-        .iOS("13.0"),
-        .macOS("10.15"),
+        .iOS("12.0"),
+        .macOS("10.13"),
     ],
     products: [
         // Dynamic, so that every H3 symbol stays exported and can be found
