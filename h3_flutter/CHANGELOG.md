@@ -1,3 +1,6 @@
+## 0.8.1
+* Support Swift Package Manager on iOS and macOS. With Swift Package Manager, H3 is compiled from source, so git dependencies work without a prebuilt `xcframework`. CocoaPods keeps working as before.
+
 ## 0.8.0
 * **[BREAKING]** Update `h3` to 4.5.0 and `h3-js` to 4.5.0
 * **[BREAKING]** `H3Factory.load()` returns `FutureOr<H3>`: on Web it loads h3-js when it is not on the page yet, so `web/index.html` no longer needs a h3-js script tag. Use `await`.
