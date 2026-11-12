@@ -320,6 +320,69 @@ jobs:
         working-directory: ./h3_flutter/example
         if: matrix.os != 'ubuntu-latest'
 
+  h3_flutter_test_ios:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        dependency_manager: [swiftpm, cocoapods]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Setup subosito/flutter-action@v2
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Use CocoaPods instead of Swift Package Manager
+        run: flutter config --no-enable-swift-package-manager
+        if: matrix.dependency_manager == 'cocoapods'
+
+      - name: Prebuild iOS & macOS library
+        run: bindings/scripts/build_darwin_static_lib.sh
+        working-directory: ./h3_flutter
+
+      - name: Pub get
+        run: flutter pub get
+        working-directory: ./h3_flutter/example
+
+      - name: Build release archive
+        run: flutter build ipa --release --no-codesign
+        working-directory: ./h3_flutter/example
+
+      # h3_flutter looks up H3 functions with DynamicLibrary.process() on iOS,
+      # so they must stay exported after the release archive strips symbols.
+      - name: Check H3 symbols in the release archive
+        run: |
+          app=build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app
+          found=""
+          while IFS= read -r -d '' bin; do
+            if nm -gU "$bin" 2>/dev/null | grep -q ' _latLngToCell$'; then
+              found="$bin"
+            fi
+          done < <(find "$app" -type f -perm -u+x -print0)
+          if [ -z "$found" ]; then
+            echo "::error::_latLngToCell is not exported from any binary in $app"
+            exit 1
+          fi
+          echo "_latLngToCell is exported from $found"
+        working-directory: ./h3_flutter/example
+
+      - name: Boot iOS simulator
+        id: simulator
+        run: |
+          udid=$(xcrun simctl list devices available --json | jq -r '[.devices[][] | select(.name | startswith("iPhone"))][0].udid')
+          xcrun simctl boot "$udid"
+          echo "udid=$udid" >> "$GITHUB_OUTPUT"
+
+      - name: Run tests
+        run: flutter test integration_test/app_test.dart -d ${{ steps.simulator.outputs.udid }}
+        working-directory: ./h3_flutter/example
+
   h3_web_tests:
     runs-on: ${{ matrix.os }}
     strategy:
