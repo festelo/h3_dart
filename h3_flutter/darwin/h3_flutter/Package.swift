@@ -14,9 +14,15 @@ let package = Package(
         // by DynamicLibrary.process() at runtime.
         .library(name: "h3-flutter", type: .dynamic, targets: ["h3_flutter"])
     ],
+    dependencies: [
+        .package(name: "FlutterFramework", path: "../FlutterFramework")
+    ],
     targets: [
         .target(
             name: "h3_flutter",
+            dependencies: [
+                .product(name: "FlutterFramework", package: "FlutterFramework")
+            ],
             exclude: [
                 "h3lib/include/h3api.h.in"
             ],
