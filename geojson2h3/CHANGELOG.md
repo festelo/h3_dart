@@ -1,3 +1,6 @@
+## 0.8.1
+* Add an example in `example/main.dart`, where pub.dev finds it
+
 ## 0.8.0
 * Update `h3_common` (v0.8.0), which matches H3 [version 4.5.0](https://github.com/uber/h3/releases/tag/v4.5.0).
 
