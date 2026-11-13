@@ -26,7 +26,7 @@ class Geojson2H3 {
     ];
     return {
       'type': _feature,
-      'id': h3Index.toString(),
+      'id': h3Index.toRadixString(16),
       'geometry': {
         'type': _polygon,
         'coordinates': coordinates,
