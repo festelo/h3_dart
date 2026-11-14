@@ -59,7 +59,7 @@ void main() {
     final coordinates = h3.cellToBoundary(hexagon);
     coordinates.add(coordinates.first); // close loop
     final feature = {
-      'id': hexagon.toString(),
+      'id': '89283082837ffff',
       'type': 'Feature',
       'properties': {},
       'geometry': {
@@ -111,6 +111,12 @@ void main() {
       result['features'][2]['properties'],
       {},
       reason: 'Null property resolved to {}',
+    );
+
+    expect(
+      [for (final feature in result['features']) feature['id']],
+      ['89283085507ffff', '892830855b3ffff', '85283473fffffff'],
+      reason: 'Feature ids are H3 index strings',
     );
   });
 }
