@@ -2,6 +2,7 @@ name: Tests
 
 on:
   push:
+    branches: [dev, master]
   pull_request:
   schedule:
     # runs the CI everyday at 10AM
