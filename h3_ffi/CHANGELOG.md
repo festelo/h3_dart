@@ -1,3 +1,6 @@
+## 0.8.1
+* Move the example to `example/main.dart`, where pub.dev finds it
+
 ## 0.8.0
 * **[BREAKING]** Update `h3` to 4.5.0
 * Add `isValidIndex`, `getIndexDigit`, `constructCell`, `gridRing` and `reverseDirectedEdge`
