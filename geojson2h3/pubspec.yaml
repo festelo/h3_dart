@@ -11,6 +11,7 @@ dependencies:
   h3_common: ^0.8.0
 
 dev_dependencies:
+  h3_ffi: ^0.8.0
   test: # uses workspace's version
   lints: # uses workspace's version
   mockito: ^5.4.6

@@ -1,3 +1,6 @@
+## 0.8.1
+* Add an example in `example/main.dart`, where pub.dev finds it
+
 ## 0.8.0
 * **[BREAKING]** H3 abstract class was updated to match [version 4.5.0](https://github.com/uber/h3/releases/tag/v4.5.0): new methods must be implemented
 * Add `isValidIndex`, `getIndexDigit`, `constructCell`, `gridRing` and `reverseDirectedEdge`
