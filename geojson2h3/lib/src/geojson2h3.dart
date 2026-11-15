@@ -14,6 +14,9 @@ class Geojson2H3 {
 
   /// Converts a single H3 hexagon with index [h3Index] to a `Polygon` feature
   ///
+  /// The feature `id` is the H3 index as a lowercase hex string,
+  /// e.g. `89283082837ffff`
+  ///
   /// It's possible to add optional feature [properties]
   Map h3ToFeature(BigInt h3Index, {Map? properties}) {
     final boundary = _h3.cellToBoundary(h3Index);
@@ -26,7 +29,7 @@ class Geojson2H3 {
     ];
     return {
       'type': _feature,
-      'id': h3Index.toString(),
+      'id': h3Index.toRadixString(16),
       'geometry': {
         'type': _polygon,
         'coordinates': coordinates,

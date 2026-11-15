@@ -1,3 +1,7 @@
+## 0.9.0
+* **[BREAKING]** `h3ToFeature` and `h3SetToFeatureCollection` now set the feature `id` to the H3 index string (`'89283082837ffff'`), as [geojson2h3](https://github.com/uber/geojson2h3) does, instead of the decimal number string (`'617700169960914943'`).  
+  To get the index back from the `id`, use `BigInt.parse(id, radix: 16)`.
+
 ## 0.8.0
 * Update `h3_common` (v0.8.0), which matches H3 [version 4.5.0](https://github.com/uber/h3/releases/tag/v4.5.0).
 
