@@ -395,6 +395,9 @@ jobs:
 
       - name: Boot iOS simulator
         id: simulator
+        # Run the integration test even when the symbol check fails, so a
+        # failure there shows whether H3 is missing at runtime as well.
+        if: ${{ !cancelled() }}
         run: |
           udid=$(xcrun simctl list devices available --json | jq -r '[.devices[][] | select(.name | startswith("iPhone"))][0].udid')
           xcrun simctl boot "$udid"
@@ -402,6 +405,7 @@ jobs:
           echo "udid=$udid" >> "$GITHUB_OUTPUT"
 
       - name: Run tests
+        if: ${{ !cancelled() }}
         run: flutter test integration_test/app_test.dart -d ${{ steps.simulator.outputs.udid }}
         working-directory: ./h3_flutter/example
 
