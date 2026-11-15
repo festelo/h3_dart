@@ -1,0 +1,17 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    target-branch: dev
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    ignore:
+      # gradle/actions v6 moved caching into a closed-source component with
+      # separate terms of use. Upgrading needs an explicit decision.
+      - dependency-name: gradle/actions/setup-gradle
+        update-types:
+          - version-update:semver-major
