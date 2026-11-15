@@ -71,11 +71,11 @@ Both web compilers are supported: `flutter build web` (JavaScript) and
 
 ### Running iOS and Mac builds locally (not from pub)
 
-As Xcode doesn't bundle CMake—unlike Android's NDK—it cannot build H3 source files directly, since H3 uses CMake.
+With Swift Package Manager (enabled by default in Flutter), the package in `darwin/h3_flutter` compiles the H3 sources directly, no extra steps are needed.
 
-This is why GitHub Actions prebuilds a static library before publishing `h3_flutter` to pub.dev, providing a smoother experience for users of this library. However, this prebuild step doesn't happen when you clone the library directly from git. 
+The CocoaPods integration links a prebuilt static library instead: Xcode doesn't bundle CMake—unlike Android's NDK—so it cannot build H3 source files directly, since H3 uses CMake. GitHub Actions prebuilds this library before publishing `h3_flutter` to pub.dev, but this prebuild step doesn't happen when you clone the library directly from git.
 
-To build the library locally for iOS/macOS development, you need to build the `xcframework` yourself by running:
+To build the library locally for iOS/macOS development with CocoaPods, you need to build the `xcframework` yourself by running:
 ```bash
 bindings/scripts/build_darwin_static_lib.sh
 ```
@@ -83,5 +83,9 @@ bindings/scripts/build_darwin_static_lib.sh
 ### Upgrading the package to a new version of H3 library
   
 As this library is built on top of `h3_web` and `h3_ffi`, you must update these packages first, please refer to their `README` files.
+Then regenerate `h3api.h` for the Swift Package Manager target:
+```bash
+bindings/scripts/generate_darwin_h3api.sh
+```
 Once they are updated, try to run the example for all the platforms.
 Ideally, it would work out of the box.
