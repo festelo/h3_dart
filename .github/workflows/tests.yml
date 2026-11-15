@@ -325,7 +325,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        dependency_manager: [swiftpm, cocoapods]
+        # cocoapods-static-frameworks and cocoapods-static-libraries are the
+        # Podfile setups many apps use (for example with Firebase), where pods
+        # are linked statically into the app.
+        dependency_manager:
+          - swiftpm
+          - cocoapods
+          - cocoapods-static-frameworks
+          - cocoapods-static-libraries
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -340,7 +347,21 @@ jobs:
 
       - name: Use CocoaPods instead of Swift Package Manager
         run: flutter config --no-enable-swift-package-manager
-        if: matrix.dependency_manager == 'cocoapods'
+        if: startsWith(matrix.dependency_manager, 'cocoapods')
+
+      - name: Link pods as static frameworks
+        run: |
+          sed -i '' 's/^  use_frameworks!$/  use_frameworks! :linkage => :static/' Podfile
+          grep -q '^  use_frameworks! :linkage => :static$' Podfile
+        working-directory: ./h3_flutter/example/ios
+        if: matrix.dependency_manager == 'cocoapods-static-frameworks'
+
+      - name: Link pods as static libraries
+        run: |
+          sed -i '' '/^  use_frameworks!$/d' Podfile
+          ! grep -q 'use_frameworks!' Podfile
+        working-directory: ./h3_flutter/example/ios
+        if: matrix.dependency_manager == 'cocoapods-static-libraries'
 
       - name: Prebuild iOS & macOS library
         run: bindings/scripts/build_darwin_static_lib.sh
