@@ -14,6 +14,9 @@ cd build
 # Number of cores for parallel build
 NUM_CORES=$(sysctl -n hw.ncpu)
 
+# Version of the bundled H3 C library, used in the iOS framework's Info.plist
+H3_VERSION=$(cat "$SCRIPT_DIR/../../../h3_ffi/c/h3/VERSION" 2>/dev/null || echo "1.0.0")
+
 ##########
 # iOS
 ##########
@@ -26,7 +29,8 @@ cmake ../.. \
     -DCMAKE_OSX_SYSROOT=$(xcodebuild -version -sdk iphoneos Path) \
     -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
     -DCMAKE_INSTALL_PREFIX=$(pwd)/install \
-    -DBUILD_SHARED_LIBS=OFF
+    -DH3_VERSION="$H3_VERSION" \
+    -DBUILD_SHARED_LIBS=ON
 make -j"$NUM_CORES"
 make install
 cd ..
@@ -43,7 +47,8 @@ cmake ../.. \
     -DCMAKE_OSX_SYSROOT=$(xcodebuild -version -sdk iphonesimulator Path) \
     -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
     -DCMAKE_INSTALL_PREFIX=$(pwd)/install \
-    -DBUILD_SHARED_LIBS=OFF
+    -DH3_VERSION="$H3_VERSION" \
+    -DBUILD_SHARED_LIBS=ON
 make -j"$NUM_CORES"
 make install
 cd ..
@@ -66,28 +71,33 @@ make install
 cd ..
 
 ##########
-# Create XCFramework
+# Create XCFrameworks
 ##########
 
+# iOS: dynamic h3.framework, so H3 symbols stay exported even when the app
+# links its pods statically (use_frameworks! :linkage => :static or no
+# use_frameworks! at all).
 xcodebuild -create-xcframework \
-    -library ios/install/lib/libh3.a \
-    -headers ios/install/include \
-    -library ios-simulator/install/lib/libh3.a \
-    -headers ios-simulator/install/include \
+    -framework ios/install/h3.framework \
+    -framework ios-simulator/install/h3.framework \
+    -output h3.xcframework
+
+# macOS: static libh3.a, force-loaded by the pod.
+xcodebuild -create-xcframework \
     -library macos/install/lib/libh3.a \
     -headers macos/install/include \
-    -output h3.xcframework
+    -output h3_macos.xcframework
 cd ..
 
 ##########
 # Copy output
 ##########
 
-rm -rf ../darwin/Libs/h3.xcframework
+rm -rf ../darwin/Libs/h3.xcframework ../darwin/Libs/h3_macos.xcframework
 mkdir -p ../darwin/Libs
-cp -r build/h3.xcframework ../darwin/Libs/
+cp -R build/h3.xcframework build/h3_macos.xcframework ../darwin/Libs/
 
 # Clean build folder
 rm -rf build
 
-echo "✅ The XCFramework was built successfully: darwin/Libs/h3.xcframework"
+echo "✅ The XCFrameworks were built successfully: darwin/Libs/h3.xcframework, darwin/Libs/h3_macos.xcframework"
