@@ -14,8 +14,12 @@ A Flutter plugin providing FFI bindings to the H3 C library.
   s.author           = { 'Ilia Beregovskii' => 'festeloqq@gmail.com' }
   s.source           = { :path => '.' }
 
-  s.vendored_frameworks = 'Libs/h3.xcframework'
-  s.preserve_paths = 'Libs/h3.xcframework/**/*'
+  # iOS: dynamic h3.framework, embedded into the app by CocoaPods, so H3
+  # symbols stay visible to DynamicLibrary.process() with any pod linkage.
+  s.ios.vendored_frameworks = 'Libs/h3.xcframework'
+  s.ios.preserve_paths = 'Libs/h3.xcframework/**/*'
+  s.osx.vendored_frameworks = 'Libs/h3_macos.xcframework'
+  s.osx.preserve_paths = 'Libs/h3_macos.xcframework/**/*'
   s.source_files = 'include.c'
 
   s.ios.dependency 'Flutter'
@@ -30,12 +34,10 @@ A Flutter plugin providing FFI bindings to the H3 C library.
   s.ios.pod_target_xcconfig = {
     # Flutter.framework does not contain a i386 slice.
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
-    'OTHER_LDFLAGS[sdk=iphonesimulator*]' => "-force_load $(PODS_TARGET_SRCROOT)/Libs/h3.xcframework/ios-arm64_x86_64-simulator/libh3.a",
-    'OTHER_LDFLAGS[sdk=iphoneos*]' => "-force_load $(PODS_TARGET_SRCROOT)/Libs/h3.xcframework/ios-arm64/libh3.a",
   }
 
   s.osx.pod_target_xcconfig = {
-    'OTHER_LDFLAGS' => "-force_load $(PODS_TARGET_SRCROOT)/Libs/h3.xcframework/macos-arm64_x86_64/libh3.a",
+    'OTHER_LDFLAGS' => "-force_load $(PODS_TARGET_SRCROOT)/Libs/h3_macos.xcframework/macos-arm64_x86_64/libh3.a",
   }
 
 end

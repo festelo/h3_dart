@@ -1,5 +1,6 @@
 ## 0.8.1
 * Support Swift Package Manager on iOS and macOS. With Swift Package Manager, H3 is compiled from source, so git dependencies work without a prebuilt `xcframework`. CocoaPods keeps working as before.
+* Fix H3 functions failing at runtime on iOS when CocoaPods links pods statically (`use_frameworks! :linkage => :static` or no `use_frameworks!`). With CocoaPods, H3 is now shipped to iOS as a dynamic `h3.framework`, so its symbols stay available to `DynamicLibrary.process()` in release builds ([#39](https://github.com/festelo/h3_dart/issues/39))
 
 ## 0.8.0
 * **[BREAKING]** Update `h3` to 4.5.0 and `h3-js` to 4.5.0
