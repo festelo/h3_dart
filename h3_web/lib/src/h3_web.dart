@@ -207,6 +207,9 @@ class H3Web implements H3 {
   ) {
     assert(childResolution >= 0 && childResolution < 16,
         'Resolution must be in [0, 15] range');
+    if (childPosition < 0) {
+      throw H3Exception.fromCode(H3ExceptionCode.domain);
+    }
     try {
       return h3js
           .childPosToCell(childPosition, h3Index.toH3JS(), childResolution)

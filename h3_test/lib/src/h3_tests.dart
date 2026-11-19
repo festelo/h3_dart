@@ -1393,6 +1393,28 @@ void testH3(
         reason: 'Child pos out of range throws',
       );
     });
+
+    test('Negative child position', () async {
+      final domain = isA<H3Exception>().having(
+        (e) => e.code,
+        'code',
+        H3ExceptionCode.domain,
+      );
+      expect(
+        () => h3.childPosToCell(-1, BigInt.parse('0x80bffffffffffff'), 15),
+        throwsA(domain),
+        reason: 'Negative child pos throws for a parent with many children',
+      );
+      expect(
+        () => h3.childPosToCell(
+          -4294967295,
+          BigInt.parse('0x88283080ddfffff'),
+          9,
+        ),
+        throwsA(domain),
+        reason: 'Negative child pos throws for a small parent',
+      );
+    });
   });
 
   test('cellToChildPos / childPosToCell round-trip', () async {
