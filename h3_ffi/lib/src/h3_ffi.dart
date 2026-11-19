@@ -772,6 +772,16 @@ class H3Ffi implements H3 {
   }
 
   @override
+  ({H3Index start, H3Index end}) edgeToVertexes(H3Index edgeIndex) {
+    return using((arena) {
+      final start = arena<Uint64>();
+      final end = arena<Uint64>();
+      throwIfError(_h3c.edgeToVertexes(edgeIndex.toNative(), start, end));
+      return (start: start.toH3Index(), end: end.toH3Index());
+    });
+  }
+
+  @override
   GeoCoord vertexToGeo(H3Index h3Index) {
     return using((arena) {
       final out = arena<c.LatLng>();

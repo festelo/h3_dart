@@ -2328,6 +2328,137 @@ void testH3(
     });
   });
 
+  group('edgeToVertexes', () {
+    test('Basic', () async {
+      final edge = BigInt.parse('0x119283470d93ffff');
+      final vertexes = h3.edgeToVertexes(edge);
+      expect(
+        vertexes.start,
+        BigInt.parse('0x259283470d83ffff'),
+        reason: 'Start vertex is as expected',
+      );
+      expect(
+        vertexes.end,
+        BigInt.parse('0x249283470d93ffff'),
+        reason: 'End vertex is as expected',
+      );
+    });
+
+    test('All edges of a cell', () async {
+      final origin = BigInt.parse('0x89283470d93ffff');
+      final edges = h3.originToDirectedEdges(origin);
+      expect(edges.length, 6, reason: 'Hexagon has 6 edges');
+      final cellVertexes = h3.cellToVertexes(origin);
+      for (final edge in edges) {
+        final vertexes = h3.edgeToVertexes(edge);
+        expect(
+          h3.isValidVertex(vertexes.start),
+          true,
+          reason: 'Start vertex is valid',
+        );
+        expect(
+          h3.isValidVertex(vertexes.end),
+          true,
+          reason: 'End vertex is valid',
+        );
+        expect(
+          vertexes.start != vertexes.end,
+          true,
+          reason: 'Start and end vertexes differ',
+        );
+        expect(
+          cellVertexes.contains(vertexes.start),
+          true,
+          reason: 'Start vertex belongs to the origin cell',
+        );
+        expect(
+          cellVertexes.contains(vertexes.end),
+          true,
+          reason: 'End vertex belongs to the origin cell',
+        );
+
+        final boundary = h3.directedEdgeToBoundary(edge);
+        final start = h3.vertexToGeo(vertexes.start);
+        final end = h3.vertexToGeo(vertexes.end);
+        expect(
+          start.lat,
+          closeTo(boundary.first.lat, 1e-9),
+          reason: 'Start vertex matches the first boundary point',
+        );
+        expect(
+          start.lon,
+          closeTo(boundary.first.lon, 1e-9),
+          reason: 'Start vertex matches the first boundary point',
+        );
+        expect(
+          end.lat,
+          closeTo(boundary.last.lat, 1e-9),
+          reason: 'End vertex matches the last boundary point',
+        );
+        expect(
+          end.lon,
+          closeTo(boundary.last.lon, 1e-9),
+          reason: 'End vertex matches the last boundary point',
+        );
+      }
+    });
+
+    test('Pentagon', () async {
+      final expected = {
+        '0x1223007fffffffff': ('0x2123007fffffffff', '0x2223007fffffffff'),
+        '0x1323007fffffffff': ('0x2223007fffffffff', '0x2323007fffffffff'),
+        '0x1423007fffffffff': ('0x2423007fffffffff', '0x2023007fffffffff'),
+        '0x1523007fffffffff': ('0x2323007fffffffff', '0x2423007fffffffff'),
+        '0x1623007fffffffff': ('0x2023007fffffffff', '0x2123007fffffffff'),
+      };
+      final edges = h3.originToDirectedEdges(
+        BigInt.parse('0x823007fffffffff'),
+      );
+      expect(edges.length, 5, reason: 'Pentagon has 5 edges');
+      for (final MapEntry(key: edge, value: (start, end)) in expected.entries) {
+        final vertexes = h3.edgeToVertexes(BigInt.parse(edge));
+        expect(
+          vertexes.start,
+          BigInt.parse(start),
+          reason: 'Pentagon start vertex is as expected',
+        );
+        expect(
+          vertexes.end,
+          BigInt.parse(end),
+          reason: 'Pentagon end vertex is as expected',
+        );
+      }
+    });
+
+    test('Invalid', () async {
+      final invalidEdge = isA<H3Exception>().having(
+        (e) => e.code,
+        'code',
+        H3ExceptionCode.dirEdgeInvalid,
+      );
+      expect(
+        () => h3.edgeToVertexes(BigInt.zero),
+        throwsA(invalidEdge),
+        reason: 'Zero is not a directed edge',
+      );
+      expect(
+        () => h3.edgeToVertexes(BigInt.parse('0x89283470d93ffff')),
+        throwsA(invalidEdge),
+        reason: 'A cell is not a directed edge',
+      );
+      expect(
+        () => h3.edgeToVertexes(BigInt.parse('0x1023007fffffffff')),
+        throwsA(invalidEdge),
+        reason: 'An edge with an invalid direction is not valid',
+      );
+      expect(
+        () => h3.edgeToVertexes(BigInt.parse('0x1123007fffffffff')),
+        throwsA(invalidEdge),
+        reason: 'The K axis edge of a pentagon is not valid',
+      );
+    });
+  });
+
   group('vertexToGeo', () {
     test('Basic', () async {
       final origin = BigInt.parse('0x823d6ffffffffff');

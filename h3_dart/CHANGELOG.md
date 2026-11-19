@@ -1,3 +1,9 @@
+## 0.9.0
+* **[BREAKING]** Update `h3` to 4.6.0
+* Add `edgeToVertexes`
+* Fixes from H3 4.6.0: an out of bounds write in `gridRing` with a negative `k`, precision loss in `cellArea` for cells crossing the antimeridian, precision loss in latitude near the poles in `cellToGeo` and `cellToBoundary`, and signed integer overflows in `maxPolygonToCellsSize` and `uncompactCellsSize`
+* Use `h3_common`, `h3_ffi` and `h3_web` 0.9.0
+
 ## 0.8.0
 * **[BREAKING]** Update `h3` to 4.5.0 and `h3-js` to 4.5.0
 * **[BREAKING]** Remove `H3Factory.web()`: on Web, `H3Factory.process()` now does the same (h3-js must already be on the page)

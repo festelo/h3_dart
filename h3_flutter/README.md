@@ -38,6 +38,11 @@ final geojson2h3 = Geojson2H3(h3);
 
 ### Web
 
+h3-js 4.6.0 is not released yet, so the web version does not have the fixes from H3 4.6.0
+(for example, `cellArea` of cells crossing the antimeridian and latitude precision near the
+poles). `edgeToVertexes` is implemented in Dart on top of h3-js and returns the same
+result as the C library.
+
 Web version is built on top of `h3-js` v4.5.0. `load()` adds h3-js to the page if it is
 not there yet, so `web/index.html` needs no changes. Await it before the first H3 call:
 ```dart

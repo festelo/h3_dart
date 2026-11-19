@@ -1,3 +1,7 @@
+## 0.9.0
+* **[BREAKING]** Implement the H3 4.6.0 interface from `h3_common` 0.9.0
+* Add `edgeToVertexes`. h3-js 4.5.0 has no `edgeToVertexes`, so it is computed from `directedEdgeToCells` and `cellToVertexes` and returns the same vertexes as the C library
+
 ## 0.8.0
 * **[BREAKING]** Update `h3-js` to 4.5.0
 * Support WebAssembly (dart2wasm, `flutter build web --wasm`). The h3-js bindings now use `dart:js_interop` instead of `package:js`, which is removed from the dependencies.

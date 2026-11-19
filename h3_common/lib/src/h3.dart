@@ -241,6 +241,9 @@ abstract class H3 {
   /// Find the indexes for all vertexes of a cell.
   List<H3Index> cellToVertexes(H3Index h3Index);
 
+  /// Find the start and end vertexes of a directed edge.
+  ({H3Index start, H3Index end}) edgeToVertexes(H3Index edgeIndex);
+
   /// Get the [GeoCoord] of a given vertex
   GeoCoord vertexToGeo(H3Index h3Index);
 
