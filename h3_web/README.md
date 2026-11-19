@@ -29,6 +29,11 @@ final hexagons = h3.polyfill(
 
 ***In most cases you should not use this library directly, use [h3_dart](https://pub.dev/packages/h3_dart/) or [h3_flutter](https://pub.dev/packages/h3_flutter/) instead.***  
 
+h3-js 4.6.0 is not released yet, so the web version does not have the fixes from H3 4.6.0
+(for example, `cellArea` of cells crossing the antimeridian and latitude precision near the
+poles). `edgeToVertexes` is implemented in Dart on top of h3-js and returns the same
+result as the C library.
+
 This library is built on top of `h3-js` v4.5.0. Load it before the first H3 call:
 ```dart
 await H3Web.ensureLoaded();

@@ -524,6 +524,29 @@ class H3Web implements H3 {
   }
 
   @override
+  ({H3Index start, H3Index end}) edgeToVertexes(H3Index edgeIndex) {
+    // h3-js 4.5.0 has no edgeToVertexes. The C implementation returns origin
+    // vertexes number N and N + 1 (counter-clockwise); they are the only
+    // consecutive origin vertexes shared with the destination cell.
+    if (!isValidDirectedEdge(edgeIndex)) {
+      throw H3Exception.fromCode(H3ExceptionCode.dirEdgeInvalid);
+    }
+    final cells = directedEdgeToCells(edgeIndex);
+    final originVertexes = cellToVertexes(cells.origin);
+    final destinationVertexes = cellToVertexes(cells.destination).toSet();
+    final count = originVertexes.length;
+    for (var i = 0; i < count; i++) {
+      final start = originVertexes[i];
+      final end = originVertexes[(i + 1) % count];
+      if (destinationVertexes.contains(start) &&
+          destinationVertexes.contains(end)) {
+        return (start: start, end: end);
+      }
+    }
+    throw H3Exception.fromCode(H3ExceptionCode.dirEdgeInvalid);
+  }
+
+  @override
   GeoCoord vertexToGeo(H3Index h3Index) {
     try {
       return h3js.vertexToLatLng(h3Index.toH3JS()).toGeoCoord();

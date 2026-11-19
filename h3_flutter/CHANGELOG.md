@@ -1,4 +1,8 @@
-## 0.8.1
+## 0.9.0
+* **[BREAKING]** Update `h3` to 4.6.0
+* Add `edgeToVertexes`
+* Fixes from H3 4.6.0: an out of bounds write in `gridRing` with a negative `k`, precision loss in `cellArea` for cells crossing the antimeridian, precision loss in latitude near the poles in `cellToGeo` and `cellToBoundary`, and signed integer overflows in `maxPolygonToCellsSize` and `uncompactCellsSize`
+* Use `h3_common`, `h3_ffi` and `h3_web` 0.9.0
 * Support Swift Package Manager on iOS and macOS. With Swift Package Manager, H3 is compiled from source, so git dependencies work without a prebuilt `xcframework`. CocoaPods keeps working as before.
 
 ## 0.8.0

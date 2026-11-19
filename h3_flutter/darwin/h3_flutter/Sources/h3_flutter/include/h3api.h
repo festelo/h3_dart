@@ -124,7 +124,7 @@ DECLSPEC const char *H3_EXPORT(describeH3Error)(H3Error err);
 /* library version numbers generated from VERSION file */
 // clang-format off
 #define H3_VERSION_MAJOR 4
-#define H3_VERSION_MINOR 5
+#define H3_VERSION_MINOR 6
 #define H3_VERSION_PATCH 0
 // clang-format on
 
@@ -795,6 +795,16 @@ DECLSPEC H3Error H3_EXPORT(cellToVertex)(H3Index origin, int vertexNum,
  */
 /** @brief Returns all vertexes for a given cell, as H3 indexes */
 DECLSPEC H3Error H3_EXPORT(cellToVertexes)(H3Index origin, H3Index *vertexes);
+/** @} */
+
+/** @defgroup edgeToVertexes edgeToVertexes
+ * Functions for edgeToVertexes
+ * @{
+ */
+/** @brief Returns the start and end vertexes of a directed edge, as H3
+ * indexes */
+DECLSPEC H3Error H3_EXPORT(edgeToVertexes)(H3Index edge, H3Index *v1,
+                                           H3Index *v2);
 /** @} */
 
 /** @defgroup vertexToLatLng vertexToLatLng

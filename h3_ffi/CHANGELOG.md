@@ -1,3 +1,9 @@
+## 0.9.0
+* **[BREAKING]** Update `h3` to 4.6.0
+* Add `edgeToVertexes`
+* Regenerate the bindings
+* Fixes from H3 4.6.0: an out of bounds write in `gridRing` with a negative `k`, precision loss in `cellArea` for cells crossing the antimeridian, precision loss in latitude near the poles in `cellToGeo` and `cellToBoundary`, and signed integer overflows in `maxPolygonToCellsSize` and `uncompactCellsSize`
+
 ## 0.8.0
 * **[BREAKING]** Update `h3` to 4.5.0
 * Add `isValidIndex`, `getIndexDigit`, `constructCell`, `gridRing` and `reverseDirectedEdge`

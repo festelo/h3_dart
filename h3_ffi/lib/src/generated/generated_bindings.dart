@@ -1614,6 +1614,31 @@ class H3C {
   late final _cellToVertexes = _cellToVertexesPtr
       .asFunction<int Function(int, ffi.Pointer<ffi.Uint64>)>();
 
+  /// @defgroup edgeToVertexes edgeToVertexes
+  /// Functions for edgeToVertexes
+  /// @{
+  /// /
+  /// /** @brief Returns the start and end vertexes of a directed edge, as H3
+  /// indexes
+  int edgeToVertexes(
+    int edge,
+    ffi.Pointer<ffi.Uint64> v1,
+    ffi.Pointer<ffi.Uint64> v2,
+  ) {
+    return _edgeToVertexes(
+      edge,
+      v1,
+      v2,
+    );
+  }
+
+  late final _edgeToVertexesPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Uint32 Function(ffi.Uint64, ffi.Pointer<ffi.Uint64>,
+              ffi.Pointer<ffi.Uint64>)>>('edgeToVertexes');
+  late final _edgeToVertexes = _edgeToVertexesPtr.asFunction<
+      int Function(int, ffi.Pointer<ffi.Uint64>, ffi.Pointer<ffi.Uint64>)>();
+
   /// @defgroup vertexToLatLng vertexToLatLng
   /// Functions for vertexToLatLng
   /// @{
