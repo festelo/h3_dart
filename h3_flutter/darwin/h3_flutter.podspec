@@ -17,6 +17,7 @@ A Flutter plugin providing FFI bindings to the H3 C library.
   s.vendored_frameworks = 'Libs/h3.xcframework'
   s.preserve_paths = 'Libs/h3.xcframework/**/*'
   s.source_files = 'include.c'
+  s.osx.source_files = 'Libs/h3_flutter_symbols.m'
 
   s.ios.dependency 'Flutter'
   s.osx.dependency 'FlutterMacOS'
