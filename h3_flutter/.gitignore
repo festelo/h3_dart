@@ -37,3 +37,4 @@ android/local.properties
 android/.gradle
 
 darwin/Libs/h3.xcframework
+darwin/Libs/h3_flutter_symbols.m
