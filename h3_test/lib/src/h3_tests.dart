@@ -2602,6 +2602,31 @@ void testH3(
       );
       expect(h3.gridRing(pentagon, 5), hasLength(25));
     });
+
+    test('Negative ringSize', () async {
+      final domain = isA<H3Exception>().having(
+        (e) => e.code,
+        'code',
+        H3ExceptionCode.domain,
+      );
+      for (final ringSize in [-1, -5]) {
+        expect(
+          () => h3.gridRing(origin, ringSize),
+          throwsA(domain),
+          reason: 'gridRing throws for ringSize $ringSize',
+        );
+        expect(
+          () => h3.gridRingUnsafe(origin, ringSize),
+          throwsA(domain),
+          reason: 'gridRingUnsafe throws for ringSize $ringSize',
+        );
+      }
+      expect(
+        h3.gridRing(origin, 1),
+        hasLength(6),
+        reason: 'subsequent calls still work',
+      );
+    });
   });
 
   group('reverseDirectedEdge', () {
