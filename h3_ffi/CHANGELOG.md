@@ -1,3 +1,6 @@
+## 0.8.1
+* `gridRing` and `gridRingUnsafe` throw `H3Exception` with `H3ExceptionCode.domain` for a negative `ringSize`, as H3 does, instead of an `ArgumentError` from the allocator
+
 ## 0.8.0
 * **[BREAKING]** Update `h3` to 4.5.0
 * Add `isValidIndex`, `getIndexDigit`, `constructCell`, `gridRing` and `reverseDirectedEdge`

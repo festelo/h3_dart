@@ -284,21 +284,23 @@ class H3Ffi implements H3 {
 
   @override
   List<H3Index> gridRing(H3Index h3Index, int ringSize) {
-    final maxCount = ringSize == 0 ? 1 : 6 * ringSize;
     return using((arena) {
-      final out = arena<Uint64>(maxCount);
+      final maxCount = arena<Int64>();
+      throwIfError(_h3c.maxGridRingSize(ringSize, maxCount));
+      final out = arena<Uint64>(maxCount.value);
       throwIfError(_h3c.gridRing(h3Index.toNative(), ringSize, out));
-      return out.asTypedList(maxCount).toH3IndexList();
+      return out.asTypedList(maxCount.value).toH3IndexList();
     });
   }
 
   @override
   List<H3Index> gridRingUnsafe(H3Index h3Index, int ringSize) {
-    final maxCount = ringSize == 0 ? 1 : 6 * ringSize;
     return using((arena) {
-      final out = arena<Uint64>(maxCount);
+      final maxCount = arena<Int64>();
+      throwIfError(_h3c.maxGridRingSize(ringSize, maxCount));
+      final out = arena<Uint64>(maxCount.value);
       throwIfError(_h3c.gridRingUnsafe(h3Index.toNative(), ringSize, out));
-      return out.asTypedList(maxCount).toH3IndexList();
+      return out.asTypedList(maxCount.value).toH3IndexList();
     });
   }
 
